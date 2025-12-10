@@ -1,0 +1,131 @@
+.ec-cart {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--ec-spacing-xl);
+  align-items: start;
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ec-spacing-md);
+  }
+}
+
+.ec-cart-item {
+  display: grid;
+  grid-template-columns: 100px 1fr auto auto auto auto;
+  gap: var(--ec-spacing-md);
+  align-items: center;
+  padding: var(--ec-spacing-md);
+  background-color: var(--ec-color-base-100);
+  border: 1px solid var(--ec-gray-200);
+  border-radius: var(--ec-border-radius);
+
+  &__image {
+    width: 100px;
+    height: 100px;
+    border-radius: var(--ec-border-radius);
+    background-color: var(--ec-gray-100);
+    object-fit: cover;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ec-spacing-xs);
+  }
+
+  &__name {
+    font-size: var(--ec-font-size-lg);
+    font-weight: 600;
+    color: var(--ec-gray-900);
+    margin: 0;
+  }
+
+  &__variant,
+  &__price {
+    font-size: var(--ec-font-size-sm);
+    color: var(--ec-gray-700);
+    margin: 0;
+  }
+
+  &__price-original {
+    font-size: var(--ec-font-size-xs);
+    color: var(--ec-gray-500);
+    margin: 0;
+  }
+
+  &__total {
+    font-size: var(--ec-font-size-lg);
+    font-weight: 600;
+    color: var(--ec-gray-900);
+  }
+
+  &__remove {
+    padding: 6px 12px;
+    font-size: var(--ec-font-size-sm);
+    color: var(--ec-color-error);
+    background-color: transparent;
+    border: 1px solid var(--ec-gray-300);
+    border-radius: var(--ec-border-radius);
+    cursor: pointer;
+    transition: var(--ec-transition);
+
+    &:hover {
+      background-color: var(--ec-color-base-200);
+      border-color: var(--ec-color-error);
+    }
+  }
+}
+
+.ec-cart-summary {
+  position: sticky;
+  top: 100px;
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--ec-spacing-sm);
+    font-size: var(--ec-font-size-base);
+    color: var(--ec-gray-700);
+  }
+
+  &__row--total {
+    font-size: var(--ec-font-size-lg);
+    font-weight: 700;
+    color: var(--ec-gray-900);
+    margin: var(--ec-spacing-md) 0;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ec-spacing-sm);
+
+    .ec-btn {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .ec-cart {
+    grid-template-columns: 1fr;
+  }
+
+  .ec-cart-summary {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .ec-cart-item {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__remove {
+      width: 100%;
+    }
+  }
+}

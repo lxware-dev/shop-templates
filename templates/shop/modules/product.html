@@ -1,0 +1,50 @@
+<div class="ec-shop">
+  <div class="ec-product-detail">
+    <div th:unless="${#lists.isEmpty(product.images)}" class="ec-product-gallery">
+      <swiper-container
+        class="product-gallery-swiper"
+        thumbs-swiper=".product-gallery-nav-swiper"
+        navigation="true"
+      >
+        <swiper-slide th:each="image : ${product.images}">
+          <img th:src="${image}" alt="Product Image" />
+        </swiper-slide>
+      </swiper-container>
+      <swiper-container
+        class="product-gallery-nav-swiper"
+        space-between="10"
+        slides-per-view="auto"
+        free-mode="true"
+        watch-slides-progress="true"
+      >
+        <swiper-slide th:each="image : ${product.images}">
+          <img th:src="${image}" sizes="100px" alt="Product Image" />
+        </swiper-slide>
+      </swiper-container>
+    </div>
+
+    <div class="ec-product-info">
+      <h1 class="ec-product-info__title" th:text="${product.title}"></h1>
+      <p class="ec-product-info__desc" th:text="${product.description}"></p>
+      <ec-buy-box th:id="${product.id}" th:csrfToken="${_csrf.token}"></ec-buy-box>
+    </div>
+  </div>
+
+  <div class="ec-product-content">
+    <div class="ec-product-content__description" th:utext="${product.content}"></div>
+
+    <table th:if="${!#lists.isEmpty(product.specDefinition)}" class="ec-product-content__specs">
+      <tbody>
+        <tr th:each="spec : ${product.specDefinition}">
+          <td th:text="${spec.name}"></td>
+          <td>
+            <span
+              th:each="specValue, iterStat : ${spec.values}"
+              th:text="${specValue.value} + ${iterStat.last ? '' : ', '}"
+            ></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+.ec-card {
+  padding: var(--ec-spacing-lg);
+  background-color: var(--ec-color-base-100);
+  border: 1px solid var(--ec-gray-200);
+  border-radius: var(--ec-border-radius);
+  &__title {
+    font-size: var(--ec-font-size-xl);
+    font-weight: 700;
+    color: var(--ec-gray-900);
+    margin: 0 0 var(--ec-spacing-lg) 0;
+  }
+}

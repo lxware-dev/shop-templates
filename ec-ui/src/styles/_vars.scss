@@ -1,0 +1,81 @@
+:root {
+  /* 基础背景色 */
+  --ec-color-base-100: hsl(0, 0%, 100%); /* 白色背景 */
+  --ec-color-base-200: hsl(0, 0%, 98%); /* 浅灰背景 */
+  --ec-color-base-300: hsl(0, 0%, 96%); /* 次级背景 */
+  --ec-color-base-content: hsl(0, 0%, 9%); /* 基础文字颜色 - 深黑 */
+
+  /* 主要色 - 黑色 */
+  --ec-color-primary: hsl(0, 0%, 9%); /* 黑色 */
+  --ec-color-primary-content: hsl(0, 0%, 100%); /* 白色文字 */
+
+  /* 次要色 - 中性灰 */
+  --ec-color-secondary: hsl(0, 0%, 96%); /* 浅灰 */
+  --ec-color-secondary-content: hsl(0, 0%, 9%); /* 黑色文字 */
+
+  /* 强调色 - 深灰 */
+  --ec-color-accent: hsl(0, 0%, 15%); /* 深灰 */
+  --ec-color-accent-content: hsl(0, 0%, 100%); /* 白色文字 */
+
+  /* 中性色 */
+  --ec-color-neutral: hsl(0, 0%, 45%); /* 中灰 */
+  --ec-color-neutral-content: hsl(0, 0%, 100%); /* 白色文字 */
+
+  /* 信息色 - 冷灰蓝 */
+  --ec-color-info: hsl(214, 13%, 47%); /* 冷灰蓝 */
+  --ec-color-info-content: hsl(0, 0%, 100%); /* 白色文字 */
+
+  /* 成功色 - 深绿灰 */
+  --ec-color-success: hsl(142, 10%, 30%); /* 深绿灰 */
+  --ec-color-success-content: hsl(0, 0%, 100%); /* 白色文字 */
+
+  /* 警告色 - 暗橙灰 */
+  --ec-color-warning: hsl(38, 15%, 35%); /* 暗橙灰 */
+  --ec-color-warning-content: hsl(0, 0%, 100%); /* 白色文字 */
+
+  /* 错误色 - 深红灰 */
+  --ec-color-error: hsl(0, 10%, 35%); /* 深红灰 */
+  --ec-color-error-content: hsl(0, 0%, 100%); /* 白色文字 */
+
+  /* 中性色阶 - 基于黑白灰 */
+  --ec-gray-50: hsl(0, 0%, 98%);
+  --ec-gray-100: hsl(0, 0%, 96%);
+  --ec-gray-200: hsl(0, 0%, 90%);
+  --ec-gray-300: hsl(0, 0%, 83%);
+  --ec-gray-400: hsl(0, 0%, 64%);
+  --ec-gray-500: hsl(0, 0%, 45%);
+  --ec-gray-600: hsl(0, 0%, 32%);
+  --ec-gray-700: hsl(0, 0%, 25%);
+  --ec-gray-800: hsl(0, 0%, 15%);
+  --ec-gray-900: hsl(0, 0%, 9%);
+
+  /* 边框和圆角 */
+  --ec-border-radius: 8px;
+  --ec-border-radius-sm: 4px;
+  --ec-border-radius-lg: 12px;
+
+  /* 间距 */
+  --ec-spacing-xs: 4px;
+  --ec-spacing-sm: 8px;
+  --ec-spacing-md: 16px;
+  --ec-spacing-lg: 24px;
+  --ec-spacing-xl: 32px;
+
+  /* 字体 */
+  --ec-font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --ec-font-size-xs: 12px;
+  --ec-font-size-sm: 14px;
+  --ec-font-size-base: 16px;
+  --ec-font-size-lg: 18px;
+  --ec-font-size-xl: 24px;
+
+  /* 阴影 */
+  --ec-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --ec-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --ec-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --ec-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* 过渡 */
+  --ec-transition: all 0.2s ease;
+}

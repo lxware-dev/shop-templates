@@ -1,0 +1,12 @@
+.ec-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ec-spacing-sm);
+  margin-bottom: var(--ec-spacing-md);
+}
+
+.ec-label {
+  font-size: var(--ec-font-size-base);
+  font-weight: 500;
+  color: var(--ec-gray-900);
+}

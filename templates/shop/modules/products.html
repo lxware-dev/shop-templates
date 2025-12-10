@@ -1,0 +1,55 @@
+<div class="ec-shop">
+  <div class="ec-shop__header">
+    <h1 class="ec-shop__title">商品列表</h1>
+    <p class="ec-shop__subtitle">发现你喜欢的商品</p>
+  </div>
+
+  <div class="ec-filter">
+    <div class="ec-filter__left">
+      <select class="ec-select" id="category-select">
+        <option>全部分类</option>
+        <option
+          th:each="category : ${categoryTree}"
+          th:value="${category.id}"
+          th:text="${category.name}"
+        ></option>
+      </select>
+      <input type="text" class="ec-input" id="search-input" placeholder="搜索商品..." />
+    </div>
+
+    <div class="ec-filter__right">
+      <select class="ec-select" id="sort-select">
+        <option value="default">默认排序</option>
+        <option value="price-asc">价格从低到高</option>
+        <option value="price-desc">价格从高到低</option>
+        <option value="name">按名称排序</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ec-product-list">
+    <a
+      th:each="product : ${productPage.content}"
+      th:href="@{/shop/product/{id}(id=${product.id})}"
+      class="ec-product-card"
+    >
+      <div th:unless="${#strings.isEmpty(product.coverImageUrl)}" class="ec-product-card__image">
+        <img th:src="${product.coverImageUrl}" th:alt="${product.title}" />
+      </div>
+      <div class="ec-product-card__info">
+        <h3 class="ec-product-card__name" th:text="${product.title}"></h3>
+        <p class="ec-product-card__description" th:text="${product.description}"></p>
+        <div class="ec-product-card__footer">
+          <div class="ec-product-card__price">
+            <span class="ec-product-card__price-current" th:text="${product.minPrice}"></span>
+            <s
+              th:if="${product.minOriginalPrice != null}"
+              class="ec-product-card__price-original"
+              th:text="${product.minOriginalPrice}"
+            ></s>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>

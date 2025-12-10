@@ -1,0 +1,15 @@
+<!doctype html>
+<html th:lang="${site.language}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title th:text="|结算 - ${site.title}|"></title>
+    <th:block th:replace="~{shop/modules/style}" />
+    <th:block th:replace="~{shop/modules/script}" />
+    <th:block th:replace="~{shop/modules/custom-styles}" />
+  </head>
+  <body>
+    <th:block th:replace="~{shop/modules/checkout}" />
+  </body>
+</html>

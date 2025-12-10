@@ -1,0 +1,37 @@
+<!doctype html>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{modules/layout :: html(title = |订单成功 - ${site.title}|, content = ~{::content})}"
+>
+  <th:block th:fragment="content">
+    <div class="mx-auto mt-5 max-w-7xl px-4">
+      <div class="ec-shop">
+        <div class="ec-success">
+          <div class="ec-success__icon">✓</div>
+          <h1 class="ec-success__title">订单提交成功</h1>
+          <p class="ec-success__desc">感谢您的购买，我们将尽快为您处理订单</p>
+
+          <div class="ec-success__info">
+            <div class="ec-success__info-row">
+              <span class="ec-success__info-label">订单号：</span>
+              <span class="ec-success__info-value">202511080001</span>
+            </div>
+            <div class="ec-success__info-row">
+              <span class="ec-success__info-label">下单时间：</span>
+              <span class="ec-success__info-value">2025-11-08 10:30:00</span>
+            </div>
+            <div class="ec-success__info-row">
+              <span class="ec-success__info-label">支付金额：</span>
+              <span class="ec-success__info-value ec-success__info-value--price">¥505.00</span>
+            </div>
+          </div>
+
+          <div class="ec-success__actions">
+            <a href="/shop" class="ec-btn ec-btn-primary ec-btn-lg">继续购物</a>
+            <a href="/orders" class="ec-btn ec-btn-secondary ec-btn-lg">查看订单</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
+</html>

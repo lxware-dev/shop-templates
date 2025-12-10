@@ -1,0 +1,29 @@
+@use 'sass:meta';
+
+// Variables
+@include meta.load-css('vars');
+
+// Layout
+@include meta.load-css('layout');
+
+// Basic elements styles
+@include meta.load-css('basics/button');
+@include meta.load-css('basics/select');
+@include meta.load-css('basics/input');
+@include meta.load-css('basics/form');
+@include meta.load-css('basics/divider');
+@include meta.load-css('basics/quantity');
+@include meta.load-css('basics/card');
+
+// Components
+@include meta.load-css('components/product-list');
+@include meta.load-css('components/product-card');
+@include meta.load-css('components/buy-box');
+
+// Pages
+@include meta.load-css('pages/home');
+@include meta.load-css('pages/product');
+@include meta.load-css('pages/cart');
+@include meta.load-css('pages/checkout');
+@include meta.load-css('pages/checkout-success');
+@include meta.load-css('pages/payments');
