@@ -92,7 +92,7 @@
               >
                 {#each addressQuery.data ?? [] as address (address.id)}
                   <option value={address.id}>
-                    {[address.firstName, address.lastName].filter(Boolean).join(' ')}
+                    {[address.lastName, address.firstName].filter(Boolean).join(' ')}
                     {address.contactPhone}
                     {[address.province, address.city, address.district, address.streetAddress]
                       .filter(Boolean)
@@ -105,12 +105,12 @@
             {#if !selectedAddressId}
               <div class="ec-checkout__form-row">
                 <div class="ec-form-group">
-                  <label class="ec-label" for="firstName">姓 *</label>
-                  <input type="text" class="ec-input" id="firstName" name="firstName" required />
+                  <label class="ec-label" for="lastName">姓 *</label>
+                  <input type="text" class="ec-input" id="lastName" name="lastName" required />
                 </div>
                 <div class="ec-form-group">
-                  <label class="ec-label" for="lastName">名 *</label>
-                  <input type="text" class="ec-input" id="lastName" name="lastName" required />
+                  <label class="ec-label" for="firstName">名 *</label>
+                  <input type="text" class="ec-input" id="firstName" name="firstName" required />
                 </div>
               </div>
               <div class="ec-form-group">
