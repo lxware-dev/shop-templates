@@ -106,16 +106,16 @@
               <div class="ec-checkout__form-row">
                 <div class="ec-form-group">
                   <label class="ec-label" for="lastName">姓 *</label>
-                  <input type="text" class="ec-input" id="lastName" name="lastName" required />
+                  <input type="text" class="ec-input" id="lastName" name="userAddress.lastName" required />
                 </div>
                 <div class="ec-form-group">
                   <label class="ec-label" for="firstName">名 *</label>
-                  <input type="text" class="ec-input" id="firstName" name="firstName" required />
+                  <input type="text" class="ec-input" id="firstName" name="userAddress.firstName" required />
                 </div>
               </div>
               <div class="ec-form-group">
                 <label class="ec-label" for="contactPhone">联系电话 *</label>
-                <input type="tel" class="ec-input" id="contactPhone" name="contactPhone" required />
+                <input type="tel" class="ec-input" id="contactPhone" name="userAddress.contactPhone" required />
               </div>
               <div class="ec-checkout__form-row">
                 <div class="ec-form-group">
@@ -124,7 +124,7 @@
                     type="text"
                     class="ec-input"
                     id="province"
-                    name="province"
+                    name="userAddress.province"
                     required
                     placeholder="如：广东省"
                   />
@@ -135,7 +135,7 @@
                     type="text"
                     class="ec-input"
                     id="city"
-                    name="city"
+                    name="userAddress.city"
                     required
                     placeholder="如：深圳市"
                   />
@@ -148,7 +148,7 @@
                     type="text"
                     class="ec-input"
                     id="district"
-                    name="district"
+                    name="userAddress.district"
                     required
                     placeholder="如：南山区"
                   />
@@ -159,7 +159,7 @@
                     type="text"
                     class="ec-input"
                     id="postalCode"
-                    name="postalCode"
+                    name="userAddress.postalCode"
                     required
                     placeholder="如：518000"
                   />
@@ -172,7 +172,7 @@
                   id="address"
                   rows="3"
                   placeholder="请输入详细地址，如街道、门牌号等"
-                  name="streetAddress"
+                  name="userAddress.streetAddress"
                   required
                 ></textarea>
               </div>
