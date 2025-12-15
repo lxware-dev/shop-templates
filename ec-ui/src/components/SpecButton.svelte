@@ -22,11 +22,22 @@
   function handleZoomClick(e: Event) {
     e.stopPropagation();
 
-    const zoom = mediumZoom(imgEl);
-    zoom?.open();
+    const zoom = mediumZoom(imgEl, {
+      background: 'rgb(255, 255, 255)',
+    });
 
-    zoom?.on('close', () => {
-      zoom?.detach();
+    zoom.on('open', (event) => {
+      (event.target as HTMLElement).style.objectFit = 'contain';
+    });
+
+    zoom.on('opened', (event) => {
+      (event.target as HTMLElement).style.objectFit = 'cover';
+    });
+
+    zoom.open();
+
+    zoom.on('close', () => {
+      zoom.detach();
     });
   }
 </script>

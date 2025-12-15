@@ -27,3 +27,6 @@
 @include meta.load-css('pages/checkout');
 @include meta.load-css('pages/checkout-success');
 @include meta.load-css('pages/payments');
+
+// Plugins
+@include meta.load-css('plugins/medium-zoom');

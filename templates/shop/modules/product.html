@@ -7,7 +7,7 @@
         navigation="true"
       >
         <swiper-slide th:each="image : ${product.images}">
-          <img th:src="${image}" alt="Product Image" />
+          <img th:src="${image}" alt="Product Image" data-zoomable />
         </swiper-slide>
       </swiper-container>
       <swiper-container
