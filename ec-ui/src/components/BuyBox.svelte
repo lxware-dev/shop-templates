@@ -179,9 +179,15 @@
         {#if selectedVariant}
           {formatPrice(selectedVariant.price || 0)}
         {:else if variants.length > 0}
-          {formatPrice(variants[0].price || 0)}
+          {[
+            formatPrice(productQuery.data?.minPrice || 0),
+            formatPrice(productQuery.data?.maxPrice || 0),
+          ].join(' - ')}
         {:else}
           {formatPrice(0)}
+        {/if}
+        {#if selectedVariant?.originalPrice}
+          <del>{formatPrice(selectedVariant.originalPrice)}</del>
         {/if}
       </div>
     </div>

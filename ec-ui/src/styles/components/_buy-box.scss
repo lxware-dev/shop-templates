@@ -17,6 +17,11 @@
       font-size: 32px;
       font-weight: 700;
       color: var(--ec-gray-900, hsl(0, 0%, 9%));
+
+      del {
+        font-size: var(--ec-font-size-sm, 14px);
+        font-weight: normal;
+      }
     }
   }
 
