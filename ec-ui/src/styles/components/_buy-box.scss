@@ -64,6 +64,7 @@
         padding: 8px;
         min-width: 100px;
         gap: var(--ec-spacing-xs, 6px);
+        position: relative;
       }
 
       &-image {
@@ -71,6 +72,34 @@
         height: 80px;
         object-fit: cover;
         border-radius: 4px;
+
+        &.medium-zoom-image--opened {
+          border-radius: 0;
+        }
+      }
+
+      &-zoom {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        opacity: 0;
+        top: 0.7rem;
+        right: 0.7rem;
+        transition: var(--ec-transition, all 0.2s ease);
+        background-color: var(--ec-color-base-300, white);
+        padding: 0.2rem;
+        border-radius: var(--ec-border-radius-sm, 4px);
+
+        svg {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+
+      &:hover &-zoom {
+        opacity: 1;
+        cursor: zoom-in;
       }
 
       &-text {

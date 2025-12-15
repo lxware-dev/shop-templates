@@ -20,9 +20,9 @@
   import ky from 'ky';
   import MingcuteAddLine from '~icons/mingcute/add-line?raw';
   import MingcuteMinimizeLine from '~icons/mingcute/minimize-line?raw';
-  import { getThumbnailUrl } from '../utils/thumbnail';
   import { formatPrice } from '../utils/price';
   import { fade } from 'svelte/transition';
+  import SpecButton from './SpecButton.svelte';
 
   let { id, csrfToken }: { id: number; csrfToken: string } = $props();
 
@@ -199,25 +199,16 @@
           {#each spec.values as specValueObj}
             {@const value = specValueObj.value}
             {@const imageUrl = specValueObj.imageUrl}
-            {@const isSelected = spec.name && selectedSpecs[spec.name] === value}
+            {@const isSelected = !!spec.name && selectedSpecs[spec.name] === value}
             {@const isAvailable = isSpecValueAvailable(spec.name, value)}
-            <button
-              class="buy-box__spec-option"
-              class:buy-box__spec-option--selected={isSelected}
-              class:buy-box__spec-option--disabled={!isAvailable}
-              class:buy-box__spec-option--with-image={imageUrl}
-              disabled={!isAvailable}
+
+            <SpecButton
+              {isSelected}
+              {isAvailable}
+              {imageUrl}
+              {value}
               onclick={() => selectSpec(spec.name, value)}
-            >
-              {#if imageUrl}
-                <img
-                  src={getThumbnailUrl(imageUrl, 'S')}
-                  alt={value}
-                  class="buy-box__spec-option-image"
-                />
-              {/if}
-              <span class="buy-box__spec-option-text">{value}</span>
-            </button>
+            ></SpecButton>
           {/each}
         </div>
       </div>
