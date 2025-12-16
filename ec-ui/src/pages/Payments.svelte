@@ -127,7 +127,7 @@
     if (paymentStatusQuery.data === 'SUCCESS') {
       toast.success('支付成功');
       setTimeout(() => {
-        window.location.href = `/uc/store/orders/${orderCode}`;
+        window.location.href = `/uc/shop/orders/${orderCode}`;
       }, 1000);
     }
   });
@@ -157,7 +157,7 @@
   {:else if orderQuery.isError}
     <div>加载订单信息失败，请刷新重试</div>
   {:else if !isPendingPayment}
-    <div>当前订单不可支付，点击<a href={`/uc/store/orders/${orderCode}`}>查看订单详情</a></div>
+    <div>当前订单不可支付，点击<a href={`/uc/shop/orders/${orderCode}`}>查看订单详情</a></div>
   {:else if orderQuery.data}
     <div class="ec-payments" transition:fade={{ duration: 200 }}>
       <div class="ec-payments__left">
@@ -251,7 +251,7 @@
 
         <div class="ec-payments__actions">
           {#if selectedPaymentMethod}
-            <a href={`/uc/store/orders/${orderCode}`} class="ec-btn ec-btn-secondary ec-btn-lg">
+            <a href={`/uc/shop/orders/${orderCode}`} class="ec-btn ec-btn-secondary ec-btn-lg">
               查看订单详情
             </a>
           {:else}
@@ -265,7 +265,7 @@
               <button type="submit" class="ec-btn ec-btn-primary ec-btn-lg">
                 立即支付 {formatPrice(orderQuery.data.totalAmount || 0)}
               </button>
-              <a href={`/uc/store/orders/${orderCode}`} class="ec-btn ec-btn-secondary ec-btn-lg">
+              <a href={`/uc/shop/orders/${orderCode}`} class="ec-btn ec-btn-secondary ec-btn-lg">
                 查看订单详情
               </a>
             </form>
