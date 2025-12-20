@@ -6,7 +6,7 @@ export default defineConfig({
     enableNativePlugin: true,
   },
   build: {
-    outDir: 'ec-dist',
+    outDir: 'shop-dist',
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'main',

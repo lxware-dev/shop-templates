@@ -1,5 +1,5 @@
 {
-  "name": "ec-ui",
+  "name": "@halo-dev/shop-ui",
   "type": "module",
   "exports": {
     ".": {

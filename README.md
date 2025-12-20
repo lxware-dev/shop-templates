@@ -3,4 +3,4 @@
 开发完成之后，需要：
 
 1. 将 `templates/shop` 文件夹复制到 halo-pro 的 `application/src/main/resources/templates`
-2. 将 `ec-dist` 文件夹复制到 halo-pro 的 `application/src/main/resources/static`
+2. 将 `shop-dist` 文件夹复制到 halo-pro 的 `application/src/main/resources/static`

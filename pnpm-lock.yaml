@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      ec-ui:
+      '@halo-dev/shop-ui':
         specifier: workspace:*
-        version: link:ec-ui
+        version: link:ui
       medium-zoom:
         specifier: ^1.1.0
         version: 1.1.0
@@ -34,11 +34,11 @@ importers:
         specifier: 8.0.0-beta.1
         version: 8.0.0-beta.1(@types/node@24.10.2)(sass-embedded@1.96.0)(sass@1.96.0)
 
-  ec-ui:
+  ui:
     dependencies:
       '@halo-dev/api-client':
         specifier: file:halo-dev-api-client-2.21.1.tgz
-        version: file:ec-ui/halo-dev-api-client-2.21.1.tgz(axios@1.13.2)
+        version: file:ui/halo-dev-api-client-2.21.1.tgz(axios@1.13.2)
       '@tanstack/svelte-query':
         specifier: ^6.0.10
         version: 6.0.10(svelte@5.46.0)
@@ -100,8 +100,8 @@ packages:
   '@emnapi/wasi-threads@1.1.0':
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
 
-  '@halo-dev/api-client@file:ec-ui/halo-dev-api-client-2.21.1.tgz':
-    resolution: {integrity: sha512-nmPtNyHy+lwTeSLRi0gJRoCFpjM4Uv9DKaUAE9lcmKsI8DLcG0dhi56FbR4Ese0jqRrj5qR2s/4obx0puRxpAQ==, tarball: file:ec-ui/halo-dev-api-client-2.21.1.tgz}
+  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.21.1.tgz':
+    resolution: {integrity: sha512-nmPtNyHy+lwTeSLRi0gJRoCFpjM4Uv9DKaUAE9lcmKsI8DLcG0dhi56FbR4Ese0jqRrj5qR2s/4obx0puRxpAQ==, tarball: file:ui/halo-dev-api-client-2.21.1.tgz}
     version: 2.21.1
     peerDependencies:
       axios: ^1.12.*
@@ -1198,7 +1198,7 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@halo-dev/api-client@file:ec-ui/halo-dev-api-client-2.21.1.tgz(axios@1.13.2)':
+  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.21.1.tgz(axios@1.13.2)':
     dependencies:
       axios: 1.13.2
       qs: 6.14.0

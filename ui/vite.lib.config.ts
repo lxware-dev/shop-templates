@@ -19,7 +19,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/main.ts',
-      name: 'ec-components',
+      name: 'shop-ui',
       fileName: 'index',
       cssFileName: 'index',
     },

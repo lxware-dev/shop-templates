@@ -1,5 +1,5 @@
 {
-  "name": "ec-templates",
+  "name": "@halo-dev/shop-templates",
   "scripts": {
     "build": "pnpm -r run build && vite build",
     "prettier": "prettier --write ."
@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "ec-ui": "workspace:*",
+    "@halo-dev/shop-ui": "workspace:*",
     "medium-zoom": "^1.1.0",
     "swiper": "^12.0.3"
   },

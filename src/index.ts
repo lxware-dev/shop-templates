@@ -1,5 +1,5 @@
-import 'ec-ui';
-import 'ec-ui/dist/index.css';
+import '@halo-dev/shop-ui';
+import '@halo-dev/shop-ui/dist/index.css';
 import mediumZoom from 'medium-zoom';
 import { register } from 'swiper/element/bundle';
 register();

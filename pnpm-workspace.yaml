@@ -1,5 +1,5 @@
 packages:
-  - ec-ui
+  - ui
 
 ignoredBuiltDependencies:
   - '@parcel/watcher'
