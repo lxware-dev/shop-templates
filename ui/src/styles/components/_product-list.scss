@@ -1,6 +1,6 @@
-.ec-product-list {
+.shop-product-list {
   display: grid;
-  gap: var(--ec-spacing-lg);
+  gap: var(--shop-spacing-lg);
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 
   @media (max-width: 768px) {

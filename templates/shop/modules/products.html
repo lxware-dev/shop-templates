@@ -1,12 +1,12 @@
-<div class="ec-shop">
-  <div class="ec-shop__header">
-    <h1 class="ec-shop__title">商品列表</h1>
-    <p class="ec-shop__subtitle">发现你喜欢的商品</p>
+<div class="shop-entry">
+  <div class="shop-entry__header">
+    <h1 class="shop-entry__title">商品列表</h1>
+    <p class="shop-entry__subtitle">发现你喜欢的商品</p>
   </div>
 
-  <div class="ec-filter">
-    <div class="ec-filter__left">
-      <select class="ec-select" id="category-select">
+  <div class="shop-filter">
+    <div class="shop-filter__left">
+      <select class="shop-select" id="category-select">
         <option value="">全部分类</option>
         <option
           th:each="category : ${categoryTree}"
@@ -17,15 +17,15 @@
       </select>
       <input
         type="text"
-        class="ec-input"
+        class="shop-input"
         id="search-input"
         placeholder="搜索商品..."
         th:value="${param.keyword != null && !param.keyword.empty ? param.keyword[0] : ''}"
       />
     </div>
 
-    <div class="ec-filter__right">
-      <select class="ec-select" id="sort-select">
+    <div class="shop-filter__right">
+      <select class="shop-select" id="sort-select">
         <option value="" th:selected="${param.sort == null || param.sort.empty}">默认排序</option>
         <option value="minPrice,asc" th:selected="${#lists.contains(param.sort, 'minPrice,asc')}">价格从低到高</option>
         <option value="minPrice,desc" th:selected="${#lists.contains(param.sort, 'minPrice,desc')}">价格从高到低</option>
@@ -73,24 +73,24 @@
     })();
   </script>
 
-  <div class="ec-product-list">
+  <div class="shop-product-list">
     <a
       th:each="product : ${productPage.content}"
       th:href="@{/shop/product/{id}(id=${product.id})}"
-      class="ec-product-card"
+      class="shop-product-card"
     >
-      <div th:unless="${#strings.isEmpty(product.coverImageUrl)}" class="ec-product-card__image">
+      <div th:unless="${#strings.isEmpty(product.coverImageUrl)}" class="shop-product-card__image">
         <img th:src="${product.coverImageUrl}" th:alt="${product.title}" />
       </div>
-      <div class="ec-product-card__info">
-        <h3 class="ec-product-card__name" th:text="${product.title}"></h3>
-        <p class="ec-product-card__description" th:text="${product.description}"></p>
-        <div th:if="${product.minPrice != null or product.minOriginalPrice != null}" class="ec-product-card__footer">
-          <div class="ec-product-card__price">
-            <span class="ec-product-card__price-current" th:text="${product.minPrice}"></span>
+      <div class="shop-product-card__info">
+        <h3 class="shop-product-card__name" th:text="${product.title}"></h3>
+        <p class="shop-product-card__description" th:text="${product.description}"></p>
+        <div th:if="${product.minPrice != null or product.minOriginalPrice != null}" class="shop-product-card__footer">
+          <div class="shop-product-card__price">
+            <span class="shop-product-card__price-current" th:text="${product.minPrice}"></span>
             <s
               th:if="${product.minOriginalPrice != null}"
-              class="ec-product-card__price-original"
+              class="shop-product-card__price-original"
               th:text="${product.minOriginalPrice}"
             ></s>
           </div>

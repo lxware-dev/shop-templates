@@ -1,13 +1,13 @@
-.ec-filter {
+.shop-filter {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--ec-spacing-lg);
-  margin-bottom: var(--ec-spacing-xl);
+  gap: var(--shop-spacing-lg);
+  margin-bottom: var(--shop-spacing-xl);
 
   &__left {
     display: flex;
-    gap: var(--ec-spacing-md);
+    gap: var(--shop-spacing-md);
     flex: 1;
     max-width: 600px;
   }
@@ -16,41 +16,41 @@
     flex-shrink: 0;
   }
 
-  .ec-select,
-  .ec-input {
+  .shop-select,
+  .shop-input {
     min-width: 0;
   }
 
-  &__left .ec-select {
+  &__left .shop-select {
     width: 180px;
     flex-shrink: 0;
   }
 
-  &__left .ec-input {
+  &__left .shop-input {
     flex: 1;
   }
 
-  &__right .ec-select {
+  &__right .shop-select {
     width: 200px;
   }
 }
 
 @media (max-width: 768px) {
-  .ec-filter {
+  .shop-filter {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--ec-spacing-md);
+    gap: var(--shop-spacing-md);
 
     &__left {
       flex-direction: column;
       max-width: none;
     }
 
-    &__left .ec-select {
+    &__left .shop-select {
       width: 100%;
     }
 
-    &__right .ec-select {
+    &__right .shop-select {
       width: 100%;
     }
   }

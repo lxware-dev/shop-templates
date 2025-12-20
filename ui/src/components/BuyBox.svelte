@@ -1,6 +1,6 @@
 <svelte:options
   customElement={{
-    tag: 'ec-buy-box',
+    tag: 'shop-buy-box',
     shadow: 'none',
     props: {
       id: { reflect: true, type: 'Number', attribute: 'id' },
@@ -30,7 +30,7 @@
 
   const productQuery = createQuery(
     () => ({
-      queryKey: ['ec:product', id],
+      queryKey: ['shop:product', id],
       queryFn: async () => {
         return await ky
           .get<ProductResponse>(
@@ -222,18 +222,18 @@
 
     <div class="buy-box__quantity">
       <span class="buy-box__quantity-label">数量</span>
-      <div class="ec-quantity">
-        <button class="ec-quantity__btn" onclick={decreaseQuantity} disabled={!canDecreaseQuantity}>
+      <div class="shop-quantity">
+        <button class="shop-quantity__btn" onclick={decreaseQuantity} disabled={!canDecreaseQuantity}>
           {@html MingcuteMinimizeLine}
         </button>
         <input
           type="number"
-          class="ec-quantity__input"
+          class="shop-quantity__input"
           bind:value={quantity}
           min="1"
           max={selectedVariant?.stock || 1}
         />
-        <button class="ec-quantity__btn" onclick={increaseQuantity} disabled={!canIncreaseQuantity}>
+        <button class="shop-quantity__btn" onclick={increaseQuantity} disabled={!canIncreaseQuantity}>
           {@html MingcuteAddLine}
         </button>
       </div>
@@ -245,7 +245,7 @@
         <input type="hidden" name="productVariantId" value={selectedVariant?.id} />
         <input type="hidden" name="quantity" value={quantity} />
         <button
-          class="ec-btn ec-btn-primary ec-btn-lg"
+          class="shop-btn shop-btn-primary shop-btn-lg"
           type="submit"
           disabled={!isSelectedVariantAvailable}
         >
@@ -258,7 +258,7 @@
         <input type="hidden" name="items[0].productVariantId" value={selectedVariant?.id} />
         <input type="hidden" name="items[0].quantity" value={quantity} />
         <button
-          class="ec-btn ec-btn-secondary ec-btn-lg"
+          class="shop-btn shop-btn-secondary shop-btn-lg"
           type="submit"
           disabled={!isSelectedVariantAvailable}
         >

@@ -1,6 +1,6 @@
 <svelte:options
   customElement={{
-    tag: 'ec-page-payments',
+    tag: 'shop-page-payments',
     shadow: 'none',
     props: {
       orderCode: { reflect: true, type: 'String', attribute: 'ordercode' },
@@ -36,7 +36,7 @@
 
   const orderQuery = createQuery(
     () => ({
-      queryKey: ['ec:order', orderCode],
+      queryKey: ['shop:order', orderCode],
       queryFn: async () => {
         return await ky
           .get<OrderResponse>(`/apis/uc.api.ecommerce.halo.run/v1alpha1/orders/${orderCode}`)
@@ -52,7 +52,7 @@
 
   const paymentMethodsQuery = createQuery(
     () => ({
-      queryKey: ['ec:payment:methods', orderCode],
+      queryKey: ['shop:payment:methods', orderCode],
       queryFn: async () => {
         return await ky
           .get<
@@ -82,7 +82,7 @@
 
   const paymentResponseQuery = createQuery(
     () => ({
-      queryKey: ['ec:payment:response', orderCode, selectedPaymentMethodId],
+      queryKey: ['shop:payment:response', orderCode, selectedPaymentMethodId],
       queryFn: async () => {
         return await ky
           .post<PaymentInitiateResponse>(
@@ -105,7 +105,7 @@
   const paymentStatusQuery = createQuery(
     () => ({
       queryKey: [
-        'ec:payment:status',
+        'shop:payment:status',
         orderCode,
         selectedPaymentMethodId,
         paymentResponseQuery.data?.sessionCode,
@@ -146,10 +146,10 @@
 
 <Toaster richColors position="top-center" />
 
-<div class="ec-shop">
-  <div class="ec-shop__header">
-    <h1 class="ec-shop__title">支付订单</h1>
-    <p class="ec-shop__subtitle">订单号：{orderCode}</p>
+<div class="shop-entry">
+  <div class="shop-entry__header">
+    <h1 class="shop-entry__title">支付订单</h1>
+    <p class="shop-entry__subtitle">订单号：{orderCode}</p>
   </div>
 
   {#if orderQuery.isLoading}
@@ -159,11 +159,11 @@
   {:else if !isPendingPayment}
     <div>当前订单不可支付，点击<a href={`/uc/shop/orders/${orderCode}`}>查看订单详情</a></div>
   {:else if orderQuery.data}
-    <div class="ec-payments" transition:fade={{ duration: 200 }}>
-      <div class="ec-payments__left">
-        <div class="ec-card">
-          <h2 class="ec-card__title">选择支付方式</h2>
-          <div class="ec-payment-methods">
+    <div class="shop-payments" transition:fade={{ duration: 200 }}>
+      <div class="shop-payments__left">
+        <div class="shop-card">
+          <h2 class="shop-card__title">选择支付方式</h2>
+          <div class="shop-payment-methods">
             {#if paymentMethodsQuery.isLoading}
               <div>加载中...</div>
             {:else if paymentMethodsQuery.isError}
@@ -173,25 +173,25 @@
             {:else}
               {#each paymentMethodsQuery.data ?? [] as paymentMethod}
                 <label
-                  class="ec-payment-method"
-                  class:ec-payment-method--active={selectedPaymentMethodId === paymentMethod.id}
+                  class="shop-payment-method"
+                  class:shop-payment-method--active={selectedPaymentMethodId === paymentMethod.id}
                 >
                   <input
                     type="radio"
                     name="paymentMethod"
                     value={paymentMethod.id}
                     bind:group={selectedPaymentMethodId}
-                    class="ec-payment-method__radio"
+                    class="shop-payment-method__radio"
                   />
-                  <div class="ec-payment-method__content">
-                    <div class="ec-payment-method__icon">
+                  <div class="shop-payment-method__content">
+                    <div class="shop-payment-method__icon">
                       {@html IconAlipay}
                     </div>
-                    <div class="ec-payment-method__info">
-                      <span class="ec-payment-method__name">{paymentMethod.name}</span>
-                      <span class="ec-payment-method__desc">使用{paymentMethod.name}支付</span>
+                    <div class="shop-payment-method__info">
+                      <span class="shop-payment-method__name">{paymentMethod.name}</span>
+                      <span class="shop-payment-method__desc">使用{paymentMethod.name}支付</span>
                     </div>
-                    <div class="ec-payment-method__check">
+                    <div class="shop-payment-method__check">
                       {@html MingcuteCheckLine}
                     </div>
                   </div>
@@ -201,30 +201,30 @@
           </div>
         </div>
 
-        <div class="ec-card">
-          <h2 class="ec-card__title">商品清单</h2>
-          <div class="ec-order-items">
+        <div class="shop-card">
+          <h2 class="shop-card__title">商品清单</h2>
+          <div class="shop-order-items">
             {#each orderQuery.data.items ?? [] as item}
               <PaymentOrderItem {item} />
             {/each}
           </div>
         </div>
 
-        <div class="ec-card">
-          <h2 class="ec-card__title">费用汇总</h2>
-          <div class="ec-order-summary">
-            <div class="ec-order-summary__row">
+        <div class="shop-card">
+          <h2 class="shop-card__title">费用汇总</h2>
+          <div class="shop-order-summary">
+            <div class="shop-order-summary__row">
               <span>商品小计</span>
               <span>{formatPrice(orderQuery.data.totalAmount || 0)}</span>
             </div>
-            <div class="ec-order-summary__row">
+            <div class="shop-order-summary__row">
               <span>运费</span>
               <span>{formatPrice(0)}</span>
             </div>
-            <div class="ec-divider"></div>
-            <div class="ec-order-summary__row ec-order-summary__row--total">
+            <div class="shop-divider"></div>
+            <div class="shop-order-summary__row shop-order-summary__row--total">
               <span>应付总额</span>
-              <span class="ec-order-summary__amount">
+              <span class="shop-order-summary__amount">
                 {formatPrice(orderQuery.data.totalAmount || 0)}
               </span>
             </div>
@@ -232,9 +232,9 @@
         </div>
       </div>
 
-      <div class="ec-payments__right">
-        <div class="ec-card">
-          <h2 class="ec-card__title">支付</h2>
+      <div class="shop-payments__right">
+        <div class="shop-card">
+          <h2 class="shop-card__title">支付</h2>
 
           {#if paymentResponseQuery.isLoading}
             <div>加载中...</div>
@@ -249,9 +249,9 @@
           {/if}
         </div>
 
-        <div class="ec-payments__actions">
+        <div class="shop-payments__actions">
           {#if selectedPaymentMethod}
-            <a href={`/uc/shop/orders/${orderCode}`} class="ec-btn ec-btn-secondary ec-btn-lg">
+            <a href={`/uc/shop/orders/${orderCode}`} class="shop-btn shop-btn-secondary shop-btn-lg">
               查看订单详情
             </a>
           {:else}
@@ -262,10 +262,10 @@
             >
               <input type="hidden" name="_csrf" value={csrfToken} />
               <input type="hidden" name="paymentMethod" value={selectedPaymentMethod} />
-              <button type="submit" class="ec-btn ec-btn-primary ec-btn-lg">
+              <button type="submit" class="shop-btn shop-btn-primary shop-btn-lg">
                 立即支付 {formatPrice(orderQuery.data.totalAmount || 0)}
               </button>
-              <a href={`/uc/shop/orders/${orderCode}`} class="ec-btn ec-btn-secondary ec-btn-lg">
+              <a href={`/uc/shop/orders/${orderCode}`} class="shop-btn shop-btn-secondary shop-btn-lg">
                 查看订单详情
               </a>
             </form>

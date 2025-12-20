@@ -1,16 +1,16 @@
-.ec-product-card {
+.shop-product-card {
   display: flex;
   flex-direction: column;
-  background-color: var(--ec-color-base-100);
-  border: 1px solid var(--ec-gray-200);
-  border-radius: var(--ec-border-radius-lg);
+  background-color: var(--shop-color-base-100);
+  border: 1px solid var(--shop-gray-200);
+  border-radius: var(--shop-border-radius-lg);
   overflow: hidden;
-  transition: var(--ec-transition);
+  transition: var(--shop-transition);
   text-decoration: none;
   color: inherit;
 
   &:hover {
-    box-shadow: var(--ec-shadow-lg);
+    box-shadow: var(--shop-shadow-lg);
     transform: translateY(-2px);
   }
 
@@ -23,7 +23,7 @@
     width: 100%;
     height: 220px;
     overflow: hidden;
-    background-color: var(--ec-gray-100);
+    background-color: var(--shop-gray-100);
 
     img {
       width: 100%;
@@ -36,15 +36,15 @@
   &__info {
     display: flex;
     flex-direction: column;
-    gap: var(--ec-spacing-sm);
-    padding: var(--ec-spacing-md);
+    gap: var(--shop-spacing-sm);
+    padding: var(--shop-spacing-md);
     flex: 1;
   }
 
   &__name {
-    font-size: var(--ec-font-size-lg);
+    font-size: var(--shop-font-size-lg);
     font-weight: 600;
-    color: var(--ec-gray-900);
+    color: var(--shop-gray-900);
     margin: 0;
     line-height: 1.4;
     display: -webkit-box;
@@ -54,8 +54,8 @@
   }
 
   &__description {
-    font-size: var(--ec-font-size-sm);
-    color: var(--ec-gray-600);
+    font-size: var(--shop-font-size-sm);
+    color: var(--shop-gray-600);
     margin: 0;
     line-height: 1.5;
     display: -webkit-box;
@@ -69,30 +69,30 @@
     align-items: center;
     justify-content: space-between;
     margin-top: auto;
-    padding-top: var(--ec-spacing-sm);
-    border-top: 1px solid var(--ec-gray-200);
+    padding-top: var(--shop-spacing-sm);
+    border-top: 1px solid var(--shop-gray-200);
   }
 
   &__price {
     display: flex;
     align-items: baseline;
-    gap: var(--ec-spacing-xs);
+    gap: var(--shop-spacing-xs);
   }
 
   &__price-current {
-    font-size: var(--ec-font-size-xl);
+    font-size: var(--shop-font-size-xl);
     font-weight: 700;
-    color: var(--ec-gray-900);
+    color: var(--shop-gray-900);
   }
 
   &__price-original {
-    font-size: var(--ec-font-size-sm);
-    color: var(--ec-gray-500);
+    font-size: var(--shop-font-size-sm);
+    color: var(--shop-gray-500);
   }
 }
 
 @media (max-width: 768px) {
-  .ec-product-card {
+  .shop-product-card {
     &__image {
       height: 180px;
     }

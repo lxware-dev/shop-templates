@@ -1,34 +1,34 @@
-.ec-input,
-.ec-textarea {
+.shop-input,
+.shop-textarea {
   width: 100%;
   padding: 10px 14px;
-  font-size: var(--ec-font-size-base);
-  font-family: var(--ec-font-family);
+  font-size: var(--shop-font-size-base);
+  font-family: var(--shop-font-family);
   line-height: 1.5;
-  color: var(--ec-color-base-content);
-  background-color: var(--ec-color-base-100);
-  border: 1px solid var(--ec-gray-300);
-  border-radius: var(--ec-border-radius);
-  transition: var(--ec-transition);
+  color: var(--shop-color-base-content);
+  background-color: var(--shop-color-base-100);
+  border: 1px solid var(--shop-gray-300);
+  border-radius: var(--shop-border-radius);
+  transition: var(--shop-transition);
 
   &:focus {
     outline: none;
-    border-color: var(--ec-color-primary);
+    border-color: var(--shop-color-primary);
     box-shadow: 0 0 0 3px hsla(0, 0%, 9%, 0.1);
   }
 
   &::placeholder {
-    color: var(--ec-gray-400);
+    color: var(--shop-gray-400);
   }
 
   &:disabled {
-    background-color: var(--ec-gray-100);
+    background-color: var(--shop-gray-100);
     cursor: not-allowed;
     opacity: 0.6;
   }
 }
 
-.ec-textarea {
+.shop-textarea {
   resize: vertical;
   min-height: 80px;
 }

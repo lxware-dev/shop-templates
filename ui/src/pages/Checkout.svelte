@@ -1,6 +1,6 @@
 <svelte:options
   customElement={{
-    tag: 'ec-page-checkout',
+    tag: 'shop-page-checkout',
     shadow: 'none',
     props: {
       contextId: { reflect: true, type: 'String', attribute: 'contextid' },
@@ -23,7 +23,7 @@
 
   const addressQuery = createQuery(
     () => ({
-      queryKey: ['ec:user:addresses'],
+      queryKey: ['shop:user:addresses'],
       queryFn: async () => {
         return await ky
           .get<UserAddressResponse[]>('/apis/uc.api.ecommerce.halo.run/v1alpha1/user-addresses')
@@ -46,7 +46,7 @@
   // Context
   const contextQuery = createQuery(
     () => ({
-      queryKey: ['ec:checkout:context', contextId],
+      queryKey: ['shop:checkout:context', contextId],
       queryFn: async () => {
         return await ky
           .get<CheckoutContextResponse>(
@@ -59,12 +59,12 @@
   );
 </script>
 
-<div class="ec-shop">
-  <div class="ec-shop__header">
-    <h1 class="ec-shop__title">结算</h1>
+<div class="shop-entry">
+  <div class="shop-entry__header">
+    <h1 class="shop-entry__title">结算</h1>
   </div>
 
-  <form action={`/shop/checkout/${contextId}/submit`} method="POST" class="ec-checkout">
+  <form action={`/shop/checkout/${contextId}/submit`} method="POST" class="shop-checkout">
     <input type="hidden" name="_csrf" value={csrfToken} />
     <input type="hidden" name="saveAsNewAddress" value={!selectedAddressId} />
 
@@ -75,17 +75,17 @@
       <!-- <input type="hidden" name="items[{index}].selectedShippingRateId" value=0 /> -->
     {/each}
 
-    <div class="ec-checkout__form">
-      <div class="ec-card">
-        <h2 class="ec-card__title">收货地址</h2>
+    <div class="shop-checkout__form">
+      <div class="shop-card">
+        <h2 class="shop-card__title">收货地址</h2>
         {#if addressQuery.isLoading}
           加载中...
         {:else}
-          <div class="ec-address-form" in:fade={{ duration: 200 }}>
-            <div class="ec-form-group">
-              <label class="ec-label" for="address-selector">选择收货地址</label>
+          <div class="shop-address-form" in:fade={{ duration: 200 }}>
+            <div class="shop-form-group">
+              <label class="shop-label" for="address-selector">选择收货地址</label>
               <select
-                class="ec-select"
+                class="shop-select"
                 id="address-selector"
                 name="selectedAddressId"
                 bind:value={selectedAddressId}
@@ -103,37 +103,37 @@
               </select>
             </div>
             {#if !selectedAddressId}
-              <div class="ec-checkout__form-row">
-                <div class="ec-form-group">
-                  <label class="ec-label" for="lastName">姓 *</label>
-                  <input type="text" class="ec-input" id="lastName" name="userAddress.lastName" required />
+              <div class="shop-checkout__form-row">
+                <div class="shop-form-group">
+                  <label class="shop-label" for="lastName">姓 *</label>
+                  <input type="text" class="shop-input" id="lastName" name="userAddress.lastName" required />
                 </div>
-                <div class="ec-form-group">
-                  <label class="ec-label" for="firstName">名 *</label>
-                  <input type="text" class="ec-input" id="firstName" name="userAddress.firstName" required />
+                <div class="shop-form-group">
+                  <label class="shop-label" for="firstName">名 *</label>
+                  <input type="text" class="shop-input" id="firstName" name="userAddress.firstName" required />
                 </div>
               </div>
-              <div class="ec-form-group">
-                <label class="ec-label" for="contactPhone">联系电话 *</label>
-                <input type="tel" class="ec-input" id="contactPhone" name="userAddress.contactPhone" required />
+              <div class="shop-form-group">
+                <label class="shop-label" for="contactPhone">联系电话 *</label>
+                <input type="tel" class="shop-input" id="contactPhone" name="userAddress.contactPhone" required />
               </div>
-              <div class="ec-checkout__form-row">
-                <div class="ec-form-group">
-                  <label class="ec-label" for="province">省份 *</label>
+              <div class="shop-checkout__form-row">
+                <div class="shop-form-group">
+                  <label class="shop-label" for="province">省份 *</label>
                   <input
                     type="text"
-                    class="ec-input"
+                    class="shop-input"
                     id="province"
                     name="userAddress.province"
                     required
                     placeholder="如：广东省"
                   />
                 </div>
-                <div class="ec-form-group">
-                  <label class="ec-label" for="city">城市 *</label>
+                <div class="shop-form-group">
+                  <label class="shop-label" for="city">城市 *</label>
                   <input
                     type="text"
-                    class="ec-input"
+                    class="shop-input"
                     id="city"
                     name="userAddress.city"
                     required
@@ -141,23 +141,23 @@
                   />
                 </div>
               </div>
-              <div class="ec-checkout__form-row">
-                <div class="ec-form-group">
-                  <label class="ec-label" for="district">区县 *</label>
+              <div class="shop-checkout__form-row">
+                <div class="shop-form-group">
+                  <label class="shop-label" for="district">区县 *</label>
                   <input
                     type="text"
-                    class="ec-input"
+                    class="shop-input"
                     id="district"
                     name="userAddress.district"
                     required
                     placeholder="如：南山区"
                   />
                 </div>
-                <div class="ec-form-group">
-                  <label class="ec-label" for="postalCode">邮编 *</label>
+                <div class="shop-form-group">
+                  <label class="shop-label" for="postalCode">邮编 *</label>
                   <input
                     type="text"
-                    class="ec-input"
+                    class="shop-input"
                     id="postalCode"
                     name="userAddress.postalCode"
                     required
@@ -165,10 +165,10 @@
                   />
                 </div>
               </div>
-              <div class="ec-form-group">
-                <label class="ec-label" for="address">详细地址 *</label>
+              <div class="shop-form-group">
+                <label class="shop-label" for="address">详细地址 *</label>
                 <textarea
-                  class="ec-textarea"
+                  class="shop-textarea"
                   id="address"
                   rows="3"
                   placeholder="请输入详细地址，如街道、门牌号等"
@@ -181,49 +181,49 @@
         {/if}
       </div>
 
-      <div class="ec-card">
-        <h2 class="ec-card__title">备注</h2>
+      <div class="shop-card">
+        <h2 class="shop-card__title">备注</h2>
         <div>
-          <div class="ec-form-group">
-            <textarea class="ec-textarea" name="customerNotes" id="customer-notes" rows="3"
+          <div class="shop-form-group">
+            <textarea class="shop-textarea" name="customerNotes" id="customer-notes" rows="3"
             ></textarea>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="ec-checkout__summary">
-      <div class="ec-card">
-        <h2 class="ec-card__title">商品清单</h2>
-        <div class="ec-order-items">
+    <div class="shop-checkout__summary">
+      <div class="shop-card">
+        <h2 class="shop-card__title">商品清单</h2>
+        <div class="shop-order-items">
           {#each contextQuery.data?.items ?? [] as item}
             <CheckoutOrderItem {item} />
           {/each}
         </div>
       </div>
 
-      <div class="ec-card">
-        <h2 class="ec-card__title">费用汇总</h2>
-        <div class="ec-order-summary">
-          <div class="ec-order-summary__row">
+      <div class="shop-card">
+        <h2 class="shop-card__title">费用汇总</h2>
+        <div class="shop-order-summary">
+          <div class="shop-order-summary__row">
             <span>小计</span>
             <span>{formatPrice(contextQuery.data?.calculateResult?.originalTotalAmount || 0)}</span>
           </div>
-          <div class="ec-order-summary__row">
+          <div class="shop-order-summary__row">
             <span>运费</span>
             <span>{formatPrice(contextQuery.data?.calculateResult?.shippingFeeAmount || 0)}</span>
           </div>
-          <div class="ec-divider"></div>
-          <div class="ec-order-summary__row ec-order-summary__row--total">
+          <div class="shop-divider"></div>
+          <div class="shop-order-summary__row shop-order-summary__row--total">
             <span>应付总额</span>
             <span>{formatPrice(contextQuery.data?.calculateResult?.payableAmount || 0)}</span>
           </div>
         </div>
       </div>
 
-      <div class="ec-checkout__actions">
-        <button type="submit" class="ec-btn ec-btn-primary ec-btn-lg">去支付</button>
-        <a href="/shop/cart" class="ec-btn ec-btn-secondary ec-btn-lg">返回购物车</a>
+      <div class="shop-checkout__actions">
+        <button type="submit" class="shop-btn shop-btn-primary shop-btn-lg">去支付</button>
+        <a href="/shop/cart" class="shop-btn shop-btn-secondary shop-btn-lg">返回购物车</a>
       </div>
     </div>
   </form>

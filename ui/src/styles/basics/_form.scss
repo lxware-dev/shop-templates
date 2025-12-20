@@ -1,12 +1,12 @@
-.ec-form-group {
+.shop-form-group {
   display: flex;
   flex-direction: column;
-  gap: var(--ec-spacing-sm);
-  margin-bottom: var(--ec-spacing-md);
+  gap: var(--shop-spacing-sm);
+  margin-bottom: var(--shop-spacing-md);
 }
 
-.ec-label {
-  font-size: var(--ec-font-size-base);
+.shop-label {
+  font-size: var(--shop-font-size-base);
   font-weight: 500;
-  color: var(--ec-gray-900);
+  color: var(--shop-gray-900);
 }

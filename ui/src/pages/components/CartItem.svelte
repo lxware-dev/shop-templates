@@ -25,12 +25,12 @@
 
   async function handleDelete(item: CartItemResponse) {
     await ky.delete(`/apis/uc.api.ecommerce.halo.run/v1alpha1/cart-items/${item.id}`).json();
-    queryClient.invalidateQueries({ queryKey: ['ec:cart:items'] });
+    queryClient.invalidateQueries({ queryKey: ['shop:cart:items'] });
   }
 
   const updateQuantityMutation = createMutation(
     () => ({
-      mutationKey: ['ec:cart:items:update'],
+      mutationKey: ['shop:cart:items:update'],
       mutationFn: async (quantity: number) => {
         return await ky
           .put(`/apis/uc.api.ecommerce.halo.run/v1alpha1/cart-items/${item.id}`, {
@@ -39,11 +39,11 @@
           .json();
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['ec:cart:items'] });
+        queryClient.invalidateQueries({ queryKey: ['shop:cart:items'] });
       },
       onError: () => {
         toast.error('更新数量失败，请重试');
-        queryClient.invalidateQueries({ queryKey: ['ec:cart:items'] });
+        queryClient.invalidateQueries({ queryKey: ['shop:cart:items'] });
       },
     }),
     () => queryClient
@@ -64,35 +64,35 @@
   });
 </script>
 
-<div class="ec-cart-item">
+<div class="shop-cart-item">
   {#if imageUrl}
     <img
       src={getThumbnailUrl(imageUrl, 'M')}
       alt={item.product?.title}
-      class="ec-cart-item__image"
+      class="shop-cart-item__image"
     />
   {/if}
-  <div class="ec-cart-item__info">
-    <a href={`/shop/product/${item.product?.id}`} class="ec-cart-item__name">
+  <div class="shop-cart-item__info">
+    <a href={`/shop/product/${item.product?.id}`} class="shop-cart-item__name">
       {item.product?.title}
     </a>
     {#if specValueText}
-      <p class="ec-cart-item__variant">{specValueText}</p>
+      <p class="shop-cart-item__variant">{specValueText}</p>
     {/if}
     <div>
-      <span class="ec-cart-item__price">
+      <span class="shop-cart-item__price">
         {formatPrice(item.productVariant?.price || 0)}
       </span>
       {#if item.productVariant?.originalPrice}
-        <s class="ec-cart-item__price-original">
+        <s class="shop-cart-item__price-original">
           {formatPrice(item.productVariant?.originalPrice || 0)}
         </s>
       {/if}
     </div>
   </div>
-  <div class="ec-quantity">
+  <div class="shop-quantity">
     <button
-      class="ec-quantity__btn"
+      class="shop-quantity__btn"
       onclick={() => updateQuantityMutation.mutate((item.quantity ?? 1) - 1)}
       disabled={isBusy || !canDecreaseQuantity}
     >
@@ -100,7 +100,7 @@
     </button>
     <input
       type="number"
-      class="ec-quantity__input"
+      class="shop-quantity__input"
       value={item.quantity || 1}
       min="1"
       max={item.productVariant?.stock || 1}
@@ -109,15 +109,15 @@
       disabled={isBusy}
     />
     <button
-      class="ec-quantity__btn"
+      class="shop-quantity__btn"
       onclick={() => updateQuantityMutation.mutate((item.quantity ?? 1) + 1)}
       disabled={isBusy || !canIncreaseQuantity}
     >
       {@html MingcuteAddLine}
     </button>
   </div>
-  <div class="ec-cart-item__total">{formatPrice(total || 0)}</div>
-  <button class="ec-cart-item__remove" onclick={() => handleDelete(item)} disabled={isBusy}>
+  <div class="shop-cart-item__total">{formatPrice(total || 0)}</div>
+  <button class="shop-cart-item__remove" onclick={() => handleDelete(item)} disabled={isBusy}>
     删除
   </button>
 </div>

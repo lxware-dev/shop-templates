@@ -1,19 +1,19 @@
-.ec-payments {
+.shop-payments {
   display: grid;
   grid-template-columns: 1fr 420px;
-  gap: var(--ec-spacing-xl);
+  gap: var(--shop-spacing-xl);
   align-items: start;
 
   &__left {
     display: flex;
     flex-direction: column;
-    gap: var(--ec-spacing-lg);
+    gap: var(--shop-spacing-lg);
   }
 
   &__right {
     display: flex;
     flex-direction: column;
-    gap: var(--ec-spacing-lg);
+    gap: var(--shop-spacing-lg);
     position: sticky;
     top: 100px;
   }
@@ -21,42 +21,42 @@
   &__actions {
     display: flex;
     flex-direction: column;
-    gap: var(--ec-spacing-sm);
+    gap: var(--shop-spacing-sm);
 
-    .ec-btn {
+    .shop-btn {
       width: 100%;
     }
   }
 }
 
-.ec-payment-methods {
+.shop-payment-methods {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--ec-spacing-md);
+  gap: var(--shop-spacing-md);
 }
 
-.ec-payment-method {
+.shop-payment-method {
   position: relative;
   display: block;
-  padding: var(--ec-spacing-md);
-  border: 2px solid var(--ec-gray-200);
-  border-radius: var(--ec-border-radius);
-  background-color: var(--ec-color-base-100);
+  padding: var(--shop-spacing-md);
+  border: 2px solid var(--shop-gray-200);
+  border-radius: var(--shop-border-radius);
+  background-color: var(--shop-color-base-100);
   cursor: pointer;
-  transition: var(--ec-transition);
+  transition: var(--shop-transition);
 
   &:hover {
-    border-color: var(--ec-gray-400);
+    border-color: var(--shop-gray-400);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
 
   &--active {
-    border-color: var(--ec-color-primary);
-    background-color: var(--ec-color-primary-light, rgba(59, 130, 246, 0.05));
+    border-color: var(--shop-color-primary);
+    background-color: var(--shop-color-primary-light, rgba(59, 130, 246, 0.05));
 
-    .ec-payment-method__check {
+    .shop-payment-method__check {
       opacity: 1;
-      color: var(--ec-color-primary);
+      color: var(--shop-color-primary);
     }
   }
 
@@ -69,7 +69,7 @@
   &__content {
     display: flex;
     align-items: center;
-    gap: var(--ec-spacing-sm);
+    gap: var(--shop-spacing-sm);
   }
 
   &__icon {
@@ -79,8 +79,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--ec-border-radius);
-    background-color: var(--ec-gray-100);
+    border-radius: var(--shop-border-radius);
+    background-color: var(--shop-gray-100);
 
     svg {
       width: 28px;
@@ -97,41 +97,41 @@
   }
 
   &__name {
-    font-size: var(--ec-font-size-base);
+    font-size: var(--shop-font-size-base);
     font-weight: 600;
-    color: var(--ec-gray-900);
+    color: var(--shop-gray-900);
     line-height: 1.3;
   }
 
   &__desc {
-    font-size: var(--ec-font-size-xs);
-    color: var(--ec-gray-600);
+    font-size: var(--shop-font-size-xs);
+    color: var(--shop-gray-600);
     line-height: 1.3;
   }
 
   &__check {
     position: absolute;
-    top: var(--ec-spacing-sm);
-    right: var(--ec-spacing-sm);
+    top: var(--shop-spacing-sm);
+    right: var(--shop-spacing-sm);
     flex-shrink: 0;
     width: 18px;
     height: 18px;
     opacity: 0;
-    transition: var(--ec-transition);
+    transition: var(--shop-transition);
   }
 }
 
-.ec-order-info {
+.shop-order-info {
   display: flex;
   flex-direction: column;
-  gap: var(--ec-spacing-md);
+  gap: var(--shop-spacing-md);
 
   &__row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: var(--ec-spacing-md);
-    border-bottom: 1px solid var(--ec-gray-200);
+    padding-bottom: var(--shop-spacing-md);
+    border-bottom: 1px solid var(--shop-gray-200);
 
     &:last-child {
       border-bottom: none;
@@ -140,91 +140,91 @@
   }
 
   &__label {
-    font-size: var(--ec-font-size-base);
-    color: var(--ec-gray-600);
+    font-size: var(--shop-font-size-base);
+    color: var(--shop-gray-600);
   }
 
   &__value {
-    font-size: var(--ec-font-size-base);
+    font-size: var(--shop-font-size-base);
     font-weight: 600;
-    color: var(--ec-gray-900);
+    color: var(--shop-gray-900);
   }
 }
 
-.ec-order-summary {
+.shop-order-summary {
   &__amount {
-    font-size: var(--ec-font-size-xl);
-    color: var(--ec-color-primary);
+    font-size: var(--shop-font-size-xl);
+    color: var(--shop-color-primary);
   }
 }
 
-.ec-qrcode-container {
+.shop-qrcode-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--ec-spacing-lg);
-  padding: var(--ec-spacing-lg) 0;
+  gap: var(--shop-spacing-lg);
+  padding: var(--shop-spacing-lg) 0;
 }
 
-.ec-qrcode-wrapper {
+.shop-qrcode-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--ec-spacing-lg);
-  background-color: var(--ec-gray-50);
-  border-radius: var(--ec-border-radius);
-  border: 2px dashed var(--ec-gray-300);
+  padding: var(--shop-spacing-lg);
+  background-color: var(--shop-gray-50);
+  border-radius: var(--shop-border-radius);
+  border: 2px dashed var(--shop-gray-300);
 }
 
-.ec-qrcode-image {
+.shop-qrcode-image {
   width: 200px;
   height: 200px;
   display: block;
 }
 
-.ec-qrcode-info {
+.shop-qrcode-info {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: var(--ec-spacing-sm);
+  gap: var(--shop-spacing-sm);
 }
 
-.ec-qrcode-amount {
-  font-size: var(--ec-font-size-lg);
-  color: var(--ec-gray-900);
+.shop-qrcode-amount {
+  font-size: var(--shop-font-size-lg);
+  color: var(--shop-gray-900);
   margin: 0;
 
   strong {
-    font-size: var(--ec-font-size-xl);
-    color: var(--ec-color-primary);
+    font-size: var(--shop-font-size-xl);
+    color: var(--shop-color-primary);
     font-weight: 700;
   }
 }
 
-.ec-qrcode-tip {
-  font-size: var(--ec-font-size-base);
-  color: var(--ec-gray-600);
+.shop-qrcode-tip {
+  font-size: var(--shop-font-size-base);
+  color: var(--shop-gray-600);
   margin: 0;
 }
 
-.ec-qrcode-status {
+.shop-qrcode-status {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--ec-spacing-sm);
-  margin-top: var(--ec-spacing-md);
-  padding: var(--ec-spacing-sm) var(--ec-spacing-md);
-  background-color: var(--ec-color-primary-light, rgba(59, 130, 246, 0.1));
-  border-radius: var(--ec-border-radius);
-  font-size: var(--ec-font-size-sm);
-  color: var(--ec-color-primary);
+  gap: var(--shop-spacing-sm);
+  margin-top: var(--shop-spacing-md);
+  padding: var(--shop-spacing-sm) var(--shop-spacing-md);
+  background-color: var(--shop-color-primary-light, rgba(59, 130, 246, 0.1));
+  border-radius: var(--shop-border-radius);
+  font-size: var(--shop-font-size-sm);
+  color: var(--shop-color-primary);
 }
 
-.ec-loading-spinner {
+.shop-loading-spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid var(--ec-color-primary-light, rgba(59, 130, 246, 0.3));
-  border-top-color: var(--ec-color-primary);
+  border: 2px solid var(--shop-color-primary-light, rgba(59, 130, 246, 0.3));
+  border-top-color: var(--shop-color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -235,20 +235,20 @@
   }
 }
 
-.ec-loading,
-.ec-error {
-  padding: var(--ec-spacing-xl);
+.shop-loading,
+.shop-error {
+  padding: var(--shop-spacing-xl);
   text-align: center;
-  font-size: var(--ec-font-size-base);
-  color: var(--ec-gray-600);
+  font-size: var(--shop-font-size-base);
+  color: var(--shop-gray-600);
 }
 
-.ec-error {
-  color: var(--ec-color-error);
+.shop-error {
+  color: var(--shop-color-error);
 }
 
 @media (max-width: 1024px) {
-  .ec-payments {
+  .shop-payments {
     grid-template-columns: 1fr;
 
     &__right {
@@ -258,28 +258,28 @@
 }
 
 @media (max-width: 768px) {
-  .ec-payment-methods {
+  .shop-payment-methods {
     grid-template-columns: 1fr;
   }
 
-  .ec-qrcode-wrapper {
-    padding: var(--ec-spacing-md);
+  .shop-qrcode-wrapper {
+    padding: var(--shop-spacing-md);
   }
 
-  .ec-qrcode-image {
+  .shop-qrcode-image {
     width: 180px;
     height: 180px;
   }
 
-  .ec-qrcode-amount {
-    font-size: var(--ec-font-size-base);
+  .shop-qrcode-amount {
+    font-size: var(--shop-font-size-base);
 
     strong {
-      font-size: var(--ec-font-size-lg);
+      font-size: var(--shop-font-size-lg);
     }
   }
 
-  .ec-qrcode-tip {
-    font-size: var(--ec-font-size-sm);
+  .shop-qrcode-tip {
+    font-size: var(--shop-font-size-sm);
   }
 }

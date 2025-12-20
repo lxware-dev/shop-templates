@@ -19,24 +19,24 @@
   });
 </script>
 
-<div class="ec-order-item" in:fade={{ duration: 200 }}>
+<div class="shop-order-item" in:fade={{ duration: 200 }}>
   {#if item.itemImageUrl}
     <img
       src={getThumbnailUrl(item.itemImageUrl, 'M')}
       alt={item.itemTitle}
-      class="ec-order-item__image"
+      class="shop-order-item__image"
     />
   {/if}
-  <div class="ec-order-item__info">
-    <a href={`/shop/product/${item.productId}`} target="_blank" class="ec-order-item__name">
+  <div class="shop-order-item__info">
+    <a href={`/shop/product/${item.productId}`} target="_blank" class="shop-order-item__name">
       {item.itemTitle}
     </a>
     {#if specValueText}
-      <span class="ec-order-item__variant">{specValueText}</span>
+      <span class="shop-order-item__variant">{specValueText}</span>
     {/if}
-    <span class="ec-order-item__quantity">x {item.quantity || 1}</span>
+    <span class="shop-order-item__quantity">x {item.quantity || 1}</span>
   </div>
-  <span class="ec-order-item__price">
+  <span class="shop-order-item__price">
     {formatPrice(total)}
   </span>
 </div>
