@@ -7,25 +7,71 @@
   <div class="ec-filter">
     <div class="ec-filter__left">
       <select class="ec-select" id="category-select">
-        <option>全部分类</option>
+        <option value="">全部分类</option>
         <option
           th:each="category : ${categoryTree}"
           th:value="${category.id}"
           th:text="${category.name}"
+          th:selected="${#lists.contains(param.categoryId, #strings.toString(category.id))}"
         ></option>
       </select>
-      <input type="text" class="ec-input" id="search-input" placeholder="搜索商品..." />
+      <input
+        type="text"
+        class="ec-input"
+        id="search-input"
+        placeholder="搜索商品..."
+        th:value="${param.keyword != null && !param.keyword.empty ? param.keyword[0] : ''}"
+      />
     </div>
 
     <div class="ec-filter__right">
       <select class="ec-select" id="sort-select">
-        <option value="default">默认排序</option>
-        <option value="price-asc">价格从低到高</option>
-        <option value="price-desc">价格从高到低</option>
-        <option value="name">按名称排序</option>
+        <option value="" th:selected="${param.sort == null || param.sort.empty}">默认排序</option>
+        <option value="minPrice,asc" th:selected="${#lists.contains(param.sort, 'minPrice,asc')}">价格从低到高</option>
+        <option value="minPrice,desc" th:selected="${#lists.contains(param.sort, 'minPrice,desc')}">价格从高到低</option>
+        <option value="title,asc" th:selected="${#lists.contains(param.sort, 'title,asc')}">按名称排序</option>
       </select>
     </div>
   </div>
+
+  <script th:inline="javascript">
+    (function() {
+      const categorySelect = document.getElementById('category-select');
+      const searchInput = document.getElementById('search-input');
+      const sortSelect = document.getElementById('sort-select');
+
+      function updateFilters(params) {
+        const url = new URL(window.location.href);
+        
+        Object.keys(params).forEach(key => {
+          if (params[key] === '' || params[key] === null || params[key] === undefined) {
+            url.searchParams.delete(key);
+          } else {
+            url.searchParams.set(key, params[key]);
+          }
+        });
+
+        url.searchParams.delete('page');
+        
+        window.location.href = url.toString();
+      }
+
+      categorySelect.addEventListener('change', function() {
+        updateFilters({ categoryId: this.value });
+      });
+
+      searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          updateFilters({ keyword: this.value.trim() });
+        }
+      });
+
+      sortSelect.addEventListener('change', function() {
+        updateFilters({ sort: this.value });
+      });
+    })();
+  </script>
 
   <div class="ec-product-list">
     <a
@@ -39,7 +85,7 @@
       <div class="ec-product-card__info">
         <h3 class="ec-product-card__name" th:text="${product.title}"></h3>
         <p class="ec-product-card__description" th:text="${product.description}"></p>
-        <div class="ec-product-card__footer">
+        <div th:if="${product.minPrice != null or product.minOriginalPrice != null}" class="ec-product-card__footer">
           <div class="ec-product-card__price">
             <span class="ec-product-card__price-current" th:text="${product.minPrice}"></span>
             <s
