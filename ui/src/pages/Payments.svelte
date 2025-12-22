@@ -250,25 +250,34 @@
         </div>
 
         <div class="shop-payments__actions">
-          {#if selectedPaymentMethod}
-            <a href={`/uc/shop/orders/${orderCode}`} class="shop-btn shop-btn-secondary shop-btn-lg">
-              查看订单详情
-            </a>
-          {:else}
+          {#if selectedPaymentMethod?.provider === 'MANUAL'}
             <form
-              action={`/shop/payments/${orderCode}/pay`}
+              action={`/apis/api.ecommerce.halo.run/v1alpha1/payment-sessions/${paymentResponseQuery.data?.sessionCode}/callback`}
               method="POST"
               style="display: contents;"
             >
+              <div class="shop-form-group">
+                <label class="shop-label" for="outTradeNo">支付交易号 *</label>
+                <input type="text" class="shop-input" id="outTradeNo" name="outTradeNo" required />
+              </div>
               <input type="hidden" name="_csrf" value={csrfToken} />
-              <input type="hidden" name="paymentMethod" value={selectedPaymentMethod} />
               <button type="submit" class="shop-btn shop-btn-primary shop-btn-lg">
-                立即支付 {formatPrice(orderQuery.data.totalAmount || 0)}
+                已确认支付
               </button>
-              <a href={`/uc/shop/orders/${orderCode}`} class="shop-btn shop-btn-secondary shop-btn-lg">
+              <a
+                href={`/uc/shop/orders/${orderCode}`}
+                class="shop-btn shop-btn-secondary shop-btn-lg"
+              >
                 查看订单详情
               </a>
             </form>
+          {:else}
+            <a
+              href={`/uc/shop/orders/${orderCode}`}
+              class="shop-btn shop-btn-secondary shop-btn-lg"
+            >
+              查看订单详情
+            </a>
           {/if}
         </div>
       </div>
