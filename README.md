@@ -57,12 +57,15 @@
    ```
 
 3. 执行 `pnpm -r run build` 编译 UI
-4. 在主题的 js 或者 ts 入口文件中添加：
+4. 在 `package.json` 的 `dependencies` 中添加 `"@halo-dev/shop-ui": "workspace:*"` 并执行 `pnpm install`
+5. 在主题的 js 或者 ts 入口文件中添加：
 
    ```ts
    import '@halo-dev/shop-ui';
    import '@halo-dev/shop-ui/dist/index.css';
    ```
 
-5. 编译主题静态资源
-6. 在 `templates/shop` 目录创建上述的模板，内容可参考当前仓库
+6. 编译主题静态资源
+7. 在 `templates/shop` 目录创建上述的模板，内容可参考当前仓库
+
+示例仓库：[lxware-dev/theme-shop-advanced-starter](https://github.com/lxware-dev/theme-shop-advanced-starter)
