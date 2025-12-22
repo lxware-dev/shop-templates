@@ -16,6 +16,7 @@
   import { formatPrice } from '../utils/price';
   import { fade } from 'svelte/transition';
   import CheckoutOrderItem from './components/CheckoutOrderItem.svelte';
+  import AddressForm from './components/AddressForm.svelte';
 
   let { contextId, csrfToken }: { contextId: string; csrfToken: string } = $props();
 
@@ -103,79 +104,7 @@
               </select>
             </div>
             {#if !selectedAddressId}
-              <div class="shop-checkout__form-row">
-                <div class="shop-form-group">
-                  <label class="shop-label" for="lastName">姓 *</label>
-                  <input type="text" class="shop-input" id="lastName" name="userAddress.lastName" required />
-                </div>
-                <div class="shop-form-group">
-                  <label class="shop-label" for="firstName">名 *</label>
-                  <input type="text" class="shop-input" id="firstName" name="userAddress.firstName" required />
-                </div>
-              </div>
-              <div class="shop-form-group">
-                <label class="shop-label" for="contactPhone">联系电话 *</label>
-                <input type="tel" class="shop-input" id="contactPhone" name="userAddress.contactPhone" required />
-              </div>
-              <div class="shop-checkout__form-row">
-                <div class="shop-form-group">
-                  <label class="shop-label" for="province">省份 *</label>
-                  <input
-                    type="text"
-                    class="shop-input"
-                    id="province"
-                    name="userAddress.province"
-                    required
-                    placeholder="如：广东省"
-                  />
-                </div>
-                <div class="shop-form-group">
-                  <label class="shop-label" for="city">城市 *</label>
-                  <input
-                    type="text"
-                    class="shop-input"
-                    id="city"
-                    name="userAddress.city"
-                    required
-                    placeholder="如：深圳市"
-                  />
-                </div>
-              </div>
-              <div class="shop-checkout__form-row">
-                <div class="shop-form-group">
-                  <label class="shop-label" for="district">区县 *</label>
-                  <input
-                    type="text"
-                    class="shop-input"
-                    id="district"
-                    name="userAddress.district"
-                    required
-                    placeholder="如：南山区"
-                  />
-                </div>
-                <div class="shop-form-group">
-                  <label class="shop-label" for="postalCode">邮编 *</label>
-                  <input
-                    type="text"
-                    class="shop-input"
-                    id="postalCode"
-                    name="userAddress.postalCode"
-                    required
-                    placeholder="如：518000"
-                  />
-                </div>
-              </div>
-              <div class="shop-form-group">
-                <label class="shop-label" for="address">详细地址 *</label>
-                <textarea
-                  class="shop-textarea"
-                  id="address"
-                  rows="3"
-                  placeholder="请输入详细地址，如街道、门牌号等"
-                  name="userAddress.streetAddress"
-                  required
-                ></textarea>
-              </div>
+              <AddressForm />
             {/if}
           </div>
         {/if}
