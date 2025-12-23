@@ -29,6 +29,7 @@
   import Manual from './components/payment-methods/Manual.svelte';
   import Alipay from './components/payment-methods/Alipay.svelte';
   import PaymentQrcode from './components/payment-methods/PaymentQrcode.svelte';
+  import BankTransfer from './components/payment-methods/BankTransfer.svelte';
 
   let { orderCode, csrfToken }: { orderCode: string; csrfToken: string } = $props();
 
@@ -136,6 +137,7 @@
     [PaymentInitiateResponsePaymentProviderEnum.Manual]: Manual,
     [PaymentInitiateResponsePaymentProviderEnum.Alipay]: Alipay,
     [PaymentInitiateResponsePaymentProviderEnum.PaymentQrcode]: PaymentQrcode,
+    [PaymentInitiateResponsePaymentProviderEnum.BankTransfer]: BankTransfer,
   };
 
   let PaymentMethodComponent = $derived(

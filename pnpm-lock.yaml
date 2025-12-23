@@ -37,8 +37,8 @@ importers:
   ui:
     dependencies:
       '@halo-dev/api-client':
-        specifier: file:halo-dev-api-client-2.21.1.tgz
-        version: file:ui/halo-dev-api-client-2.21.1.tgz(axios@1.13.2)
+        specifier: file:halo-dev-api-client-2.22.0.tgz
+        version: file:ui/halo-dev-api-client-2.22.0.tgz(axios@1.13.2)
       '@tanstack/svelte-query':
         specifier: ^6.0.10
         version: 6.0.10(svelte@5.46.0)
@@ -103,9 +103,9 @@ packages:
   '@emnapi/wasi-threads@1.1.0':
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
 
-  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.21.1.tgz':
-    resolution: {integrity: sha512-yJ2d2grU6qEJAo6nn7FOmxlOutGcUAiXTs5sLTZmLrpQFbAdcaGo3W3fUq0NOcDZyIUQYfWewrUGKq50KC3JOw==, tarball: file:ui/halo-dev-api-client-2.21.1.tgz}
-    version: 2.21.1
+  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.22.0.tgz':
+    resolution: {integrity: sha512-PqEQ2uGNeA0k4uDugP2EZ6G3wcogEIwhZxS/bGSOc4Q6wIH3AeOm2XeQRM/YKYMhqsls+5FLsy+nTWHMrAHFiQ==, tarball: file:ui/halo-dev-api-client-2.22.0.tgz}
+    version: 2.22.0
     peerDependencies:
       axios: ^1.12.*
 
@@ -1201,7 +1201,7 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.21.1.tgz(axios@1.13.2)':
+  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.22.0.tgz(axios@1.13.2)':
     dependencies:
       axios: 1.13.2
       qs: 6.14.0
