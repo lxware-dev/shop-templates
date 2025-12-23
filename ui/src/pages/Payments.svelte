@@ -29,6 +29,7 @@
   import { toast, Toaster } from 'svelte-sonner';
   import Manual from './components/payment-methods/Manual.svelte';
   import Alipay from './components/payment-methods/Alipay.svelte';
+  import PaymentQrcode from './components/payment-methods/PaymentQrcode.svelte';
 
   let { orderCode, csrfToken }: { orderCode: string; csrfToken: string } = $props();
 
@@ -135,6 +136,7 @@
   const PaymentMethodComponents = {
     [PaymentInitiateResponsePaymentProviderEnum.Manual]: Manual,
     [PaymentInitiateResponsePaymentProviderEnum.Alipay]: Alipay,
+    [PaymentInitiateResponsePaymentProviderEnum.PaymentQrcode]: PaymentQrcode,
   };
 
   let PaymentMethodComponent = $derived(
@@ -250,7 +252,7 @@
         </div>
 
         <div class="shop-payments__actions">
-          {#if selectedPaymentMethod?.provider === 'MANUAL'}
+          {#if selectedPaymentMethod?.provider === 'MANUAL' || selectedPaymentMethod?.provider === 'PAYMENT_QRCODE'}
             <form
               action={`/apis/api.ecommerce.halo.run/v1alpha1/payment-sessions/${paymentResponseQuery.data?.sessionCode}/callback`}
               method="POST"
