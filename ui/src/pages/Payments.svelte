@@ -14,7 +14,6 @@
   import ky from 'ky';
   import { formatPrice } from '../utils/price';
   import { fade } from 'svelte/transition';
-  import IconAlipay from '~icons/simple-icons/alipay?raw&color=#1677FF';
   import MingcuteCheckLine from '~icons/mingcute/check-line?raw';
   import {
     OrderResponsePaymentStatusEnum,
@@ -23,7 +22,7 @@
     type OrderResponse,
     type PaymentInitiateResponse,
     type PaymentMethodPublicResponse,
-    type PaymentSessionResponseStatusEnum,
+    type PaymentSessionUcResponseStatusEnum,
   } from '@halo-dev/api-client';
   import PaymentOrderItem from './components/PaymentOrderItem.svelte';
   import { toast, Toaster } from 'svelte-sonner';
@@ -113,7 +112,7 @@
       ],
       queryFn: async () => {
         return await ky
-          .get<PaymentSessionResponseStatusEnum>(
+          .get<PaymentSessionUcResponseStatusEnum>(
             `/apis/uc.api.ecommerce.halo.run/v1alpha1/payment-sessions/${paymentResponseQuery.data?.sessionCode}/status`
           )
           .json();
@@ -186,9 +185,11 @@
                     class="shop-payment-method__radio"
                   />
                   <div class="shop-payment-method__content">
-                    <div class="shop-payment-method__icon">
-                      {@html IconAlipay}
-                    </div>
+                    {#if paymentMethod.providerIconUrl}
+                      <div class="shop-payment-method__icon">
+                        <img src={paymentMethod.providerIconUrl} alt={paymentMethod.name} />
+                      </div>
+                    {/if}
                     <div class="shop-payment-method__info">
                       <span class="shop-payment-method__name">{paymentMethod.name}</span>
                       <span class="shop-payment-method__desc">使用{paymentMethod.name}支付</span>
