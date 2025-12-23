@@ -9,7 +9,7 @@
 {#if paymentQrcode}
   <div class="shop-qrcode-container">
     <div class="shop-qrcode-wrapper">
-      <img src={paymentQrcode.qrcodeImageUrl} class="shop-qrcode-image" />
+      <img src={paymentQrcode.qrcodeImageUrl} alt="收款二维码" class="shop-qrcode-image" />
     </div>
     <div class="shop-qrcode-info">
       <p class="shop-qrcode-tip">{paymentQrcode.instructions}</p>
