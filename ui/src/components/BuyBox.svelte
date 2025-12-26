@@ -240,7 +240,7 @@
     </div>
 
     <div class="buy-box__actions">
-      <form action="/shop/cart" method="post">
+      <form action={`/shop/cart?redirect_uri=${window.location.href}`} method="post">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <input type="hidden" name="productVariantId" value={selectedVariant?.id} />
         <input type="hidden" name="quantity" value={quantity} />
@@ -252,7 +252,7 @@
           加入购物车
         </button>
       </form>
-      <form action="/shop/checkout/prepare" method="post">
+      <form action={`/shop/checkout/prepare?redirect_uri=${window.location.href}`} method="post">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <input type="hidden" name="source" value="BUY_NOW" />
         <input type="hidden" name="items[0].productVariantId" value={selectedVariant?.id} />
