@@ -30,7 +30,7 @@
         <iframe
           title="支付宝支付"
           srcdoc={alipay.pageRedirectionData}
-          style="width: 200px; height: 205px;"
+          style="width: 200px; height: 205px;border: none;"
         ></iframe>
       </div>
       <div class="shop-qrcode-info">
