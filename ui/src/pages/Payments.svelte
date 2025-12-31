@@ -19,6 +19,7 @@
     OrderResponsePaymentStatusEnum,
     PaymentInitiateRequestPreferredResponseTypeEnum,
     PaymentInitiateResponsePaymentProviderEnum,
+    PaymentMethodPublicResponseProviderEnum,
     type OrderResponse,
     type PaymentInitiateResponse,
     type PaymentMethodPublicResponse,
@@ -30,6 +31,7 @@
   import Alipay from './components/payment-methods/Alipay.svelte';
   import PaymentQrcode from './components/payment-methods/PaymentQrcode.svelte';
   import BankTransfer from './components/payment-methods/BankTransfer.svelte';
+  import WeChat from './components/payment-methods/WeChat.svelte';
 
   let { orderCode, csrfToken }: { orderCode: string; csrfToken: string } = $props();
 
@@ -85,6 +87,13 @@
     () => ({
       queryKey: ['shop:payment:response', orderCode, selectedPaymentMethodId],
       queryFn: async () => {
+        let preferredResponseType: PaymentInitiateRequestPreferredResponseTypeEnum =
+          PaymentInitiateRequestPreferredResponseTypeEnum.RedirectUrl;
+
+        if (selectedPaymentMethod?.provider === PaymentMethodPublicResponseProviderEnum.WechatPay) {
+          preferredResponseType = PaymentInitiateRequestPreferredResponseTypeEnum.QrcodeUrl;
+        }
+
         return await ky
           .post<PaymentInitiateResponse>(
             `/apis/uc.api.ecommerce.halo.run/v1alpha1/orders/${orderCode}/initiate-payment`,
@@ -92,7 +101,7 @@
               json: {
                 paymentMethodId: selectedPaymentMethodId,
                 returnUrl: window.location.href,
-                preferredResponseType: PaymentInitiateRequestPreferredResponseTypeEnum.RedirectUrl,
+                preferredResponseType,
               },
             }
           )
@@ -138,6 +147,7 @@
     [PaymentInitiateResponsePaymentProviderEnum.Alipay]: Alipay,
     [PaymentInitiateResponsePaymentProviderEnum.PaymentQrcode]: PaymentQrcode,
     [PaymentInitiateResponsePaymentProviderEnum.BankTransfer]: BankTransfer,
+    [PaymentInitiateResponsePaymentProviderEnum.WechatPay]: WeChat,
   };
 
   let PaymentMethodComponent = $derived(
