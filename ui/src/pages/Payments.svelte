@@ -92,7 +92,7 @@
               json: {
                 paymentMethodId: selectedPaymentMethodId,
                 returnUrl: window.location.href,
-                preferredResponseType: PaymentInitiateRequestPreferredResponseTypeEnum.Form,
+                preferredResponseType: PaymentInitiateRequestPreferredResponseTypeEnum.RedirectUrl,
               },
             }
           )

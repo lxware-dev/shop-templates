@@ -27,23 +27,29 @@
     <div class="shop-filter__right">
       <select class="shop-select" id="sort-select">
         <option value="" th:selected="${param.sort == null || param.sort.empty}">默认排序</option>
-        <option value="minPrice,asc" th:selected="${#lists.contains(param.sort, 'minPrice,asc')}">价格从低到高</option>
-        <option value="minPrice,desc" th:selected="${#lists.contains(param.sort, 'minPrice,desc')}">价格从高到低</option>
-        <option value="title,asc" th:selected="${#lists.contains(param.sort, 'title,asc')}">按名称排序</option>
+        <option value="minPrice,asc" th:selected="${#lists.contains(param.sort, 'minPrice,asc')}">
+          价格从低到高
+        </option>
+        <option value="minPrice,desc" th:selected="${#lists.contains(param.sort, 'minPrice,desc')}">
+          价格从高到低
+        </option>
+        <option value="title,asc" th:selected="${#lists.contains(param.sort, 'title,asc')}">
+          按名称排序
+        </option>
       </select>
     </div>
   </div>
 
   <script th:inline="javascript">
-    (function() {
+    (function () {
       const categorySelect = document.getElementById('category-select');
       const searchInput = document.getElementById('search-input');
       const sortSelect = document.getElementById('sort-select');
 
       function updateFilters(params) {
         const url = new URL(window.location.href);
-        
-        Object.keys(params).forEach(key => {
+
+        Object.keys(params).forEach((key) => {
           if (params[key] === '' || params[key] === null || params[key] === undefined) {
             url.searchParams.delete(key);
           } else {
@@ -52,22 +58,22 @@
         });
 
         url.searchParams.delete('page');
-        
+
         window.location.href = url.toString();
       }
 
-      categorySelect.addEventListener('change', function() {
+      categorySelect.addEventListener('change', function () {
         updateFilters({ categoryId: this.value });
       });
 
-      searchInput.addEventListener('keydown', function(e) {
+      searchInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
           e.preventDefault();
           updateFilters({ keyword: this.value.trim() });
         }
       });
 
-      sortSelect.addEventListener('change', function() {
+      sortSelect.addEventListener('change', function () {
         updateFilters({ sort: this.value });
       });
     })();
@@ -85,7 +91,10 @@
       <div class="shop-product-card__info">
         <h3 class="shop-product-card__name" th:text="${product.title}"></h3>
         <p class="shop-product-card__description" th:text="${product.description}"></p>
-        <div th:if="${product.minPrice != null or product.minOriginalPrice != null}" class="shop-product-card__footer">
+        <div
+          th:if="${product.minPrice != null or product.minOriginalPrice != null}"
+          class="shop-product-card__footer"
+        >
           <div class="shop-product-card__price">
             <span class="shop-product-card__price-current" th:text="${product.minPrice}"></span>
             <s

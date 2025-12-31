@@ -223,7 +223,11 @@
     <div class="buy-box__quantity">
       <span class="buy-box__quantity-label">数量</span>
       <div class="shop-quantity">
-        <button class="shop-quantity__btn" onclick={decreaseQuantity} disabled={!canDecreaseQuantity}>
+        <button
+          class="shop-quantity__btn"
+          onclick={decreaseQuantity}
+          disabled={!canDecreaseQuantity}
+        >
           {@html MingcuteMinimizeLine}
         </button>
         <input
@@ -233,7 +237,11 @@
           min="1"
           max={selectedVariant?.stock || 1}
         />
-        <button class="shop-quantity__btn" onclick={increaseQuantity} disabled={!canIncreaseQuantity}>
+        <button
+          class="shop-quantity__btn"
+          onclick={increaseQuantity}
+          disabled={!canIncreaseQuantity}
+        >
           {@html MingcuteAddLine}
         </button>
       </div>

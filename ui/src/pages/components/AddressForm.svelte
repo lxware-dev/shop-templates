@@ -82,7 +82,13 @@
 <div class="shop-checkout__form-row">
   <div class="shop-form-group">
     <label class="shop-label" for="province">省份 *</label>
-    <select id="province" class="shop-select" name="userAddress.provinceCode" bind:value={provinceCode} required>
+    <select
+      id="province"
+      class="shop-select"
+      name="userAddress.provinceCode"
+      bind:value={provinceCode}
+      required
+    >
       {#each provinceQuery.data ?? [] as province (province.code)}
         <option value={province.code}>{province.name}</option>
       {/each}
@@ -90,7 +96,13 @@
   </div>
   <div class="shop-form-group">
     <label class="shop-label" for="city">城市 *</label>
-    <select id="city" class="shop-select" name="userAddress.cityCode" bind:value={cityCode} required>
+    <select
+      id="city"
+      class="shop-select"
+      name="userAddress.cityCode"
+      bind:value={cityCode}
+      required
+    >
       {#each cityQuery.data ?? [] as city (city.code)}
         <option value={city.code}>{city.name}</option>
       {/each}
@@ -100,7 +112,13 @@
 <div class="shop-checkout__form-row">
   <div class="shop-form-group">
     <label class="shop-label" for="district">区县 *</label>
-    <select id="district" class="shop-select" name="userAddress.districtCode" bind:value={areaCode} required>
+    <select
+      id="district"
+      class="shop-select"
+      name="userAddress.districtCode"
+      bind:value={areaCode}
+      required
+    >
       {#each areaQuery.data ?? [] as area (area.code)}
         <option value={area.code}>{area.name}</option>
       {/each}

@@ -41,6 +41,11 @@
         </div>
       </div>
     </div>
+  {:else if responseType === 'REDIRECT_URL'}
+    <div class="shop-redirect-container">
+      <a href={alipay.redirectUrl} target="_blank" class="shop-redirect-link"> 点击跳转至支付宝 </a>
+      <p class="shop-redirect-tip">点击链接后将在新窗口打开支付页面</p>
+    </div>
   {:else}
     <div>暂无支付宝支付信息，请联系管理员</div>
   {/if}

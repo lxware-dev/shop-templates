@@ -234,6 +234,29 @@
   }
 }
 
+.shop-redirect-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--shop-spacing-sm);
+}
+
+.shop-redirect-link {
+  font-size: var(--shop-font-size-base);
+  color: var(--shop-color-primary);
+  text-decoration: none;
+  transition: var(--shop-transition);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.shop-redirect-tip {
+  font-size: var(--shop-font-size-sm);
+  color: var(--shop-gray-500);
+  margin: 0;
+}
+
 .shop-loading,
 .shop-error {
   padding: var(--shop-spacing-xl);
