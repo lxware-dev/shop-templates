@@ -265,7 +265,7 @@
         </div>
 
         <div class="shop-payments__actions">
-          {#if selectedPaymentMethod?.provider === 'MANUAL' || selectedPaymentMethod?.provider === 'PAYMENT_QRCODE'}
+          {#if selectedPaymentMethod?.provider === 'BANK_TRANSFER' || selectedPaymentMethod?.provider === 'PAYMENT_QRCODE'}
             <form
               action={`/apis/api.ecommerce.halo.run/v1alpha1/payment-sessions/${paymentResponseQuery.data?.sessionCode}/callback`}
               method="POST"
