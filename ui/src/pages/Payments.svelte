@@ -32,6 +32,7 @@
   import PaymentQrcode from './components/payment-methods/PaymentQrcode.svelte';
   import BankTransfer from './components/payment-methods/BankTransfer.svelte';
   import WeChat from './components/payment-methods/WeChat.svelte';
+  import Stripe from './components/payment-methods/Stripe.svelte';
 
   let { orderCode, csrfToken }: { orderCode: string; csrfToken: string } = $props();
 
@@ -148,6 +149,7 @@
     [PaymentInitiateResponsePaymentProviderEnum.PaymentQrcode]: PaymentQrcode,
     [PaymentInitiateResponsePaymentProviderEnum.BankTransfer]: BankTransfer,
     [PaymentInitiateResponsePaymentProviderEnum.WechatPay]: WeChat,
+    [PaymentInitiateResponsePaymentProviderEnum.Stripe]: Stripe,
   };
 
   let PaymentMethodComponent = $derived(
