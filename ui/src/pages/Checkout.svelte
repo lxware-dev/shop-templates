@@ -22,6 +22,21 @@
 
   const queryClient = new QueryClient();
 
+  // Context
+  const contextQuery = createQuery(
+    () => ({
+      queryKey: ['shop:checkout:context', contextId],
+      queryFn: async () => {
+        return await ky
+          .get<CheckoutContextResponse>(
+            `/apis/uc.api.ecommerce.halo.run/v1alpha1/checkout/${contextId}`
+          )
+          .json();
+      },
+    }),
+    () => queryClient
+  );
+
   const addressQuery = createQuery(
     () => ({
       queryKey: ['shop:user:addresses'],
@@ -43,21 +58,6 @@
       selectedAddressId = defaultAddress?.id || addresses[0]?.id;
     }
   });
-
-  // Context
-  const contextQuery = createQuery(
-    () => ({
-      queryKey: ['shop:checkout:context', contextId],
-      queryFn: async () => {
-        return await ky
-          .get<CheckoutContextResponse>(
-            `/apis/uc.api.ecommerce.halo.run/v1alpha1/checkout/${contextId}`
-          )
-          .json();
-      },
-    }),
-    () => queryClient
-  );
 </script>
 
 <div class="shop-entry">
@@ -67,7 +67,10 @@
 
   <form action={`/shop/checkout/${contextId}/submit`} method="POST" class="shop-checkout">
     <input type="hidden" name="_csrf" value={csrfToken} />
-    <input type="hidden" name="saveAsNewAddress" value={!selectedAddressId} />
+
+    {#if contextQuery.data?.isShippingRequired}
+      <input type="hidden" name="saveAsNewAddress" value={!selectedAddressId} />
+    {/if}
 
     {#each contextQuery.data?.items as item, index}
       <input type="hidden" name="items[{index}].productVariantId" value={item.productVariant?.id} />
@@ -77,38 +80,40 @@
     {/each}
 
     <div class="shop-checkout__form">
-      <div class="shop-card">
-        <h2 class="shop-card__title">收货地址</h2>
-        {#if addressQuery.isLoading}
-          加载中...
-        {:else}
-          <div class="shop-address-form" in:fade={{ duration: 200 }}>
-            <div class="shop-form-group">
-              <label class="shop-label" for="address-selector">选择收货地址</label>
-              <select
-                class="shop-select"
-                id="address-selector"
-                name="selectedAddressId"
-                bind:value={selectedAddressId}
-              >
-                {#each addressQuery.data ?? [] as address (address.id)}
-                  <option value={address.id}>
-                    {[address.lastName, address.firstName].filter(Boolean).join(' ')}
-                    {address.contactPhone}
-                    {[address.province, address.city, address.district, address.streetAddress]
-                      .filter(Boolean)
-                      .join('')}{address.isDefault ? ' (默认)' : ''}
-                  </option>
-                {/each}
-                <option value="">填写新地址</option>
-              </select>
+      {#if contextQuery.data?.isShippingRequired}
+        <div class="shop-card">
+          <h2 class="shop-card__title">收货地址</h2>
+          {#if addressQuery.isLoading}
+            加载中...
+          {:else}
+            <div class="shop-address-form" in:fade={{ duration: 200 }}>
+              <div class="shop-form-group">
+                <label class="shop-label" for="address-selector">选择收货地址</label>
+                <select
+                  class="shop-select"
+                  id="address-selector"
+                  name="selectedAddressId"
+                  bind:value={selectedAddressId}
+                >
+                  {#each addressQuery.data ?? [] as address (address.id)}
+                    <option value={address.id}>
+                      {[address.lastName, address.firstName].filter(Boolean).join(' ')}
+                      {address.contactPhone}
+                      {[address.province, address.city, address.district, address.streetAddress]
+                        .filter(Boolean)
+                        .join('')}{address.isDefault ? ' (默认)' : ''}
+                    </option>
+                  {/each}
+                  <option value="">填写新地址</option>
+                </select>
+              </div>
+              {#if !selectedAddressId}
+                <AddressForm />
+              {/if}
             </div>
-            {#if !selectedAddressId}
-              <AddressForm />
-            {/if}
-          </div>
-        {/if}
-      </div>
+          {/if}
+        </div>
+      {/if}
 
       <div class="shop-card">
         <h2 class="shop-card__title">备注</h2>

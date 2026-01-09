@@ -104,7 +104,7 @@ packages:
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
 
   '@halo-dev/api-client@file:ui/halo-dev-api-client-2.22.0.tgz':
-    resolution: {integrity: sha512-msgChxQ+qf7K3XVYaGKf+VSp6Lf7F1qa3bHYMccnvbNbTA+lho6RrTcuTPo1WMyRrIerEdDxkiTjRR79Fa7dvw==, tarball: file:ui/halo-dev-api-client-2.22.0.tgz}
+    resolution: {integrity: sha512-hqQNmFpWx+xUzPIVXa/MKo7evTsnlTRL2RuYlOLOc/mKVxuYwQ1+1LwQi2xnUb5S6gZdBPdD2qQESMl7E65rXw==, tarball: file:ui/halo-dev-api-client-2.22.0.tgz}
     version: 2.22.0
     peerDependencies:
       axios: ^1.12.*
