@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { PaymentInitiateResponse } from '@halo-dev/api-client';
-  import QRCode from 'qrcode';
 
   let { paymentResponse }: { paymentResponse: PaymentInitiateResponse } = $props();
 
@@ -12,9 +11,9 @@
   {#if responseType === 'QRCODE_URL'}
     <div class="shop-qrcode-container">
       <div class="shop-qrcode-wrapper">
-        {#await QRCode.toDataURL(easyPay?.qrCode?.url!) then qrcodeUrl}
-          <img src={qrcodeUrl} alt="支付二维码" class="shop-qrcode-image" />
-        {/await}
+        {#if easyPay.qrCode?.url}
+          <img src={easyPay.qrCode?.url} alt="支付二维码" class="shop-qrcode-image" />
+        {/if}
       </div>
       <div class="shop-qrcode-info">
         <p class="shop-qrcode-tip">
