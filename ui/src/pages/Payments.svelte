@@ -199,9 +199,9 @@
                     class="shop-payment-method__radio"
                   />
                   <div class="shop-payment-method__content">
-                    {#if paymentMethod.providerIconUrl}
+                    {#if paymentMethod.icon}
                       <div class="shop-payment-method__icon">
-                        <img src={paymentMethod.providerIconUrl} alt={paymentMethod.name} />
+                        <img src={paymentMethod.icon} alt={paymentMethod.name} />
                       </div>
                     {/if}
                     <div class="shop-payment-method__info">
