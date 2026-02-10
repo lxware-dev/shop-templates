@@ -33,6 +33,7 @@
   import BankTransfer from './components/payment-methods/BankTransfer.svelte';
   import WeChat from './components/payment-methods/WeChat.svelte';
   import Stripe from './components/payment-methods/Stripe.svelte';
+  import EasyPay from './components/payment-methods/EasyPay.svelte';
 
   let { orderCode, csrfToken }: { orderCode: string; csrfToken: string } = $props();
 
@@ -91,7 +92,10 @@
         let preferredResponseType: PaymentInitiateRequestPreferredResponseTypeEnum =
           PaymentInitiateRequestPreferredResponseTypeEnum.RedirectUrl;
 
-        if (selectedPaymentMethod?.provider === PaymentMethodPublicResponseProviderEnum.WechatPay) {
+        if (
+          selectedPaymentMethod?.provider === PaymentMethodPublicResponseProviderEnum.WechatPay ||
+          selectedPaymentMethod?.provider === PaymentMethodPublicResponseProviderEnum.EasyPay
+        ) {
           preferredResponseType = PaymentInitiateRequestPreferredResponseTypeEnum.QrcodeUrl;
         }
 
@@ -150,6 +154,7 @@
     [PaymentInitiateResponsePaymentProviderEnum.BankTransfer]: BankTransfer,
     [PaymentInitiateResponsePaymentProviderEnum.WechatPay]: WeChat,
     [PaymentInitiateResponsePaymentProviderEnum.Stripe]: Stripe,
+    [PaymentInitiateResponsePaymentProviderEnum.EasyPay]: EasyPay,
   };
 
   let PaymentMethodComponent = $derived(
