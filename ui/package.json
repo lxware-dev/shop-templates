@@ -14,10 +14,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build --config ./vite.lib.config.ts",
+    "build": "vp build --config ./vite.lib.config.ts",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
-    "dev": "vite",
-    "preview": "vite preview",
+    "dev": "vp dev",
+    "preview": "vp preview",
     "lint": "prettier --check ."
   },
   "devDependencies": {

@@ -1,18 +1,27 @@
-import path from 'path';
-import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
+import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
-  experimental: {
-    enableNativePlugin: true,
-  },
-  build: {
+  pack: {
+    entry: resolve(__dirname, 'src/index.ts'),
+    name: 'main',
+    globalName: 'main',
+    format: 'iife',
     outDir: 'shop-dist',
-    lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'main',
-      fileName: 'main',
-      formats: ['iife'],
-      cssFileName: 'style',
+    deps: {
+      alwaysBundle: ['medium-zoom', 'swiper/**', '@halo-dev/shop-ui/**'],
+    },
+    outputOptions: {
+      minify: true,
+      entryFileNames: 'main.iife.js',
+    },
+    platform: 'browser',
+    css: {
+      minify: true,
     },
   },
+  staged: {
+    '*': 'prettier --check .',
+  },
+  lint: { options: { typeAware: true, typeCheck: true } },
 });

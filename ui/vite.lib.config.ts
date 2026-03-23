@@ -1,12 +1,9 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import autoprefixer from 'autoprefixer';
 import Icons from 'unplugin-icons/vite';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
-  experimental: {
-    enableNativePlugin: true,
-  },
   plugins: [
     svelte(),
     Icons({
