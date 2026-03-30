@@ -62,6 +62,12 @@
         window.location.href = url.toString();
       }
 
+      function goToPage(page) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('page', page);
+        window.location.href = url.toString();
+      }
+
       categorySelect.addEventListener('change', function () {
         updateFilters({ categoryId: this.value });
       });
@@ -76,12 +82,22 @@
       sortSelect.addEventListener('change', function () {
         updateFilters({ sort: this.value });
       });
+
+      document.addEventListener('click', function (event) {
+        const button = event.target.closest('.shop-pagination__button[data-page]');
+
+        if (!button || button.disabled) {
+          return;
+        }
+
+        goToPage(button.dataset.page);
+      });
     })();
   </script>
 
   <div class="shop-product-list">
     <a
-      th:each="product : ${productPage.content}"
+      th:each="product : ${productPage.items}"
       th:href="@{/shop/product/{id}(id=${product.id})}"
       class="shop-product-card"
     >
@@ -106,5 +122,28 @@
         </div>
       </div>
     </a>
+  </div>
+
+  <div class="shop-pagination" th:if="${productPage.totalPages > 0}">
+    <button
+      type="button"
+      class="shop-btn shop-btn-secondary shop-btn-sm shop-pagination__button"
+      th:disabled="${!productPage.hasPrevious()}"
+      th:attr="data-page=${productPage.page-1}"
+    >
+      上一页
+    </button>
+    <span
+      class="shop-pagination__info"
+      th:text="|${productPage.page}/${productPage.totalPages}|"
+    ></span>
+    <button
+      type="button"
+      class="shop-btn shop-btn-secondary shop-btn-sm shop-pagination__button"
+      th:disabled="${!productPage.hasNext()}"
+      th:attr="data-page=${productPage.page+1}"
+    >
+      下一页
+    </button>
   </div>
 </div>

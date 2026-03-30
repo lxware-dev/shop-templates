@@ -7,3 +7,24 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
+
+.shop-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--shop-spacing-md);
+  margin-top: var(--shop-spacing-xl);
+
+  &__info {
+    min-width: 56px;
+    text-align: center;
+    font-size: var(--shop-font-size-base);
+    color: var(--shop-gray-700);
+  }
+}
+
+@media (max-width: 768px) {
+  .shop-pagination {
+    gap: var(--shop-spacing-sm);
+  }
+}
