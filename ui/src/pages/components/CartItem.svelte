@@ -8,6 +8,8 @@
   import ky from 'ky';
   import { formatPrice } from '../../utils/price';
   import { toast } from 'svelte-sonner';
+  import { get } from 'svelte/store';
+  import i18n from '../../i18n';
 
   let { item, queryClient }: { item: CartItemResponse; queryClient: QueryClient } = $props();
 
@@ -42,7 +44,7 @@
         queryClient.invalidateQueries({ queryKey: ['shop:cart:items'] });
       },
       onError: () => {
-        toast.error('更新数量失败，请重试');
+        toast.error(get(i18n).t('cartItem.updateQuantityFailed'));
         queryClient.invalidateQueries({ queryKey: ['shop:cart:items'] });
       },
     }),
@@ -118,6 +120,6 @@
   </div>
   <div class="shop-cart-item__total">{formatPrice(total || 0)}</div>
   <button class="shop-cart-item__remove" onclick={() => handleDelete(item)} disabled={isBusy}>
-    删除
+    {$i18n.t('cartItem.remove')}
   </button>
 </div>

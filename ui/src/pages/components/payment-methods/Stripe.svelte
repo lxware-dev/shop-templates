@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PaymentInitiateResponse } from '@halo-dev/api-client';
+  import i18n from '../../../i18n';
   let { paymentResponse }: { paymentResponse: PaymentInitiateResponse } = $props();
 
   let responseType = $derived(paymentResponse.payload?.responseType);
@@ -10,13 +11,15 @@
   {#if responseType === 'REDIRECT_URL'}
     <div class="shop-redirect-container">
       <a href={stripe.checkoutUrl} target="_blank" class="shop-redirect-link">
-        点击跳转至 Stripe
+        {$i18n.t('paymentMethods.redirectToProvider', {
+          provider: $i18n.t('common.providers.stripe'),
+        })}
       </a>
-      <p class="shop-redirect-tip">点击链接后将在新窗口打开支付页面</p>
+      <p class="shop-redirect-tip">{$i18n.t('common.redirectTip')}</p>
     </div>
   {:else}
-    <div>暂无 Stripe 支付信息，请联系管理员</div>
+    <div>{$i18n.t('paymentMethods.stripeUnavailable')}</div>
   {/if}
 {:else}
-  <div>暂无 Stripe 支付信息，请联系管理员</div>
+  <div>{$i18n.t('paymentMethods.stripeUnavailable')}</div>
 {/if}

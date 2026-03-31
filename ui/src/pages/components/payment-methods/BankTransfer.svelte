@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PaymentInitiateResponse } from '@halo-dev/api-client';
+  import i18n from '../../../i18n';
 
   let { paymentResponse }: { paymentResponse: PaymentInitiateResponse } = $props();
 
@@ -8,12 +9,14 @@
 
 {#if bankTransfer}
   <ul>
-    <li>银行名称：{bankTransfer?.bankName}</li>
-    <li>银行地址：{bankTransfer?.bankAddress}</li>
-    <li>账户名称：{bankTransfer?.accountName}</li>
-    <li>账户号码：{bankTransfer?.accountNumber}</li>
-    <li>备注：{bankTransfer?.instructions}</li>
+    <li>{$i18n.t('paymentMethods.bankName', { value: bankTransfer?.bankName ?? '-' })}</li>
+    <li>{$i18n.t('paymentMethods.bankAddress', { value: bankTransfer?.bankAddress ?? '-' })}</li>
+    <li>{$i18n.t('paymentMethods.accountName', { value: bankTransfer?.accountName ?? '-' })}</li>
+    <li>
+      {$i18n.t('paymentMethods.accountNumber', { value: bankTransfer?.accountNumber ?? '-' })}
+    </li>
+    <li>{$i18n.t('paymentMethods.notes', { value: bankTransfer?.instructions ?? '-' })}</li>
   </ul>
 {:else}
-  <div>暂无银行转账信息，请联系管理员</div>
+  <div>{$i18n.t('paymentMethods.bankTransferUnavailable')}</div>
 {/if}

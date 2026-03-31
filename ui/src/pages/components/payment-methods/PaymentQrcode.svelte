@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PaymentInitiateResponse } from '@halo-dev/api-client';
+  import i18n from '../../../i18n';
 
   let { paymentResponse }: { paymentResponse: PaymentInitiateResponse } = $props();
 
@@ -9,7 +10,11 @@
 {#if paymentQrcode}
   <div class="shop-qrcode-container">
     <div class="shop-qrcode-wrapper">
-      <img src={paymentQrcode.qrcodeImageUrl} alt="收款二维码" class="shop-qrcode-image" />
+      <img
+        src={paymentQrcode.qrcodeImageUrl}
+        alt={$i18n.t('common.receivingQrCodeAlt')}
+        class="shop-qrcode-image"
+      />
     </div>
     <div class="shop-qrcode-info">
       <p class="shop-qrcode-tip">{paymentQrcode.instructions}</p>

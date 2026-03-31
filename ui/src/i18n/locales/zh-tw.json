@@ -1,0 +1,106 @@
+{
+  "common": {
+    "loading": "載入中…",
+    "viewLargeImage": "查看大圖",
+    "qrCodeAlt": "支付二維碼",
+    "receivingQrCodeAlt": "收款二維碼",
+    "paymentWaiting": "等待支付中…",
+    "redirectTip": "點擊連結後將在新視窗開啟支付頁面",
+    "viewOrderDetails": "查看訂單詳情",
+    "defaultAddressSuffix": " (預設)",
+    "providers": {
+      "alipay": "支付寶",
+      "wechat": "微信",
+      "stripe": "Stripe"
+    }
+  },
+  "buyBox": {
+    "loadFailed": "載入失敗：{{message}}",
+    "price": "價格",
+    "stock": "庫存：{{count}} 件",
+    "quantity": "數量",
+    "addToCart": "加入購物車",
+    "buyNow": "立即購買"
+  },
+  "cart": {
+    "title": "購物車",
+    "subtitle": "共 {{count}} 件商品",
+    "loadError": "載入錯誤：{{message}}",
+    "empty": "購物車為空",
+    "summaryTitle": "訂單摘要",
+    "itemsTotal": "商品總計",
+    "shipping": "運費",
+    "pendingCalculation": "待計算",
+    "total": "總計",
+    "proceedToCheckout": "前往結算",
+    "continueShopping": "繼續購物"
+  },
+  "cartItem": {
+    "updateQuantityFailed": "更新數量失敗，請重試",
+    "remove": "刪除"
+  },
+  "checkout": {
+    "title": "結算",
+    "shippingAddress": "收貨地址",
+    "selectShippingAddress": "選擇收貨地址",
+    "fillNewAddress": "填寫新地址",
+    "notes": "備註",
+    "orderItems": "商品清單",
+    "summaryTitle": "費用彙總",
+    "subtotal": "小計",
+    "shipping": "運費",
+    "payableTotal": "應付總額",
+    "goToPay": "去支付",
+    "backToCart": "返回購物車"
+  },
+  "addressForm": {
+    "lastName": "姓 *",
+    "firstName": "名 *",
+    "contactPhone": "聯絡電話 *",
+    "province": "省份 *",
+    "city": "城市 *",
+    "district": "區縣 *",
+    "postalCode": "郵遞區號 *",
+    "postalCodePlaceholder": "例如：518000",
+    "address": "詳細地址 *",
+    "addressPlaceholder": "請輸入詳細地址，例如街道、門牌號等"
+  },
+  "payments": {
+    "paymentSuccess": "支付成功",
+    "title": "支付訂單",
+    "orderCode": "訂單號：{{code}}",
+    "loadOrderFailed": "載入訂單資訊失敗，請重新整理後重試",
+    "orderNotPayablePrefix": "目前訂單不可支付，點擊",
+    "orderNotPayableSuffix": "",
+    "selectPaymentMethod": "選擇支付方式",
+    "loadPaymentMethodsFailed": "載入支付方式失敗，請重新整理後重試",
+    "noPaymentMethods": "暫無支付方式，請聯絡管理員",
+    "usePaymentMethod": "使用 {{name}} 支付",
+    "orderItems": "商品清單",
+    "summaryTitle": "費用彙總",
+    "itemsSubtotal": "商品小計",
+    "shipping": "運費",
+    "payableTotal": "應付總額",
+    "paymentTitle": "支付",
+    "loadPaymentResponseFailed": "載入支付回應失敗，請重新整理後重試",
+    "unsupportedPaymentMethod": "暫不支援該支付方式，請聯絡管理員",
+    "paymentTransactionNumber": "支付交易號 *",
+    "paymentConfirmed": "已確認支付"
+  },
+  "paymentMethods": {
+    "scanToPay": "請使用 {{provider}} 掃描二維碼完成支付",
+    "redirectToProvider": "點擊跳轉至 {{provider}}",
+    "paymentInfoUnavailable": "暫無支付資訊，請聯絡管理員",
+    "alipayUnavailable": "暫無支付寶支付資訊，請聯絡管理員",
+    "wechatUnavailable": "暫無微信支付資訊，請聯絡管理員",
+    "stripeUnavailable": "暫無 Stripe 支付資訊，請聯絡管理員",
+    "manualUnavailable": "暫無手動支付資訊，請聯絡管理員",
+    "bankTransferUnavailable": "暫無銀行轉帳資訊，請聯絡管理員",
+    "alipayTitle": "支付寶支付",
+    "bankName": "銀行名稱：{{value}}",
+    "bankAddress": "銀行地址：{{value}}",
+    "accountName": "帳戶名稱：{{value}}",
+    "accountNumber": "帳戶號碼：{{value}}",
+    "notes": "備註：{{value}}"
+  }
+}

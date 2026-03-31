@@ -17,6 +17,7 @@
   import { fade } from 'svelte/transition';
   import CheckoutOrderItem from './components/CheckoutOrderItem.svelte';
   import AddressForm from './components/AddressForm.svelte';
+  import i18n from '../i18n';
 
   let { contextId, csrfToken }: { contextId: string; csrfToken: string } = $props();
 
@@ -62,7 +63,7 @@
 
 <div class="shop-entry">
   <div class="shop-entry__header">
-    <h1 class="shop-entry__title">结算</h1>
+    <h1 class="shop-entry__title">{$i18n.t('checkout.title')}</h1>
   </div>
 
   <form action={`/shop/checkout/${contextId}/submit`} method="POST" class="shop-checkout">
@@ -82,13 +83,15 @@
     <div class="shop-checkout__form">
       {#if contextQuery.data?.isShippingRequired}
         <div class="shop-card">
-          <h2 class="shop-card__title">收货地址</h2>
+          <h2 class="shop-card__title">{$i18n.t('checkout.shippingAddress')}</h2>
           {#if addressQuery.isLoading}
-            加载中...
+            {$i18n.t('common.loading')}
           {:else}
             <div class="shop-address-form" in:fade={{ duration: 200 }}>
               <div class="shop-form-group">
-                <label class="shop-label" for="address-selector">选择收货地址</label>
+                <label class="shop-label" for="address-selector">
+                  {$i18n.t('checkout.selectShippingAddress')}
+                </label>
                 <select
                   class="shop-select"
                   id="address-selector"
@@ -101,10 +104,10 @@
                       {address.contactPhone}
                       {[address.province, address.city, address.district, address.streetAddress]
                         .filter(Boolean)
-                        .join('')}{address.isDefault ? ' (默认)' : ''}
+                        .join('')}{address.isDefault ? $i18n.t('common.defaultAddressSuffix') : ''}
                     </option>
                   {/each}
-                  <option value="">填写新地址</option>
+                  <option value="">{$i18n.t('checkout.fillNewAddress')}</option>
                 </select>
               </div>
               {#if !selectedAddressId}
@@ -116,7 +119,7 @@
       {/if}
 
       <div class="shop-card">
-        <h2 class="shop-card__title">备注</h2>
+        <h2 class="shop-card__title">{$i18n.t('checkout.notes')}</h2>
         <div>
           <div class="shop-form-group">
             <textarea class="shop-textarea" name="customerNotes" id="customer-notes" rows="3"
@@ -128,7 +131,7 @@
 
     <div class="shop-checkout__summary">
       <div class="shop-card">
-        <h2 class="shop-card__title">商品清单</h2>
+        <h2 class="shop-card__title">{$i18n.t('checkout.orderItems')}</h2>
         <div class="shop-order-items">
           {#each contextQuery.data?.items ?? [] as item}
             <CheckoutOrderItem {item} />
@@ -137,27 +140,31 @@
       </div>
 
       <div class="shop-card">
-        <h2 class="shop-card__title">费用汇总</h2>
+        <h2 class="shop-card__title">{$i18n.t('checkout.summaryTitle')}</h2>
         <div class="shop-order-summary">
           <div class="shop-order-summary__row">
-            <span>小计</span>
+            <span>{$i18n.t('checkout.subtotal')}</span>
             <span>{formatPrice(contextQuery.data?.calculateResult?.originalTotalAmount || 0)}</span>
           </div>
           <div class="shop-order-summary__row">
-            <span>运费</span>
+            <span>{$i18n.t('checkout.shipping')}</span>
             <span>{formatPrice(contextQuery.data?.calculateResult?.shippingFeeAmount || 0)}</span>
           </div>
           <div class="shop-divider"></div>
           <div class="shop-order-summary__row shop-order-summary__row--total">
-            <span>应付总额</span>
+            <span>{$i18n.t('checkout.payableTotal')}</span>
             <span>{formatPrice(contextQuery.data?.calculateResult?.payableAmount || 0)}</span>
           </div>
         </div>
       </div>
 
       <div class="shop-checkout__actions">
-        <button type="submit" class="shop-btn shop-btn-primary shop-btn-lg">去支付</button>
-        <a href="/shop/cart" class="shop-btn shop-btn-secondary shop-btn-lg">返回购物车</a>
+        <button type="submit" class="shop-btn shop-btn-primary shop-btn-lg">
+          {$i18n.t('checkout.goToPay')}
+        </button>
+        <a href="/shop/cart" class="shop-btn shop-btn-secondary shop-btn-lg">
+          {$i18n.t('checkout.backToCart')}
+        </a>
       </div>
     </div>
   </form>

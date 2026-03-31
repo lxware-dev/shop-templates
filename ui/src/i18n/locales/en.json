@@ -1,0 +1,106 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "viewLargeImage": "View larger image",
+    "qrCodeAlt": "Payment QR code",
+    "receivingQrCodeAlt": "Collection QR code",
+    "paymentWaiting": "Waiting for payment...",
+    "redirectTip": "Clicking the link will open the payment page in a new window",
+    "viewOrderDetails": "View order details",
+    "defaultAddressSuffix": " (Default)",
+    "providers": {
+      "alipay": "Alipay",
+      "wechat": "WeChat",
+      "stripe": "Stripe"
+    }
+  },
+  "buyBox": {
+    "loadFailed": "Failed to load: {{message}}",
+    "price": "Price",
+    "stock": "Stock: {{count}} pcs",
+    "quantity": "Quantity",
+    "addToCart": "Add to cart",
+    "buyNow": "Buy now"
+  },
+  "cart": {
+    "title": "Cart",
+    "subtitle": "{{count}} items",
+    "loadError": "Load failed: {{message}}",
+    "empty": "Your cart is empty",
+    "summaryTitle": "Order summary",
+    "itemsTotal": "Items total",
+    "shipping": "Shipping",
+    "pendingCalculation": "To be calculated",
+    "total": "Total",
+    "proceedToCheckout": "Proceed to checkout",
+    "continueShopping": "Continue shopping"
+  },
+  "cartItem": {
+    "updateQuantityFailed": "Failed to update quantity. Please try again.",
+    "remove": "Remove"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "shippingAddress": "Shipping address",
+    "selectShippingAddress": "Select a shipping address",
+    "fillNewAddress": "Enter a new address",
+    "notes": "Notes",
+    "orderItems": "Items",
+    "summaryTitle": "Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "payableTotal": "Amount due",
+    "goToPay": "Go to payment",
+    "backToCart": "Back to cart"
+  },
+  "addressForm": {
+    "lastName": "Last name *",
+    "firstName": "First name *",
+    "contactPhone": "Phone number *",
+    "province": "Province *",
+    "city": "City *",
+    "district": "District *",
+    "postalCode": "Postal code *",
+    "postalCodePlaceholder": "e.g. 518000",
+    "address": "Street address *",
+    "addressPlaceholder": "Enter the full address, such as street and house number"
+  },
+  "payments": {
+    "paymentSuccess": "Payment successful",
+    "title": "Pay for order",
+    "orderCode": "Order code: {{code}}",
+    "loadOrderFailed": "Failed to load order information. Please refresh and try again.",
+    "orderNotPayablePrefix": "This order is not payable right now. Click ",
+    "orderNotPayableSuffix": " to view order details.",
+    "selectPaymentMethod": "Select a payment method",
+    "loadPaymentMethodsFailed": "Failed to load payment methods. Please refresh and try again.",
+    "noPaymentMethods": "No payment methods are available. Please contact the administrator.",
+    "usePaymentMethod": "Pay with {{name}}",
+    "orderItems": "Items",
+    "summaryTitle": "Summary",
+    "itemsSubtotal": "Items subtotal",
+    "shipping": "Shipping",
+    "payableTotal": "Amount due",
+    "paymentTitle": "Payment",
+    "loadPaymentResponseFailed": "Failed to load payment response. Please refresh and try again.",
+    "unsupportedPaymentMethod": "This payment method is not supported yet. Please contact the administrator.",
+    "paymentTransactionNumber": "Payment transaction number *",
+    "paymentConfirmed": "I have completed the payment"
+  },
+  "paymentMethods": {
+    "scanToPay": "Please use {{provider}} to scan the QR code and complete the payment",
+    "redirectToProvider": "Go to {{provider}}",
+    "paymentInfoUnavailable": "Payment information is unavailable. Please contact the administrator.",
+    "alipayUnavailable": "Alipay payment information is unavailable. Please contact the administrator.",
+    "wechatUnavailable": "WeChat payment information is unavailable. Please contact the administrator.",
+    "stripeUnavailable": "Stripe payment information is unavailable. Please contact the administrator.",
+    "manualUnavailable": "Manual payment information is unavailable. Please contact the administrator.",
+    "bankTransferUnavailable": "Bank transfer information is unavailable. Please contact the administrator.",
+    "alipayTitle": "Alipay payment",
+    "bankName": "Bank name: {{value}}",
+    "bankAddress": "Bank address: {{value}}",
+    "accountName": "Account name: {{value}}",
+    "accountNumber": "Account number: {{value}}",
+    "notes": "Notes: {{value}}"
+  }
+}

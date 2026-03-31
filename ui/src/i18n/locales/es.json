@@ -1,0 +1,106 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "viewLargeImage": "Ver imagen ampliada",
+    "qrCodeAlt": "Código QR de pago",
+    "receivingQrCodeAlt": "Código QR de cobro",
+    "paymentWaiting": "Esperando el pago...",
+    "redirectTip": "Al hacer clic en el enlace se abrirá la página de pago en una nueva ventana",
+    "viewOrderDetails": "Ver detalles del pedido",
+    "defaultAddressSuffix": " (Predeterminada)",
+    "providers": {
+      "alipay": "Alipay",
+      "wechat": "WeChat",
+      "stripe": "Stripe"
+    }
+  },
+  "buyBox": {
+    "loadFailed": "Error al cargar: {{message}}",
+    "price": "Precio",
+    "stock": "Stock: {{count}} uds.",
+    "quantity": "Cantidad",
+    "addToCart": "Agregar al carrito",
+    "buyNow": "Comprar ahora"
+  },
+  "cart": {
+    "title": "Carrito",
+    "subtitle": "{{count}} artículos",
+    "loadError": "Error al cargar: {{message}}",
+    "empty": "Tu carrito está vacío",
+    "summaryTitle": "Resumen del pedido",
+    "itemsTotal": "Total de productos",
+    "shipping": "Envío",
+    "pendingCalculation": "Pendiente de calcular",
+    "total": "Total",
+    "proceedToCheckout": "Ir al pago",
+    "continueShopping": "Seguir comprando"
+  },
+  "cartItem": {
+    "updateQuantityFailed": "No se pudo actualizar la cantidad. Inténtalo de nuevo.",
+    "remove": "Eliminar"
+  },
+  "checkout": {
+    "title": "Pago",
+    "shippingAddress": "Dirección de envío",
+    "selectShippingAddress": "Selecciona una dirección de envío",
+    "fillNewAddress": "Ingresar una nueva dirección",
+    "notes": "Notas",
+    "orderItems": "Productos",
+    "summaryTitle": "Resumen",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "payableTotal": "Importe a pagar",
+    "goToPay": "Ir al pago",
+    "backToCart": "Volver al carrito"
+  },
+  "addressForm": {
+    "lastName": "Apellido *",
+    "firstName": "Nombre *",
+    "contactPhone": "Teléfono de contacto *",
+    "province": "Provincia *",
+    "city": "Ciudad *",
+    "district": "Distrito *",
+    "postalCode": "Código postal *",
+    "postalCodePlaceholder": "Ej.: 518000",
+    "address": "Dirección detallada *",
+    "addressPlaceholder": "Ingresa la dirección completa, como calle y número"
+  },
+  "payments": {
+    "paymentSuccess": "Pago realizado con éxito",
+    "title": "Pagar pedido",
+    "orderCode": "Número de pedido: {{code}}",
+    "loadOrderFailed": "No se pudo cargar la información del pedido. Actualiza e inténtalo de nuevo.",
+    "orderNotPayablePrefix": "Este pedido no se puede pagar ahora. Haz clic en ",
+    "orderNotPayableSuffix": " para ver los detalles del pedido.",
+    "selectPaymentMethod": "Selecciona un método de pago",
+    "loadPaymentMethodsFailed": "No se pudieron cargar los métodos de pago. Actualiza e inténtalo de nuevo.",
+    "noPaymentMethods": "No hay métodos de pago disponibles. Ponte en contacto con el administrador.",
+    "usePaymentMethod": "Pagar con {{name}}",
+    "orderItems": "Productos",
+    "summaryTitle": "Resumen",
+    "itemsSubtotal": "Subtotal de productos",
+    "shipping": "Envío",
+    "payableTotal": "Importe a pagar",
+    "paymentTitle": "Pago",
+    "loadPaymentResponseFailed": "No se pudo cargar la respuesta del pago. Actualiza e inténtalo de nuevo.",
+    "unsupportedPaymentMethod": "Este método de pago aún no es compatible. Ponte en contacto con el administrador.",
+    "paymentTransactionNumber": "Número de transacción de pago *",
+    "paymentConfirmed": "Ya confirmé el pago"
+  },
+  "paymentMethods": {
+    "scanToPay": "Usa {{provider}} para escanear el código QR y completar el pago",
+    "redirectToProvider": "Ir a {{provider}}",
+    "paymentInfoUnavailable": "La información de pago no está disponible. Ponte en contacto con el administrador.",
+    "alipayUnavailable": "La información de pago de Alipay no está disponible. Ponte en contacto con el administrador.",
+    "wechatUnavailable": "La información de pago de WeChat no está disponible. Ponte en contacto con el administrador.",
+    "stripeUnavailable": "La información de pago de Stripe no está disponible. Ponte en contacto con el administrador.",
+    "manualUnavailable": "La información de pago manual no está disponible. Ponte en contacto con el administrador.",
+    "bankTransferUnavailable": "La información de transferencia bancaria no está disponible. Ponte en contacto con el administrador.",
+    "alipayTitle": "Pago con Alipay",
+    "bankName": "Banco: {{value}}",
+    "bankAddress": "Dirección del banco: {{value}}",
+    "accountName": "Nombre de la cuenta: {{value}}",
+    "accountNumber": "Número de cuenta: {{value}}",
+    "notes": "Notas: {{value}}"
+  }
+}

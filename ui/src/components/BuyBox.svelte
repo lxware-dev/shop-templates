@@ -23,6 +23,7 @@
   import { formatPrice } from '../utils/price';
   import { fade } from 'svelte/transition';
   import SpecButton from './SpecButton.svelte';
+  import i18n from '../i18n';
 
   let { id, csrfToken }: { id: number; csrfToken: string } = $props();
 
@@ -168,13 +169,13 @@
 </script>
 
 {#if productQuery.isLoading}
-  加载中...
+  {$i18n.t('common.loading')}
 {:else if productQuery.isError}
-  加载失败: {productQuery.error.message}
+  {$i18n.t('buyBox.loadFailed', { message: productQuery.error.message })}
 {:else}
   <div class="buy-box" transition:fade={{ duration: 200 }}>
     <div class="buy-box__price">
-      <div class="buy-box__price-label">价格</div>
+      <div class="buy-box__price-label">{$i18n.t('buyBox.price')}</div>
       <div class="buy-box__price-value">
         {#if selectedVariant}
           {formatPrice(selectedVariant.price || 0)}
@@ -216,12 +217,14 @@
 
     {#if selectedVariant && selectedVariant.trackInventory}
       <div class="buy-box__stock">
-        库存：<span class="buy-box__stock-value">{selectedVariant.stock || 0} 件</span>
+        <span class="buy-box__stock-value">
+          {$i18n.t('buyBox.stock', { count: selectedVariant.stock || 0 })}
+        </span>
       </div>
     {/if}
 
     <div class="buy-box__quantity">
-      <span class="buy-box__quantity-label">数量</span>
+      <span class="buy-box__quantity-label">{$i18n.t('buyBox.quantity')}</span>
       <div class="shop-quantity">
         <button
           class="shop-quantity__btn"
@@ -257,7 +260,7 @@
           type="submit"
           disabled={!isSelectedVariantAvailable}
         >
-          加入购物车
+          {$i18n.t('buyBox.addToCart')}
         </button>
       </form>
       <form action={`/shop/checkout/prepare?redirect_uri=${window.location.href}`} method="post">
@@ -270,7 +273,7 @@
           type="submit"
           disabled={!isSelectedVariantAvailable}
         >
-          立即购买
+          {$i18n.t('buyBox.buyNow')}
         </button>
       </form>
     </div>

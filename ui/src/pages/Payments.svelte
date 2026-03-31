@@ -27,6 +27,7 @@
   } from '@halo-dev/api-client';
   import PaymentOrderItem from './components/PaymentOrderItem.svelte';
   import { toast, Toaster } from 'svelte-sonner';
+  import { get } from 'svelte/store';
   import Manual from './components/payment-methods/Manual.svelte';
   import Alipay from './components/payment-methods/Alipay.svelte';
   import PaymentQrcode from './components/payment-methods/PaymentQrcode.svelte';
@@ -34,6 +35,7 @@
   import WeChat from './components/payment-methods/WeChat.svelte';
   import Stripe from './components/payment-methods/Stripe.svelte';
   import EasyPay from './components/payment-methods/EasyPay.svelte';
+  import i18n from '../i18n';
 
   let { orderCode, csrfToken }: { orderCode: string; csrfToken: string } = $props();
 
@@ -140,7 +142,7 @@
 
   $effect(() => {
     if (paymentStatusQuery.data === 'SUCCESS') {
-      toast.success('支付成功');
+      toast.success(get(i18n).t('payments.paymentSuccess'));
       setTimeout(() => {
         window.location.href = `/uc/shop/orders/${orderCode}`;
       }, 1000);
@@ -168,28 +170,32 @@
 
 <div class="shop-entry">
   <div class="shop-entry__header">
-    <h1 class="shop-entry__title">支付订单</h1>
-    <p class="shop-entry__subtitle">订单号：{orderCode}</p>
+    <h1 class="shop-entry__title">{$i18n.t('payments.title')}</h1>
+    <p class="shop-entry__subtitle">{$i18n.t('payments.orderCode', { code: orderCode })}</p>
   </div>
 
   {#if orderQuery.isLoading}
-    <div>加载中...</div>
+    <div>{$i18n.t('common.loading')}</div>
   {:else if orderQuery.isError}
-    <div>加载订单信息失败，请刷新重试</div>
+    <div>{$i18n.t('payments.loadOrderFailed')}</div>
   {:else if !isPendingPayment}
-    <div>当前订单不可支付，点击<a href={`/uc/shop/orders/${orderCode}`}>查看订单详情</a></div>
+    <div>
+      {$i18n.t('payments.orderNotPayablePrefix')}
+      <a href={`/uc/shop/orders/${orderCode}`}>{$i18n.t('common.viewOrderDetails')}</a>
+      {$i18n.t('payments.orderNotPayableSuffix')}
+    </div>
   {:else if orderQuery.data}
     <div class="shop-payments" transition:fade={{ duration: 200 }}>
       <div class="shop-payments__left">
         <div class="shop-card">
-          <h2 class="shop-card__title">选择支付方式</h2>
+          <h2 class="shop-card__title">{$i18n.t('payments.selectPaymentMethod')}</h2>
           <div class="shop-payment-methods">
             {#if paymentMethodsQuery.isLoading}
-              <div>加载中...</div>
+              <div>{$i18n.t('common.loading')}</div>
             {:else if paymentMethodsQuery.isError}
-              <div>加载支付方式失败，请刷新重试</div>
+              <div>{$i18n.t('payments.loadPaymentMethodsFailed')}</div>
             {:else if paymentMethodsQuery.data?.length === 0}
-              <div>暂无支付方式，请联系管理员</div>
+              <div>{$i18n.t('payments.noPaymentMethods')}</div>
             {:else}
               {#each paymentMethodsQuery.data ?? [] as paymentMethod}
                 <label
@@ -211,7 +217,9 @@
                     {/if}
                     <div class="shop-payment-method__info">
                       <span class="shop-payment-method__name">{paymentMethod.name}</span>
-                      <span class="shop-payment-method__desc">使用{paymentMethod.name}支付</span>
+                      <span class="shop-payment-method__desc">
+                        {$i18n.t('payments.usePaymentMethod', { name: paymentMethod.name })}
+                      </span>
                     </div>
                     <div class="shop-payment-method__check">
                       {@html MingcuteCheckLine}
@@ -224,7 +232,7 @@
         </div>
 
         <div class="shop-card">
-          <h2 class="shop-card__title">商品清单</h2>
+          <h2 class="shop-card__title">{$i18n.t('payments.orderItems')}</h2>
           <div class="shop-order-items">
             {#each orderQuery.data.items ?? [] as item}
               <PaymentOrderItem {item} />
@@ -233,19 +241,19 @@
         </div>
 
         <div class="shop-card">
-          <h2 class="shop-card__title">费用汇总</h2>
+          <h2 class="shop-card__title">{$i18n.t('payments.summaryTitle')}</h2>
           <div class="shop-order-summary">
             <div class="shop-order-summary__row">
-              <span>商品小计</span>
+              <span>{$i18n.t('payments.itemsSubtotal')}</span>
               <span>{formatPrice(orderQuery.data.totalAmount || 0)}</span>
             </div>
             <div class="shop-order-summary__row">
-              <span>运费</span>
+              <span>{$i18n.t('payments.shipping')}</span>
               <span>{formatPrice(0)}</span>
             </div>
             <div class="shop-divider"></div>
             <div class="shop-order-summary__row shop-order-summary__row--total">
-              <span>应付总额</span>
+              <span>{$i18n.t('payments.payableTotal')}</span>
               <span class="shop-order-summary__amount">
                 {formatPrice(orderQuery.data.totalAmount || 0)}
               </span>
@@ -256,17 +264,17 @@
 
       <div class="shop-payments__right">
         <div class="shop-card">
-          <h2 class="shop-card__title">支付</h2>
+          <h2 class="shop-card__title">{$i18n.t('payments.paymentTitle')}</h2>
 
           {#if paymentResponseQuery.isLoading}
-            <div>加载中...</div>
+            <div>{$i18n.t('common.loading')}</div>
           {:else if paymentResponseQuery.isError}
-            <div>加载支付响应失败，请刷新重试</div>
+            <div>{$i18n.t('payments.loadPaymentResponseFailed')}</div>
           {:else if paymentResponseQuery.data}
             {#if PaymentMethodComponent}
               <PaymentMethodComponent paymentResponse={paymentResponseQuery.data} />
             {:else}
-              <div>暂不支持该支付方式，请联系管理员</div>
+              <div>{$i18n.t('payments.unsupportedPaymentMethod')}</div>
             {/if}
           {/if}
         </div>
@@ -279,18 +287,20 @@
               style="display: contents;"
             >
               <div class="shop-form-group">
-                <label class="shop-label" for="outTradeNo">支付交易号 *</label>
+                <label class="shop-label" for="outTradeNo">
+                  {$i18n.t('payments.paymentTransactionNumber')}
+                </label>
                 <input type="text" class="shop-input" id="outTradeNo" name="outTradeNo" required />
               </div>
               <input type="hidden" name="_csrf" value={csrfToken} />
               <button type="submit" class="shop-btn shop-btn-primary shop-btn-lg">
-                已确认支付
+                {$i18n.t('payments.paymentConfirmed')}
               </button>
               <a
                 href={`/uc/shop/orders/${orderCode}`}
                 class="shop-btn shop-btn-secondary shop-btn-lg"
               >
-                查看订单详情
+                {$i18n.t('common.viewOrderDetails')}
               </a>
             </form>
           {:else}
@@ -298,7 +308,7 @@
               href={`/uc/shop/orders/${orderCode}`}
               class="shop-btn shop-btn-secondary shop-btn-lg"
             >
-              查看订单详情
+              {$i18n.t('common.viewOrderDetails')}
             </a>
           {/if}
         </div>

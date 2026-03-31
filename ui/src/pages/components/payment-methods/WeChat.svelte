@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PaymentInitiateResponse } from '@halo-dev/api-client';
   import QRCode from 'qrcode';
+  import i18n from '../../../i18n';
 
   let { paymentResponse }: { paymentResponse: PaymentInitiateResponse } = $props();
 
@@ -13,20 +14,24 @@
     <div class="shop-qrcode-container">
       <div class="shop-qrcode-wrapper">
         {#await QRCode.toDataURL(wechatPay.nativePay?.codeUrl!) then qrcodeUrl}
-          <img src={qrcodeUrl} alt="支付二维码" class="shop-qrcode-image" />
+          <img src={qrcodeUrl} alt={$i18n.t('common.qrCodeAlt')} class="shop-qrcode-image" />
         {/await}
       </div>
       <div class="shop-qrcode-info">
-        <p class="shop-qrcode-tip">请使用微信扫描二维码完成支付</p>
+        <p class="shop-qrcode-tip">
+          {$i18n.t('paymentMethods.scanToPay', {
+            provider: $i18n.t('common.providers.wechat'),
+          })}
+        </p>
         <div class="shop-qrcode-status">
           <div class="shop-loading-spinner"></div>
-          <span>等待支付中...</span>
+          <span>{$i18n.t('common.paymentWaiting')}</span>
         </div>
       </div>
     </div>
   {:else}
-    <div>暂无微信支付信息，请联系管理员</div>
+    <div>{$i18n.t('paymentMethods.wechatUnavailable')}</div>
   {/if}
 {:else}
-  <div>暂无微信支付信息，请联系管理员</div>
+  <div>{$i18n.t('paymentMethods.wechatUnavailable')}</div>
 {/if}

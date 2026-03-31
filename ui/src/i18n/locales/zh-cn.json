@@ -1,0 +1,106 @@
+{
+  "common": {
+    "loading": "加载中…",
+    "viewLargeImage": "查看大图",
+    "qrCodeAlt": "支付二维码",
+    "receivingQrCodeAlt": "收款二维码",
+    "paymentWaiting": "等待支付中…",
+    "redirectTip": "点击链接后将在新窗口打开支付页面",
+    "viewOrderDetails": "查看订单详情",
+    "defaultAddressSuffix": " (默认)",
+    "providers": {
+      "alipay": "支付宝",
+      "wechat": "微信",
+      "stripe": "Stripe"
+    }
+  },
+  "buyBox": {
+    "loadFailed": "加载失败：{{message}}",
+    "price": "价格",
+    "stock": "库存：{{count}} 件",
+    "quantity": "数量",
+    "addToCart": "加入购物车",
+    "buyNow": "立即购买"
+  },
+  "cart": {
+    "title": "购物车",
+    "subtitle": "共 {{count}} 件商品",
+    "loadError": "加载错误：{{message}}",
+    "empty": "购物车为空",
+    "summaryTitle": "订单摘要",
+    "itemsTotal": "商品总计",
+    "shipping": "运费",
+    "pendingCalculation": "待计算",
+    "total": "总计",
+    "proceedToCheckout": "前往结算",
+    "continueShopping": "继续购物"
+  },
+  "cartItem": {
+    "updateQuantityFailed": "更新数量失败，请重试",
+    "remove": "删除"
+  },
+  "checkout": {
+    "title": "结算",
+    "shippingAddress": "收货地址",
+    "selectShippingAddress": "选择收货地址",
+    "fillNewAddress": "填写新地址",
+    "notes": "备注",
+    "orderItems": "商品清单",
+    "summaryTitle": "费用汇总",
+    "subtotal": "小计",
+    "shipping": "运费",
+    "payableTotal": "应付总额",
+    "goToPay": "去支付",
+    "backToCart": "返回购物车"
+  },
+  "addressForm": {
+    "lastName": "姓 *",
+    "firstName": "名 *",
+    "contactPhone": "联系电话 *",
+    "province": "省份 *",
+    "city": "城市 *",
+    "district": "区县 *",
+    "postalCode": "邮编 *",
+    "postalCodePlaceholder": "如：518000",
+    "address": "详细地址 *",
+    "addressPlaceholder": "请输入详细地址，如街道、门牌号等"
+  },
+  "payments": {
+    "paymentSuccess": "支付成功",
+    "title": "支付订单",
+    "orderCode": "订单号：{{code}}",
+    "loadOrderFailed": "加载订单信息失败，请刷新重试",
+    "orderNotPayablePrefix": "当前订单不可支付，点击",
+    "orderNotPayableSuffix": "",
+    "selectPaymentMethod": "选择支付方式",
+    "loadPaymentMethodsFailed": "加载支付方式失败，请刷新重试",
+    "noPaymentMethods": "暂无支付方式，请联系管理员",
+    "usePaymentMethod": "使用 {{name}} 支付",
+    "orderItems": "商品清单",
+    "summaryTitle": "费用汇总",
+    "itemsSubtotal": "商品小计",
+    "shipping": "运费",
+    "payableTotal": "应付总额",
+    "paymentTitle": "支付",
+    "loadPaymentResponseFailed": "加载支付响应失败，请刷新重试",
+    "unsupportedPaymentMethod": "暂不支持该支付方式，请联系管理员",
+    "paymentTransactionNumber": "支付交易号 *",
+    "paymentConfirmed": "已确认支付"
+  },
+  "paymentMethods": {
+    "scanToPay": "请使用 {{provider}} 扫描二维码完成支付",
+    "redirectToProvider": "点击跳转至 {{provider}}",
+    "paymentInfoUnavailable": "暂无支付信息，请联系管理员",
+    "alipayUnavailable": "暂无支付宝支付信息，请联系管理员",
+    "wechatUnavailable": "暂无微信支付信息，请联系管理员",
+    "stripeUnavailable": "暂无 Stripe 支付信息，请联系管理员",
+    "manualUnavailable": "暂无手动支付信息，请联系管理员",
+    "bankTransferUnavailable": "暂无银行转账信息，请联系管理员",
+    "alipayTitle": "支付宝支付",
+    "bankName": "银行名称：{{value}}",
+    "bankAddress": "银行地址：{{value}}",
+    "accountName": "账户名称：{{value}}",
+    "accountNumber": "账户号码：{{value}}",
+    "notes": "备注：{{value}}"
+  }
+}

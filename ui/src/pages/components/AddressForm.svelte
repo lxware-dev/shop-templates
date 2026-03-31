@@ -2,6 +2,7 @@
   import type { AddressEntryResponse } from '@halo-dev/api-client';
   import { createQuery, QueryClient } from '@tanstack/svelte-query';
   import ky from 'ky';
+  import i18n from '../../i18n';
 
   const queryClient = new QueryClient();
 
@@ -67,21 +68,21 @@
 
 <div class="shop-checkout__form-row">
   <div class="shop-form-group">
-    <label class="shop-label" for="lastName">姓 *</label>
+    <label class="shop-label" for="lastName">{$i18n.t('addressForm.lastName')}</label>
     <input type="text" class="shop-input" id="lastName" name="userAddress.lastName" required />
   </div>
   <div class="shop-form-group">
-    <label class="shop-label" for="firstName">名 *</label>
+    <label class="shop-label" for="firstName">{$i18n.t('addressForm.firstName')}</label>
     <input type="text" class="shop-input" id="firstName" name="userAddress.firstName" required />
   </div>
 </div>
 <div class="shop-form-group">
-  <label class="shop-label" for="contactPhone">联系电话 *</label>
+  <label class="shop-label" for="contactPhone">{$i18n.t('addressForm.contactPhone')}</label>
   <input type="tel" class="shop-input" id="contactPhone" name="userAddress.contactPhone" required />
 </div>
 <div class="shop-checkout__form-row">
   <div class="shop-form-group">
-    <label class="shop-label" for="province">省份 *</label>
+    <label class="shop-label" for="province">{$i18n.t('addressForm.province')}</label>
     <select
       id="province"
       class="shop-select"
@@ -95,7 +96,7 @@
     </select>
   </div>
   <div class="shop-form-group">
-    <label class="shop-label" for="city">城市 *</label>
+    <label class="shop-label" for="city">{$i18n.t('addressForm.city')}</label>
     <select
       id="city"
       class="shop-select"
@@ -111,7 +112,7 @@
 </div>
 <div class="shop-checkout__form-row">
   <div class="shop-form-group">
-    <label class="shop-label" for="district">区县 *</label>
+    <label class="shop-label" for="district">{$i18n.t('addressForm.district')}</label>
     <select
       id="district"
       class="shop-select"
@@ -125,24 +126,24 @@
     </select>
   </div>
   <div class="shop-form-group">
-    <label class="shop-label" for="postalCode">邮编 *</label>
+    <label class="shop-label" for="postalCode">{$i18n.t('addressForm.postalCode')}</label>
     <input
       type="text"
       class="shop-input"
       id="postalCode"
       name="userAddress.postalCode"
       required
-      placeholder="如：518000"
+      placeholder={$i18n.t('addressForm.postalCodePlaceholder')}
     />
   </div>
 </div>
 <div class="shop-form-group">
-  <label class="shop-label" for="address">详细地址 *</label>
+  <label class="shop-label" for="address">{$i18n.t('addressForm.address')}</label>
   <textarea
     class="shop-textarea"
     id="address"
     rows="3"
-    placeholder="请输入详细地址，如街道、门牌号等"
+    placeholder={$i18n.t('addressForm.addressPlaceholder')}
     name="userAddress.streetAddress"
     required
   ></textarea>

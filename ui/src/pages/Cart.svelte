@@ -17,6 +17,7 @@
   import { formatPrice } from '../utils/price';
   import { Toaster } from 'svelte-sonner';
   import { fade } from 'svelte/transition';
+  import i18n from '../i18n';
 
   let { csrfToken } = $props<{ csrfToken: string }>();
 
@@ -52,21 +53,20 @@
 <Toaster richColors position="top-center" />
 
 <div class="shop-entry">
-  <!-- 页面头部 -->
   <div class="shop-entry__header">
-    <h1 class="shop-entry__title">购物车</h1>
-    <p class="shop-entry__subtitle">共 {query.data?.length ?? 0} 件商品</p>
+    <h1 class="shop-entry__title">{$i18n.t('cart.title')}</h1>
+    <p class="shop-entry__subtitle">
+      {$i18n.t('cart.subtitle', { count: query.data?.length ?? 0 })}
+    </p>
   </div>
 
-  <!-- 购物车内容 -->
   <div class="shop-cart">
-    <!-- 购物车列表 -->
     {#if query.isLoading}
-      <span>加载中...</span>
+      <span>{$i18n.t('common.loading')}</span>
     {:else if query.isError}
-      <span>加载错误：{query.error.message}</span>
+      <span>{$i18n.t('cart.loadError', { message: query.error.message })}</span>
     {:else if query.data?.length === 0}
-      <span>购物车为空</span>
+      <span>{$i18n.t('cart.empty')}</span>
     {:else}
       <div class="shop-cart__items" transition:fade={{ duration: 200 }}>
         {#each query.data ?? [] as item}
@@ -75,20 +75,19 @@
       </div>
     {/if}
 
-    <!-- 结算区域 -->
     <div class="shop-cart-summary shop-card">
-      <h2 class="shop-card__title">订单摘要</h2>
+      <h2 class="shop-card__title">{$i18n.t('cart.summaryTitle')}</h2>
       <div class="shop-cart-summary__row">
-        <span>商品总计</span>
+        <span>{$i18n.t('cart.itemsTotal')}</span>
         <span>{formatPrice(total || 0)}</span>
       </div>
       <div class="shop-cart-summary__row">
-        <span>运费</span>
-        <span>待计算</span>
+        <span>{$i18n.t('cart.shipping')}</span>
+        <span>{$i18n.t('cart.pendingCalculation')}</span>
       </div>
       <div class="shop-divider"></div>
       <div class="shop-cart-summary__row shop-cart-summary__row--total">
-        <span>总计</span>
+        <span>{$i18n.t('cart.total')}</span>
         <span>{formatPrice(total || 0)}</span>
       </div>
       <div class="shop-cart-summary__actions">
@@ -103,10 +102,12 @@
             class="shop-btn shop-btn-primary shop-btn-lg"
             disabled={!query.data?.length || query.isLoading || query.isFetching}
           >
-            前往结算
+            {$i18n.t('cart.proceedToCheckout')}
           </button>
         </form>
-        <a href="/shop/products" class="shop-btn shop-btn-secondary shop-btn-lg">继续购物</a>
+        <a href="/shop/products" class="shop-btn shop-btn-secondary shop-btn-lg">
+          {$i18n.t('cart.continueShopping')}
+        </a>
       </div>
     </div>
   </div>

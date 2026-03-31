@@ -3,6 +3,7 @@
   import MingcuteSearch3Line from '~icons/mingcute/search-3-line?raw';
   import type { HTMLButtonAttributes } from 'svelte/elements';
   import mediumZoom, { type Zoom } from 'medium-zoom';
+  import i18n from '../i18n';
 
   const {
     isSelected,
@@ -62,7 +63,7 @@
       role="button"
       tabindex="0"
       class="buy-box__spec-option-zoom"
-      aria-label="查看大图"
+      aria-label={$i18n.t('common.viewLargeImage')}
       onclick={handleZoomClick}
       onkeydown={(e) => e.key === 'Enter' && handleZoomClick(e)}
     >

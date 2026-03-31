@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PaymentInitiateResponse } from '@halo-dev/api-client';
+  import i18n from '../../../i18n';
 
   let { paymentResponse }: { paymentResponse: PaymentInitiateResponse } = $props();
 
@@ -8,12 +9,12 @@
 
 {#if manual}
   <ul>
-    <li>银行名称：{manual?.bankName}</li>
-    <li>银行地址：{manual?.bankAddress}</li>
-    <li>账户名称：{manual?.accountName}</li>
-    <li>账户号码：{manual?.accountNumber}</li>
-    <li>备注：{manual?.instructions}</li>
+    <li>{$i18n.t('paymentMethods.bankName', { value: manual?.bankName ?? '-' })}</li>
+    <li>{$i18n.t('paymentMethods.bankAddress', { value: manual?.bankAddress ?? '-' })}</li>
+    <li>{$i18n.t('paymentMethods.accountName', { value: manual?.accountName ?? '-' })}</li>
+    <li>{$i18n.t('paymentMethods.accountNumber', { value: manual?.accountNumber ?? '-' })}</li>
+    <li>{$i18n.t('paymentMethods.notes', { value: manual?.instructions ?? '-' })}</li>
   </ul>
 {:else}
-  <div>暂无手动支付信息，请联系管理员</div>
+  <div>{$i18n.t('paymentMethods.manualUnavailable')}</div>
 {/if}
