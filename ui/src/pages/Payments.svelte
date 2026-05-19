@@ -57,6 +57,18 @@
     orderQuery.data?.paymentStatus === OrderResponsePaymentStatusEnum.Pending
   );
 
+  const orderDiscountAmount = $derived((orderQuery.data as any)?.discountAmount ?? 0);
+
+  const hasOrderDiscount = $derived(orderDiscountAmount > 0);
+
+  const orderDiscountLabel = $derived.by(() => {
+    const order = orderQuery.data as any;
+    if (!order?.discountName) return get(i18n).t('payments.discount');
+    return order.discountCode
+      ? `${order.discountName} (${order.discountCode})`
+      : order.discountName;
+  });
+
   const paymentMethodsQuery = createQuery(
     () => ({
       queryKey: ['shop:payment:methods', orderCode],
@@ -245,12 +257,18 @@
           <div class="shop-order-summary">
             <div class="shop-order-summary__row">
               <span>{$i18n.t('payments.itemsSubtotal')}</span>
-              <span>{formatPrice(orderQuery.data.totalAmount || 0)}</span>
+              <span>{formatPrice((orderQuery.data.totalAmount || 0) + orderDiscountAmount)}</span>
             </div>
             <div class="shop-order-summary__row">
               <span>{$i18n.t('payments.shipping')}</span>
               <span>{formatPrice(0)}</span>
             </div>
+            {#if hasOrderDiscount}
+              <div class="shop-order-summary__row shop-order-summary__row--discount">
+                <span>{orderDiscountLabel}</span>
+                <span>-{formatPrice(orderDiscountAmount)}</span>
+              </div>
+            {/if}
             <div class="shop-divider"></div>
             <div class="shop-order-summary__row shop-order-summary__row--total">
               <span>{$i18n.t('payments.payableTotal')}</span>

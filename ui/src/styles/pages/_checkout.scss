@@ -103,6 +103,33 @@
       color: var(--shop-gray-900);
       margin: var(--shop-spacing-md) 0 0 0;
     }
+
+    &--discount {
+      color: var(--shop-color-success, #0f766e);
+
+      span:last-child {
+        color: var(--shop-color-success, #0f766e);
+      }
+    }
+  }
+}
+
+.shop-checkout-discount-card {
+  &__controls {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.5rem;
+    align-items: center;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__tip {
+    margin-top: 0.5rem;
+    color: var(--shop-gray-500, #6b7280);
+    font-size: var(--shop-font-size-sm, 0.875rem);
   }
 }
 

@@ -51,7 +51,15 @@
     "shipping": "Shipping",
     "payableTotal": "Amount due",
     "goToPay": "Go to payment",
-    "backToCart": "Back to cart"
+    "backToCart": "Back to cart",
+    "discountCode": "Discount code",
+    "discountCodePlaceholder": "Enter discount code",
+    "apply": "Apply",
+    "remove": "Remove",
+    "discountTip": "System will automatically calculate the best discount.",
+    "discountApplySuccess": "Discount code applied successfully",
+    "discountRemoveSuccess": "Discount code removed",
+    "discountApplyError": "Invalid or expired discount code"
   },
   "addressForm": {
     "lastName": "Last name *",
@@ -81,6 +89,7 @@
     "itemsSubtotal": "Items subtotal",
     "shipping": "Shipping",
     "payableTotal": "Amount due",
+    "discount": "Discount",
     "paymentTitle": "Payment",
     "loadPaymentResponseFailed": "Failed to load payment response. Please refresh and try again.",
     "unsupportedPaymentMethod": "This payment method is not supported yet. Please contact the administrator.",

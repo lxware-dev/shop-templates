@@ -51,7 +51,15 @@
     "shipping": "运费",
     "payableTotal": "应付总额",
     "goToPay": "去支付",
-    "backToCart": "返回购物车"
+    "backToCart": "返回购物车",
+    "discountCode": "优惠码",
+    "discountCodePlaceholder": "请输入优惠码",
+    "apply": "应用",
+    "remove": "移除",
+    "discountTip": "系统将自动计算最优优惠。",
+    "discountApplySuccess": "优惠码应用成功",
+    "discountRemoveSuccess": "优惠码已移除",
+    "discountApplyError": "优惠码无效或已过期"
   },
   "addressForm": {
     "lastName": "姓 *",
@@ -81,6 +89,7 @@
     "itemsSubtotal": "商品小计",
     "shipping": "运费",
     "payableTotal": "应付总额",
+    "discount": "优惠",
     "paymentTitle": "支付",
     "loadPaymentResponseFailed": "加载支付响应失败，请刷新重试",
     "unsupportedPaymentMethod": "暂不支持该支付方式，请联系管理员",

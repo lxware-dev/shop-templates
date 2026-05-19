@@ -10,13 +10,15 @@
 />
 
 <script lang="ts">
-  import { createQuery, QueryClient } from '@tanstack/svelte-query';
+  import { createQuery, createMutation, QueryClient } from '@tanstack/svelte-query';
   import ky from 'ky';
   import { type CheckoutContextResponse, type UserAddressResponse } from '@halo-dev/api-client';
   import { formatPrice } from '../utils/price';
   import { fade } from 'svelte/transition';
   import CheckoutOrderItem from './components/CheckoutOrderItem.svelte';
   import AddressForm from './components/AddressForm.svelte';
+  import { toast, Toaster } from 'svelte-sonner';
+  import { get } from 'svelte/store';
   import i18n from '../i18n';
 
   let { contextId, csrfToken }: { contextId: string; csrfToken: string } = $props();
@@ -52,6 +54,69 @@
 
   let selectedAddressId = $state<number | undefined>(undefined);
 
+  let discountCodeInput = $state('');
+
+  const applyDiscountMutation = createMutation(
+    () => ({
+      mutationFn: async (code: string) => {
+        return await ky
+          .post(`/shop/checkout/${contextId}/discount`, {
+            json: { code },
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+          })
+          .json();
+      },
+      onSuccess: () => {
+        toast.success(get(i18n).t('checkout.discountApplySuccess'));
+        discountCodeInput = '';
+        queryClient.invalidateQueries({ queryKey: ['shop:checkout:context', contextId] });
+      },
+      onError: () => {
+        toast.error(get(i18n).t('checkout.discountApplyError'));
+      },
+    }),
+    () => queryClient
+  );
+
+  const removeDiscountMutation = createMutation(
+    () => ({
+      mutationFn: async () => {
+        return await ky
+          .delete(`/shop/checkout/${contextId}/discount`, {
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+          })
+          .json();
+      },
+      onSuccess: () => {
+        toast.success(get(i18n).t('checkout.discountRemoveSuccess'));
+        queryClient.invalidateQueries({ queryKey: ['shop:checkout:context', contextId] });
+      },
+    }),
+    () => queryClient
+  );
+
+  function applyDiscount() {
+    const code = discountCodeInput.trim();
+    if (!code) return;
+    applyDiscountMutation.mutate(code);
+  }
+
+  function removeDiscount() {
+    removeDiscountMutation.mutate(undefined);
+  }
+
+  const hasDiscount = $derived(
+    ((contextQuery.data as any)?.calculateResult?.discountAmount ?? 0) > 0
+  );
+
+  const discountLabel = $derived.by(() => {
+    const result = (contextQuery.data as any)?.calculateResult;
+    if (!result?.discountName) return get(i18n).t('payments.discount');
+    return result.discountCode
+      ? `${result.discountName} (${result.discountCode})`
+      : result.discountName;
+  });
+
   $effect(() => {
     if (addressQuery.isFetched) {
       const addresses = addressQuery.data ?? [];
@@ -60,6 +125,8 @@
     }
   });
 </script>
+
+<Toaster richColors position="top-center" />
 
 <div class="shop-entry">
   <div class="shop-entry__header">
@@ -118,6 +185,46 @@
         </div>
       {/if}
 
+      <div class="shop-card shop-checkout-discount-card">
+        <h2 class="shop-card__title">{$i18n.t('checkout.discountCode')}</h2>
+        <div class="shop-checkout-discount-card__controls">
+          <input
+            class="shop-input"
+            type="text"
+            bind:value={discountCodeInput}
+            placeholder={$i18n.t('checkout.discountCodePlaceholder')}
+            onkeydown={(e) => e.key === 'Enter' && applyDiscount()}
+          />
+          <button
+            type="button"
+            class="shop-btn shop-btn-secondary"
+            disabled={applyDiscountMutation.isPending || !discountCodeInput.trim()}
+            onclick={applyDiscount}
+          >
+            {#if applyDiscountMutation.isPending}
+              <span class="shop-loading-spinner"></span>
+            {:else}
+              {$i18n.t('checkout.apply')}
+            {/if}
+          </button>
+          {#if hasDiscount}
+            <button
+              type="button"
+              class="shop-btn shop-btn-secondary"
+              disabled={removeDiscountMutation.isPending}
+              onclick={removeDiscount}
+            >
+              {#if removeDiscountMutation.isPending}
+                <span class="shop-loading-spinner"></span>
+              {:else}
+                {$i18n.t('checkout.remove')}
+              {/if}
+            </button>
+          {/if}
+        </div>
+        <p class="shop-checkout-discount-card__tip">{$i18n.t('checkout.discountTip')}</p>
+      </div>
+
       <div class="shop-card">
         <h2 class="shop-card__title">{$i18n.t('checkout.notes')}</h2>
         <div>
@@ -150,6 +257,16 @@
             <span>{$i18n.t('checkout.shipping')}</span>
             <span>{formatPrice(contextQuery.data?.calculateResult?.shippingFeeAmount || 0)}</span>
           </div>
+          {#if hasDiscount}
+            <div class="shop-order-summary__row shop-order-summary__row--discount">
+              <span>{discountLabel}</span>
+              <span
+                >-{formatPrice(
+                  (contextQuery.data as any)?.calculateResult?.discountAmount || 0
+                )}</span
+              >
+            </div>
+          {/if}
           <div class="shop-divider"></div>
           <div class="shop-order-summary__row shop-order-summary__row--total">
             <span>{$i18n.t('checkout.payableTotal')}</span>
