@@ -63,10 +63,12 @@
     "coupons": "Coupons",
     "couponsPlaceholder": "Select coupons to apply",
     "couponApplySuccess": "Coupons applied",
-    "couponRemoveSuccess": "Coupon removed",
     "couponApplyError": "Coupon validation failed",
     "couponCombinableError": "This coupon cannot be combined with other coupons",
-    "couponDiscountCombinableError": "This coupon cannot be combined with the current discount"
+    "couponDiscountCombinableError": "This coupon cannot be combined with the current discount",
+    "couponNotCombinableLabel": "Not combinable",
+    "couponNotCombinableWithDiscountLabel": "Not with discount",
+    "couponsRejected": "Unavailable coupons"
   },
   "addressForm": {
     "lastName": "Last name *",

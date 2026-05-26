@@ -20,12 +20,25 @@
     PaymentInitiateRequestPreferredResponseTypeEnum,
     PaymentInitiateResponsePaymentProviderEnum,
     PaymentMethodPublicResponseProviderEnum,
-    type CouponDetail,
     type OrderResponse,
     type PaymentInitiateResponse,
     type PaymentMethodPublicResponse,
     type PaymentSessionUcResponseStatusEnum,
   } from '@halo-dev/api-client';
+
+  interface AppliedCoupon {
+    customerCouponId?: number;
+    couponName?: string;
+    discountAmount?: number;
+  }
+
+  interface RejectedCoupon {
+    customerCouponId?: number;
+    couponName?: string;
+    reasonCode?: string;
+    reasonMessage?: string;
+  }
+
   import PaymentOrderItem from './components/PaymentOrderItem.svelte';
   import { toast, Toaster } from 'svelte-sonner';
   import { get } from 'svelte/store';
@@ -71,7 +84,11 @@
   });
 
   const appliedCoupons = $derived(
-    ((orderQuery.data as any)?.appliedCoupons ?? []) as CouponDetail[]
+    ((orderQuery.data as any)?.appliedCoupons ?? []) as AppliedCoupon[]
+  );
+
+  const rejectedCoupons = $derived(
+    ((orderQuery.data as any)?.rejectedCoupons ?? []) as RejectedCoupon[]
   );
 
   const couponDiscountAmount = $derived(
@@ -80,7 +97,9 @@
 
   const hasCoupons = $derived(appliedCoupons.length > 0);
 
-  function couponLabel(c: CouponDetail) {
+  const hasRejectedCoupons = $derived(rejectedCoupons.length > 0);
+
+  function couponLabel(c: AppliedCoupon) {
     return c.couponName ?? get(i18n).t('checkout.coupons');
   }
 
@@ -290,6 +309,16 @@
                 <span>-{formatPrice(coupon.discountAmount ?? 0)}</span>
               </div>
             {/each}
+            {#if hasRejectedCoupons}
+              {#each rejectedCoupons as rc (rc.customerCouponId)}
+                <div class="shop-order-summary__row shop-order-summary__row--rejected">
+                  <span>{rc.couponName ?? $i18n.t('checkout.coupons')}</span>
+                  <span class="shop-order-summary__rejected" title={rc.reasonMessage}>
+                    {$i18n.t('checkout.couponsRejected')}
+                  </span>
+                </div>
+              {/each}
+            {/if}
             <div class="shop-divider"></div>
             <div class="shop-order-summary__row shop-order-summary__row--total">
               <span>{$i18n.t('payments.payableTotal')}</span>

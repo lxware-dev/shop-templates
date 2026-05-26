@@ -16,10 +16,23 @@
     type CheckoutContextResponse,
     type UserAddressResponse,
     type CustomerCouponResponse,
-    type CouponDetail,
+    type ApplyCouponsRequest,
   } from '@halo-dev/api-client';
   import { formatPrice } from '../utils/price';
   import { fade } from 'svelte/transition';
+
+  interface AppliedCoupon {
+    customerCouponId?: number;
+    couponName?: string;
+    discountAmount?: number;
+  }
+
+  interface RejectedCoupon {
+    customerCouponId?: number;
+    couponName?: string;
+    reasonCode?: string;
+    reasonMessage?: string;
+  }
   import CheckoutOrderItem from './components/CheckoutOrderItem.svelte';
   import AddressForm from './components/AddressForm.svelte';
   import { toast, Toaster } from 'svelte-sonner';
@@ -79,63 +92,83 @@
 
   let selectedCouponIds = $state<number[]>([]);
   let couponSelectionInitialized = $state(false);
+  let couponError = $state('');
 
   $effect(() => {
     if (couponSelectionInitialized || contextQuery.isFetching) return;
     const data = contextQuery.data as any;
     if (data?.calculateResult) {
       selectedCouponIds =
-        data.calculateResult.appliedCoupons?.map((c: CouponDetail) => c.customerCouponId!) ?? [];
+        data.calculateResult.appliedCoupons?.map((c: AppliedCoupon) => c.customerCouponId!) ?? [];
       couponSelectionInitialized = true;
     }
   });
 
   function toggleCoupon(id: number) {
+    couponError = '';
+    const coupon = availableCoupons.find((c) => c.id === id);
+
     if (selectedCouponIds.includes(id)) {
+      // Deselect
       selectedCouponIds = selectedCouponIds.filter((i) => i !== id);
-    } else {
-      selectedCouponIds = [...selectedCouponIds, id];
+      return;
     }
+
+    // If the new coupon cannot combine with other coupons, replace selection entirely
+    if (coupon?.combineWithCoupons === false) {
+      selectedCouponIds = [id];
+      if (coupon?.combineWithOrderDiscount === false && hasDiscount) {
+        couponError = get(i18n).t('checkout.couponDiscountCombinableError');
+      }
+      return;
+    }
+
+    // If any currently selected coupon cannot combine with others, replace selection
+    const hasNonCombinableSelected = selectedCouponIds.some((sid) => {
+      const sc = availableCoupons.find((c) => c.id === sid);
+      return sc?.combineWithCoupons === false;
+    });
+    if (hasNonCombinableSelected) {
+      selectedCouponIds = [id];
+      if (coupon?.combineWithOrderDiscount === false && hasDiscount) {
+        couponError = get(i18n).t('checkout.couponDiscountCombinableError');
+      }
+      return;
+    }
+
+    // Warn if coupon cannot combine with the current discount
+    if (coupon?.combineWithOrderDiscount === false && hasDiscount) {
+      couponError = get(i18n).t('checkout.couponDiscountCombinableError');
+    }
+
+    selectedCouponIds = [...selectedCouponIds, id];
   }
 
   const applyCouponsMutation = createMutation(
     () => ({
       mutationFn: async (ids: number[]) => {
+        const body: ApplyCouponsRequest = { customerCouponIds: ids };
         return await ky
-          .post(`/shop/checkout/${contextId}/coupons`, {
-            json: { customerCouponIds: ids },
+          .put(`/apis/uc.api.ecommerce.halo.run/v1alpha1/checkout/${contextId}/coupons`, {
+            json: body,
             headers: { 'X-XSRF-TOKEN': csrfToken },
           })
           .json();
       },
       onSuccess: (_, ids) => {
         selectedCouponIds = [...ids];
+        couponError = '';
         toast.success(get(i18n).t('checkout.couponApplySuccess'));
         queryClient.invalidateQueries({ queryKey: ['shop:checkout:context', contextId] });
       },
-      onError: () => {
-        toast.error(get(i18n).t('checkout.couponApplyError'));
-      },
-    }),
-    () => queryClient
-  );
-
-  const removeCouponMutation = createMutation(
-    () => ({
-      mutationFn: async (customerCouponId: number) => {
-        return await ky
-          .delete(`/shop/checkout/${contextId}/coupons/${customerCouponId}`, {
-            headers: { 'X-XSRF-TOKEN': csrfToken },
-          })
-          .json();
-      },
-      onSuccess: () => {
-        couponSelectionInitialized = false;
-        toast.success(get(i18n).t('checkout.couponRemoveSuccess'));
-        queryClient.invalidateQueries({ queryKey: ['shop:checkout:context', contextId] });
-      },
-      onError: () => {
-        toast.error(get(i18n).t('checkout.couponApplyError'));
+      onError: async (error) => {
+        try {
+          const body = await (error as any)?.response?.json();
+          couponError = body?.detail || get(i18n).t('checkout.couponApplyError');
+        } catch {
+          couponError = get(i18n).t('checkout.couponApplyError');
+        }
+        toast.error(couponError);
       },
     }),
     () => queryClient
@@ -143,10 +176,6 @@
 
   function applyCoupons() {
     applyCouponsMutation.mutate(selectedCouponIds);
-  }
-
-  function removeCoupon(customerCouponId: number) {
-    removeCouponMutation.mutate(customerCouponId);
   }
 
   const applyDiscountMutation = createMutation(
@@ -211,7 +240,11 @@
   });
 
   const appliedCoupons = $derived(
-    ((contextQuery.data as any)?.calculateResult?.appliedCoupons ?? []) as CouponDetail[]
+    ((contextQuery.data as any)?.calculateResult?.appliedCoupons ?? []) as AppliedCoupon[]
+  );
+
+  const rejectedCoupons = $derived(
+    ((contextQuery.data as any)?.calculateResult?.rejectedCoupons ?? []) as RejectedCoupon[]
   );
 
   const couponDiscountAmount = $derived(
@@ -220,15 +253,21 @@
 
   const hasCoupons = $derived(appliedCoupons.length > 0);
 
+  const hasRejectedCoupons = $derived(rejectedCoupons.length > 0);
+
+  const rejectedCouponMap = $derived(
+    new Map<number, RejectedCoupon>(rejectedCoupons.map((rc) => [rc.customerCouponId!, rc]))
+  );
+
   const hasCouponChanges = $derived.by(() => {
-    const appliedIds = new Set(appliedCoupons.map((c: CouponDetail) => c.customerCouponId!));
+    const appliedIds = new Set(appliedCoupons.map((c: AppliedCoupon) => c.customerCouponId!));
     const selectedSet = new Set(selectedCouponIds);
     return (
       appliedIds.size !== selectedSet.size || [...appliedIds].some((id) => !selectedSet.has(id))
     );
   });
 
-  function couponLabel(c: CouponDetail) {
+  function couponLabel(c: AppliedCoupon) {
     return c.couponName ?? get(i18n).t('checkout.coupons');
   }
 
@@ -351,9 +390,14 @@
             {#if availableCoupons.length > 0}
               <div class="shop-coupon-list">
                 {#each availableCoupons as coupon (coupon.id)}
+                  {@const isNonCombinable = coupon.combineWithCoupons === false}
+                  {@const isNonCombinableWithDiscount = coupon.combineWithOrderDiscount === false}
+                  {@const couponRejection = rejectedCouponMap.get(coupon.id!)}
                   <label
                     class="shop-coupon-item"
                     class:shop-coupon-item--selected={selectedCouponIds.includes(coupon.id!)}
+                    class:shop-coupon-item--non-combinable={isNonCombinable}
+                    class:shop-coupon-item--rejected={!!couponRejection}
                   >
                     <input
                       type="checkbox"
@@ -362,7 +406,19 @@
                       onchange={() => toggleCoupon(coupon.id!)}
                     />
                     <div class="shop-coupon-item__info">
-                      <span class="shop-coupon-item__name">{coupon.couponName}</span>
+                      <span class="shop-coupon-item__name">
+                        {coupon.couponName}
+                        {#if isNonCombinable}
+                          <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
+                            {$i18n.t('checkout.couponNotCombinableLabel')}
+                          </span>
+                        {/if}
+                        {#if isNonCombinableWithDiscount}
+                          <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
+                            {$i18n.t('checkout.couponNotCombinableWithDiscountLabel')}
+                          </span>
+                        {/if}
+                      </span>
                       <span class="shop-coupon-item__desc">
                         {#if coupon.calculationType === 'AMOUNT'}
                           {formatPrice(coupon.discountValue ?? 0)} off
@@ -380,10 +436,18 @@
                           {new Date(coupon.expiresAt).toLocaleDateString()}
                         </span>
                       {/if}
+                      {#if couponRejection}
+                        <span class="shop-coupon-item__error">
+                          {couponRejection.reasonMessage}
+                        </span>
+                      {/if}
                     </div>
                   </label>
                 {/each}
               </div>
+            {/if}
+            {#if couponError}
+              <p class="shop-error">{couponError}</p>
             {/if}
             <div class="shop-checkout-discount-card__controls">
               {#if availableCoupons.length > 0}
@@ -400,20 +464,6 @@
                   {/if}
                 </button>
               {/if}
-              {#each appliedCoupons as coupon (coupon.customerCouponId)}
-                <button
-                  type="button"
-                  class="shop-btn shop-btn-secondary"
-                  disabled={removeCouponMutation.isPending}
-                  onclick={() => removeCoupon(coupon.customerCouponId!)}
-                >
-                  {#if removeCouponMutation.isPending}
-                    <span class="shop-loading-spinner"></span>
-                  {:else}
-                    {$i18n.t('checkout.remove')} {couponLabel(coupon)}
-                  {/if}
-                </button>
-              {/each}
             </div>
           {/if}
         </div>

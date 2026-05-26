@@ -63,10 +63,12 @@
     "coupons": "优惠券",
     "couponsPlaceholder": "选择要使用的优惠券",
     "couponApplySuccess": "优惠券应用成功",
-    "couponRemoveSuccess": "优惠券已移除",
     "couponApplyError": "优惠券验证失败",
     "couponCombinableError": "该券不可与其他券叠加使用",
-    "couponDiscountCombinableError": "该券不可与当前折扣叠加使用"
+    "couponDiscountCombinableError": "该券不可与当前折扣叠加使用",
+    "couponNotCombinableLabel": "不可叠加",
+    "couponNotCombinableWithDiscountLabel": "不可与折扣叠加",
+    "couponsRejected": "不适用优惠券"
   },
   "addressForm": {
     "lastName": "姓 *",

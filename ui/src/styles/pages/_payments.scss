@@ -155,6 +155,22 @@
     font-size: var(--shop-font-size-xl);
     color: var(--shop-color-primary);
   }
+
+  &__row {
+    &--rejected {
+      color: var(--shop-gray-400, #9ca3af);
+      font-size: var(--shop-font-size-sm, 0.875rem);
+
+      span:last-child {
+        font-size: var(--shop-font-size-xs, 0.75rem);
+      }
+    }
+  }
+
+  &__rejected {
+    cursor: help;
+    border-bottom: 1px dashed var(--shop-gray-300, #d1d5db);
+  }
 }
 
 .shop-qrcode-container {
