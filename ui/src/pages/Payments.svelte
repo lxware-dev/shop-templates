@@ -20,6 +20,7 @@
     PaymentInitiateRequestPreferredResponseTypeEnum,
     PaymentInitiateResponsePaymentProviderEnum,
     PaymentMethodPublicResponseProviderEnum,
+    type CouponDetail,
     type OrderResponse,
     type PaymentInitiateResponse,
     type PaymentMethodPublicResponse,
@@ -68,6 +69,20 @@
       ? `${order.discountName} (${order.discountCode})`
       : order.discountName;
   });
+
+  const appliedCoupons = $derived(
+    ((orderQuery.data as any)?.appliedCoupons ?? []) as CouponDetail[]
+  );
+
+  const couponDiscountAmount = $derived(
+    ((orderQuery.data as any)?.couponDiscountAmount ?? 0) as number
+  );
+
+  const hasCoupons = $derived(appliedCoupons.length > 0);
+
+  function couponLabel(c: CouponDetail) {
+    return c.couponName ?? get(i18n).t('checkout.coupons');
+  }
 
   const paymentMethodsQuery = createQuery(
     () => ({
@@ -269,6 +284,12 @@
                 <span>-{formatPrice(orderDiscountAmount)}</span>
               </div>
             {/if}
+            {#each appliedCoupons as coupon (coupon.customerCouponId)}
+              <div class="shop-order-summary__row shop-order-summary__row--discount">
+                <span>{couponLabel(coupon)}</span>
+                <span>-{formatPrice(coupon.discountAmount ?? 0)}</span>
+              </div>
+            {/each}
             <div class="shop-divider"></div>
             <div class="shop-order-summary__row shop-order-summary__row--total">
               <span>{$i18n.t('payments.payableTotal')}</span>

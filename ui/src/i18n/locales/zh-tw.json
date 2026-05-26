@@ -51,7 +51,22 @@
     "shipping": "運費",
     "payableTotal": "應付總額",
     "goToPay": "去支付",
-    "backToCart": "返回購物車"
+    "backToCart": "返回購物車",
+    "discountCode": "優惠碼",
+    "discountCodePlaceholder": "請輸入優惠碼",
+    "apply": "應用",
+    "remove": "移除",
+    "discountTip": "系統將自動計算最優優惠。",
+    "discountApplySuccess": "優惠碼應用成功",
+    "discountRemoveSuccess": "優惠碼已移除",
+    "discountApplyError": "優惠碼無效或已過期",
+    "coupons": "優惠券",
+    "couponsPlaceholder": "選擇要使用的優惠券",
+    "couponApplySuccess": "優惠券應用成功",
+    "couponRemoveSuccess": "優惠券已移除",
+    "couponApplyError": "優惠券驗證失敗",
+    "couponCombinableError": "該券不可與其他券疊加使用",
+    "couponDiscountCombinableError": "該券不可與當前折扣疊加使用"
   },
   "addressForm": {
     "lastName": "姓 *",

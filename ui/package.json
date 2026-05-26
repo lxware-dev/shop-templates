@@ -32,7 +32,7 @@
     "unplugin-icons": "^22.5.0"
   },
   "dependencies": {
-    "@halo-dev/api-client": "file:halo-dev-api-client-2.22.0.tgz",
+    "@halo-dev/api-client": "file:halo-dev-api-client-2.24.0.tgz",
     "@tanstack/svelte-query": "^6.1.0",
     "decimal.js": "^10.6.0",
     "i18next": "^26.0.3",

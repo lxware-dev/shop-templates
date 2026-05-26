@@ -53,8 +53,8 @@ importers:
   ui:
     dependencies:
       '@halo-dev/api-client':
-        specifier: file:halo-dev-api-client-2.22.0.tgz
-        version: file:ui/halo-dev-api-client-2.22.0.tgz(axios@1.13.2)
+        specifier: file:halo-dev-api-client-2.24.0.tgz
+        version: file:ui/halo-dev-api-client-2.24.0.tgz(axios@1.13.2)
       '@tanstack/svelte-query':
         specifier: ^6.1.0
         version: 6.1.0(svelte@5.53.10)
@@ -306,11 +306,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.22.0.tgz':
-    resolution: {integrity: sha512-Ifrk9fSy5uL+Bs8/K/z2d2Ykuqek7ergcNUf0bv0DUQGw6Z5WZZplIYx/CVfDhByBhchgX0hdtARdo92EYR1ag==, tarball: file:ui/halo-dev-api-client-2.22.0.tgz}
-    version: 2.22.0
+  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.24.0.tgz':
+    resolution: {integrity: sha512-qZSIo+Qd2Dt0A7SxTLihcA3dGf8lx4XPH8wg0luZG3YSEl/cBa7eNNtYgZlkTjNnina4ijyg76JHt7eZ8iYc4g==, tarball: file:ui/halo-dev-api-client-2.24.0.tgz}
+    version: 2.24.0
     peerDependencies:
-      axios: ^1.12.*
+      axios: ^1.16.0
 
   '@iconify/json@2.2.448':
     resolution: {integrity: sha512-67zot0eJmV9qbap6pDyE+VBtje09kKoetE0zRwauScpSeG1AnCUkL4YdiT9BA6Nu78Np5CNAgF6rZJ6b7G6dNw==}
@@ -2468,7 +2468,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.4':
     optional: true
 
-  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.22.0.tgz(axios@1.13.2)':
+  '@halo-dev/api-client@file:ui/halo-dev-api-client-2.24.0.tgz(axios@1.13.2)':
     dependencies:
       axios: 1.13.2
       qs: 6.14.0

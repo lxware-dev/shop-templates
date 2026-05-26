@@ -51,7 +51,22 @@
     "shipping": "Envío",
     "payableTotal": "Importe a pagar",
     "goToPay": "Ir al pago",
-    "backToCart": "Volver al carrito"
+    "backToCart": "Volver al carrito",
+    "discountCode": "Código de descuento",
+    "discountCodePlaceholder": "Ingrese el código de descuento",
+    "apply": "Aplicar",
+    "remove": "Eliminar",
+    "discountTip": "El sistema calculará automáticamente el mejor descuento.",
+    "discountApplySuccess": "Código de descuento aplicado con éxito",
+    "discountRemoveSuccess": "Código de descuento eliminado",
+    "discountApplyError": "Código de descuento inválido o vencido",
+    "coupons": "Cupones",
+    "couponsPlaceholder": "Selecciona cupones para aplicar",
+    "couponApplySuccess": "Cupones aplicados",
+    "couponRemoveSuccess": "Cupón eliminado",
+    "couponApplyError": "Error de validación del cupón",
+    "couponCombinableError": "Este cupón no se puede combinar con otros cupones",
+    "couponDiscountCombinableError": "Este cupón no se puede combinar con el descuento actual"
   },
   "addressForm": {
     "lastName": "Apellido *",

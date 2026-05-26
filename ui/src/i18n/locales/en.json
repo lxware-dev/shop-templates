@@ -59,7 +59,14 @@
     "discountTip": "System will automatically calculate the best discount.",
     "discountApplySuccess": "Discount code applied successfully",
     "discountRemoveSuccess": "Discount code removed",
-    "discountApplyError": "Invalid or expired discount code"
+    "discountApplyError": "Invalid or expired discount code",
+    "coupons": "Coupons",
+    "couponsPlaceholder": "Select coupons to apply",
+    "couponApplySuccess": "Coupons applied",
+    "couponRemoveSuccess": "Coupon removed",
+    "couponApplyError": "Coupon validation failed",
+    "couponCombinableError": "This coupon cannot be combined with other coupons",
+    "couponDiscountCombinableError": "This coupon cannot be combined with the current discount"
   },
   "addressForm": {
     "lastName": "Last name *",

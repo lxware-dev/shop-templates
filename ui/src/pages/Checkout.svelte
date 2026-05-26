@@ -12,7 +12,12 @@
 <script lang="ts">
   import { createQuery, createMutation, QueryClient } from '@tanstack/svelte-query';
   import ky from 'ky';
-  import { type CheckoutContextResponse, type UserAddressResponse } from '@halo-dev/api-client';
+  import {
+    type CheckoutContextResponse,
+    type UserAddressResponse,
+    type CustomerCouponResponse,
+    type CouponDetail,
+  } from '@halo-dev/api-client';
   import { formatPrice } from '../utils/price';
   import { fade } from 'svelte/transition';
   import CheckoutOrderItem from './components/CheckoutOrderItem.svelte';
@@ -56,13 +61,101 @@
 
   let discountCodeInput = $state('');
 
+  // Coupons
+  const myCouponsQuery = createQuery(
+    () => ({
+      queryKey: ['shop:coupons:mine'],
+      queryFn: async () => {
+        return await ky.get<CustomerCouponResponse[]>('/shop/coupons/mine').json();
+      },
+      staleTime: 30_000,
+    }),
+    () => queryClient
+  );
+
+  const availableCoupons = $derived(
+    (myCouponsQuery.data ?? []).filter((c) => c.status === 'AVAILABLE')
+  );
+
+  let selectedCouponIds = $state<number[]>([]);
+  let couponSelectionInitialized = $state(false);
+
+  $effect(() => {
+    if (couponSelectionInitialized || contextQuery.isFetching) return;
+    const data = contextQuery.data as any;
+    if (data?.calculateResult) {
+      selectedCouponIds =
+        data.calculateResult.appliedCoupons?.map((c: CouponDetail) => c.customerCouponId!) ?? [];
+      couponSelectionInitialized = true;
+    }
+  });
+
+  function toggleCoupon(id: number) {
+    if (selectedCouponIds.includes(id)) {
+      selectedCouponIds = selectedCouponIds.filter((i) => i !== id);
+    } else {
+      selectedCouponIds = [...selectedCouponIds, id];
+    }
+  }
+
+  const applyCouponsMutation = createMutation(
+    () => ({
+      mutationFn: async (ids: number[]) => {
+        return await ky
+          .post(`/shop/checkout/${contextId}/coupons`, {
+            json: { customerCouponIds: ids },
+            headers: { 'X-XSRF-TOKEN': csrfToken },
+          })
+          .json();
+      },
+      onSuccess: (_, ids) => {
+        selectedCouponIds = [...ids];
+        toast.success(get(i18n).t('checkout.couponApplySuccess'));
+        queryClient.invalidateQueries({ queryKey: ['shop:checkout:context', contextId] });
+      },
+      onError: () => {
+        toast.error(get(i18n).t('checkout.couponApplyError'));
+      },
+    }),
+    () => queryClient
+  );
+
+  const removeCouponMutation = createMutation(
+    () => ({
+      mutationFn: async (customerCouponId: number) => {
+        return await ky
+          .delete(`/shop/checkout/${contextId}/coupons/${customerCouponId}`, {
+            headers: { 'X-XSRF-TOKEN': csrfToken },
+          })
+          .json();
+      },
+      onSuccess: () => {
+        couponSelectionInitialized = false;
+        toast.success(get(i18n).t('checkout.couponRemoveSuccess'));
+        queryClient.invalidateQueries({ queryKey: ['shop:checkout:context', contextId] });
+      },
+      onError: () => {
+        toast.error(get(i18n).t('checkout.couponApplyError'));
+      },
+    }),
+    () => queryClient
+  );
+
+  function applyCoupons() {
+    applyCouponsMutation.mutate(selectedCouponIds);
+  }
+
+  function removeCoupon(customerCouponId: number) {
+    removeCouponMutation.mutate(customerCouponId);
+  }
+
   const applyDiscountMutation = createMutation(
     () => ({
       mutationFn: async (code: string) => {
         return await ky
           .post(`/shop/checkout/${contextId}/discount`, {
             json: { code },
-            headers: { 'X-CSRF-TOKEN': csrfToken },
+            headers: { 'X-XSRF-TOKEN': csrfToken },
           })
           .json();
       },
@@ -83,7 +176,7 @@
       mutationFn: async () => {
         return await ky
           .delete(`/shop/checkout/${contextId}/discount`, {
-            headers: { 'X-CSRF-TOKEN': csrfToken },
+            headers: { 'X-XSRF-TOKEN': csrfToken },
           })
           .json();
       },
@@ -116,6 +209,28 @@
       ? `${result.discountName} (${result.discountCode})`
       : result.discountName;
   });
+
+  const appliedCoupons = $derived(
+    ((contextQuery.data as any)?.calculateResult?.appliedCoupons ?? []) as CouponDetail[]
+  );
+
+  const couponDiscountAmount = $derived(
+    ((contextQuery.data as any)?.calculateResult?.couponDiscountAmount ?? 0) as number
+  );
+
+  const hasCoupons = $derived(appliedCoupons.length > 0);
+
+  const hasCouponChanges = $derived.by(() => {
+    const appliedIds = new Set(appliedCoupons.map((c: CouponDetail) => c.customerCouponId!));
+    const selectedSet = new Set(selectedCouponIds);
+    return (
+      appliedIds.size !== selectedSet.size || [...appliedIds].some((id) => !selectedSet.has(id))
+    );
+  });
+
+  function couponLabel(c: CouponDetail) {
+    return c.couponName ?? get(i18n).t('checkout.coupons');
+  }
 
   $effect(() => {
     if (addressQuery.isFetched) {
@@ -225,6 +340,85 @@
         <p class="shop-checkout-discount-card__tip">{$i18n.t('checkout.discountTip')}</p>
       </div>
 
+      {#if availableCoupons.length > 0 || hasCoupons}
+        <div class="shop-card shop-checkout-discount-card">
+          <h2 class="shop-card__title">{$i18n.t('checkout.coupons')}</h2>
+          {#if myCouponsQuery.isLoading}
+            <span>{$i18n.t('common.loading')}</span>
+          {:else if availableCoupons.length === 0 && !hasCoupons}
+            <p class="shop-checkout-discount-card__tip">{$i18n.t('checkout.couponsPlaceholder')}</p>
+          {:else}
+            {#if availableCoupons.length > 0}
+              <div class="shop-coupon-list">
+                {#each availableCoupons as coupon (coupon.id)}
+                  <label
+                    class="shop-coupon-item"
+                    class:shop-coupon-item--selected={selectedCouponIds.includes(coupon.id!)}
+                  >
+                    <input
+                      type="checkbox"
+                      class="shop-coupon-item__checkbox"
+                      checked={selectedCouponIds.includes(coupon.id!)}
+                      onchange={() => toggleCoupon(coupon.id!)}
+                    />
+                    <div class="shop-coupon-item__info">
+                      <span class="shop-coupon-item__name">{coupon.couponName}</span>
+                      <span class="shop-coupon-item__desc">
+                        {#if coupon.calculationType === 'AMOUNT'}
+                          {formatPrice(coupon.discountValue ?? 0)} off
+                        {:else if coupon.calculationType === 'PERCENTAGE'}
+                          {coupon.discountValue}% off
+                          {#if coupon.maxDiscountAmount}
+                            (max {formatPrice(coupon.maxDiscountAmount)}){/if}
+                        {/if}
+                        {#if coupon.minOrderAmount}
+                          · min order {formatPrice(coupon.minOrderAmount)}
+                        {/if}
+                      </span>
+                      {#if coupon.expiresAt}
+                        <span class="shop-coupon-item__expires">
+                          {new Date(coupon.expiresAt).toLocaleDateString()}
+                        </span>
+                      {/if}
+                    </div>
+                  </label>
+                {/each}
+              </div>
+            {/if}
+            <div class="shop-checkout-discount-card__controls">
+              {#if availableCoupons.length > 0}
+                <button
+                  type="button"
+                  class="shop-btn shop-btn-secondary"
+                  disabled={applyCouponsMutation.isPending || !hasCouponChanges}
+                  onclick={applyCoupons}
+                >
+                  {#if applyCouponsMutation.isPending}
+                    <span class="shop-loading-spinner"></span>
+                  {:else}
+                    {$i18n.t('checkout.apply')}
+                  {/if}
+                </button>
+              {/if}
+              {#each appliedCoupons as coupon (coupon.customerCouponId)}
+                <button
+                  type="button"
+                  class="shop-btn shop-btn-secondary"
+                  disabled={removeCouponMutation.isPending}
+                  onclick={() => removeCoupon(coupon.customerCouponId!)}
+                >
+                  {#if removeCouponMutation.isPending}
+                    <span class="shop-loading-spinner"></span>
+                  {:else}
+                    {$i18n.t('checkout.remove')} {couponLabel(coupon)}
+                  {/if}
+                </button>
+              {/each}
+            </div>
+          {/if}
+        </div>
+      {/if}
+
       <div class="shop-card">
         <h2 class="shop-card__title">{$i18n.t('checkout.notes')}</h2>
         <div>
@@ -267,6 +461,12 @@
               >
             </div>
           {/if}
+          {#each appliedCoupons as coupon (coupon.customerCouponId)}
+            <div class="shop-order-summary__row shop-order-summary__row--discount">
+              <span>{couponLabel(coupon)}</span>
+              <span>-{formatPrice(coupon.discountAmount ?? 0)}</span>
+            </div>
+          {/each}
           <div class="shop-divider"></div>
           <div class="shop-order-summary__row shop-order-summary__row--total">
             <span>{$i18n.t('checkout.payableTotal')}</span>

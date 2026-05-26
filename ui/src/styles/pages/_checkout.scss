@@ -133,6 +133,59 @@
   }
 }
 
+.shop-coupon-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--shop-spacing-sm);
+  margin-bottom: var(--shop-spacing-sm);
+}
+
+.shop-coupon-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--shop-spacing-sm);
+  padding: var(--shop-spacing-sm) var(--shop-spacing-md);
+  border: 1px solid var(--shop-gray-200);
+  border-radius: var(--shop-border-radius);
+  cursor: pointer;
+  transition: border-color 0.2s;
+
+  &--selected {
+    border-color: var(--shop-color-primary, #2563eb);
+    background-color: var(--shop-color-primary-light, rgba(37, 99, 235, 0.05));
+  }
+
+  &__checkbox {
+    margin-top: 2px;
+    accent-color: var(--shop-color-primary, #2563eb);
+    cursor: pointer;
+  }
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__name {
+    font-size: var(--shop-font-size-base);
+    font-weight: 600;
+    color: var(--shop-gray-900);
+  }
+
+  &__desc {
+    font-size: var(--shop-font-size-sm);
+    color: var(--shop-gray-600);
+  }
+
+  &__expires {
+    font-size: var(--shop-font-size-xs, 0.75rem);
+    color: var(--shop-gray-400);
+    margin-top: 2px;
+  }
+}
+
 @media (max-width: 1024px) {
   .shop-checkout {
     grid-template-columns: 1fr;
