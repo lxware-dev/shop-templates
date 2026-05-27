@@ -73,6 +73,24 @@
   let selectedAddressId = $state<number | undefined>(undefined);
 
   let discountCodeInput = $state('');
+  let discountCodeInitialized = $state(false);
+
+  $effect(() => {
+    const data = contextQuery.data as any;
+    const code = data?.calculateResult?.discountCode;
+    console.log('[discount-effect]', {
+      isFetching: contextQuery.isFetching,
+      discountCodeInitialized,
+      code,
+      hasData: !!data,
+    });
+    if (!contextQuery.isFetching && data?.calculateResult && !discountCodeInitialized) {
+      discountCodeInitialized = true;
+      if (code) {
+        discountCodeInput = code;
+      }
+    }
+  });
 
   // Coupons
   const myCouponsQuery = createQuery(
@@ -225,6 +243,8 @@
 
   function removeDiscount() {
     removeDiscountMutation.mutate(undefined);
+    discountCodeInput = '';
+    discountCodeInitialized = false;
   }
 
   const hasDiscount = $derived(
