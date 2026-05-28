@@ -68,7 +68,20 @@
     "couponDiscountCombinableError": "Este cupón no se puede combinar con el descuento actual",
     "couponNotCombinableLabel": "No combinable",
     "couponNotCombinableWithDiscountLabel": "No con descuento",
-    "couponsRejected": "Cupones no disponibles"
+    "couponsRejected": "No disponible",
+    "couponLoadError": "Error al cargar los cupones. Inténtelo de nuevo.",
+    "retryCoupons": "Reintentar",
+    "couponsEmpty": "No hay cupones disponibles.",
+    "couponsAppliedOnly": "No hay otros cupones disponibles. Los cupones aplicados se muestran en el resumen.",
+    "couponPartialApply": "Algunos cupones no se pudieron aplicar. Revise los cupones resaltados.",
+    "couponSelectionReplaced": "La selección anterior se reemplazó porque este cupón no se puede combinar.",
+    "couponSelectionWillReplace": "Seleccionar este cupón reemplazará la selección actual.",
+    "couponAmountOff": "{{amount}} de descuento",
+    "couponPercentageOff": "{{value}}% de descuento",
+    "couponMaxDiscount": "máx. {{amount}}",
+    "couponMinOrder": "pedido mínimo {{amount}}",
+    "couponExpiresAt": "Vence el {{date}}",
+    "couponRejectedFallback": "Este cupón no está disponible para este pedido."
   },
   "addressForm": {
     "lastName": "Apellido *",

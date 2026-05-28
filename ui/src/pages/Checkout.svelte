@@ -112,6 +112,13 @@
   let couponSelectionInitialized = $state(false);
   let couponError = $state('');
 
+  const selectedHasNonCombinableCoupon = $derived(
+    selectedCouponIds.some((sid) => {
+      const coupon = availableCoupons.find((c) => c.id === sid);
+      return coupon?.combineWithCoupons === false;
+    })
+  );
+
   $effect(() => {
     if (couponSelectionInitialized || contextQuery.isFetching) return;
     const data = contextQuery.data as any;
@@ -127,13 +134,14 @@
     const coupon = availableCoupons.find((c) => c.id === id);
 
     if (selectedCouponIds.includes(id)) {
-      // Deselect
       selectedCouponIds = selectedCouponIds.filter((i) => i !== id);
       return;
     }
 
-    // If the new coupon cannot combine with other coupons, replace selection entirely
     if (coupon?.combineWithCoupons === false) {
+      if (selectedCouponIds.length > 0) {
+        toast.info(get(i18n).t('checkout.couponSelectionReplaced'));
+      }
       selectedCouponIds = [id];
       if (coupon?.combineWithOrderDiscount === false && hasDiscount) {
         couponError = get(i18n).t('checkout.couponDiscountCombinableError');
@@ -141,12 +149,8 @@
       return;
     }
 
-    // If any currently selected coupon cannot combine with others, replace selection
-    const hasNonCombinableSelected = selectedCouponIds.some((sid) => {
-      const sc = availableCoupons.find((c) => c.id === sid);
-      return sc?.combineWithCoupons === false;
-    });
-    if (hasNonCombinableSelected) {
+    if (selectedHasNonCombinableCoupon) {
+      toast.info(get(i18n).t('checkout.couponSelectionReplaced'));
       selectedCouponIds = [id];
       if (coupon?.combineWithOrderDiscount === false && hasDiscount) {
         couponError = get(i18n).t('checkout.couponDiscountCombinableError');
@@ -154,12 +158,19 @@
       return;
     }
 
-    // Warn if coupon cannot combine with the current discount
     if (coupon?.combineWithOrderDiscount === false && hasDiscount) {
       couponError = get(i18n).t('checkout.couponDiscountCombinableError');
     }
 
     selectedCouponIds = [...selectedCouponIds, id];
+  }
+
+  function couponWillReplaceSelection(coupon: CustomerCouponResponse) {
+    return (
+      !selectedCouponIds.includes(coupon.id!) &&
+      selectedCouponIds.length > 0 &&
+      (coupon.combineWithCoupons === false || selectedHasNonCombinableCoupon)
+    );
   }
 
   const applyCouponsMutation = createMutation(
@@ -171,12 +182,18 @@
             json: body,
             headers: { 'X-XSRF-TOKEN': csrfToken },
           })
-          .json();
+          .json<CheckoutContextResponse>();
       },
-      onSuccess: (_, ids) => {
+      onSuccess: (data, ids) => {
+        const rejected = data.calculateResult?.rejectedCoupons ?? [];
         selectedCouponIds = [...ids];
-        couponError = '';
-        toast.success(get(i18n).t('checkout.couponApplySuccess'));
+        couponError = rejected.length > 0 ? get(i18n).t('checkout.couponPartialApply') : '';
+        queryClient.setQueryData(['shop:checkout:context', contextId], data);
+        if (rejected.length > 0) {
+          toast.warning(get(i18n).t('checkout.couponPartialApply'));
+        } else {
+          toast.success(get(i18n).t('checkout.couponApplySuccess'));
+        }
         queryClient.invalidateQueries({ queryKey: ['shop:checkout:context', contextId] });
       },
       onError: async (error) => {
@@ -241,6 +258,12 @@
     applyDiscountMutation.mutate(code);
   }
 
+  function handleDiscountCodeKeydown(event: KeyboardEvent) {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    applyDiscount();
+  }
+
   function removeDiscount() {
     removeDiscountMutation.mutate(undefined);
     discountCodeInput = '';
@@ -267,13 +290,7 @@
     ((contextQuery.data as any)?.calculateResult?.rejectedCoupons ?? []) as RejectedCoupon[]
   );
 
-  const couponDiscountAmount = $derived(
-    ((contextQuery.data as any)?.calculateResult?.couponDiscountAmount ?? 0) as number
-  );
-
   const hasCoupons = $derived(appliedCoupons.length > 0);
-
-  const hasRejectedCoupons = $derived(rejectedCoupons.length > 0);
 
   const rejectedCouponMap = $derived(
     new Map<number, RejectedCoupon>(rejectedCoupons.map((rc) => [rc.customerCouponId!, rc]))
@@ -289,6 +306,53 @@
 
   function couponLabel(c: AppliedCoupon) {
     return c.couponName ?? get(i18n).t('checkout.coupons');
+  }
+
+  function couponDescription(coupon: CustomerCouponResponse) {
+    const parts: string[] = [];
+
+    if (coupon.calculationType === 'AMOUNT') {
+      parts.push(
+        get(i18n).t('checkout.couponAmountOff', {
+          amount: formatPrice(coupon.discountValue ?? 0),
+        })
+      );
+    } else if (coupon.calculationType === 'PERCENTAGE') {
+      const percentage = get(i18n).t('checkout.couponPercentageOff', {
+        value: coupon.discountValue ?? 0,
+      });
+      parts.push(
+        coupon.maxDiscountAmount
+          ? `${percentage} (${get(i18n).t('checkout.couponMaxDiscount', {
+              amount: formatPrice(coupon.maxDiscountAmount),
+            })})`
+          : percentage
+      );
+    }
+
+    if (coupon.minOrderAmount) {
+      parts.push(
+        get(i18n).t('checkout.couponMinOrder', {
+          amount: formatPrice(coupon.minOrderAmount),
+        })
+      );
+    }
+
+    return parts.join(' · ');
+  }
+
+  function formatCouponDate(value: string, locale?: string) {
+    return new Intl.DateTimeFormat(locale || undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }).format(new Date(value));
+  }
+
+  function rejectedCouponReason(coupon: RejectedCoupon) {
+    return (
+      coupon.reasonMessage || coupon.reasonCode || get(i18n).t('checkout.couponRejectedFallback')
+    );
   }
 
   $effect(() => {
@@ -367,7 +431,11 @@
             type="text"
             bind:value={discountCodeInput}
             placeholder={$i18n.t('checkout.discountCodePlaceholder')}
-            onkeydown={(e) => e.key === 'Enter' && applyDiscount()}
+            aria-label={$i18n.t('checkout.discountCode')}
+            name="discountCode"
+            autocomplete="off"
+            spellcheck="false"
+            onkeydown={handleDiscountCodeKeydown}
           />
           <button
             type="button"
@@ -399,95 +467,103 @@
         <p class="shop-checkout-discount-card__tip">{$i18n.t('checkout.discountTip')}</p>
       </div>
 
-      {#if availableCoupons.length > 0 || hasCoupons}
-        <div class="shop-card shop-checkout-discount-card">
-          <h2 class="shop-card__title">{$i18n.t('checkout.coupons')}</h2>
-          {#if myCouponsQuery.isLoading}
-            <span>{$i18n.t('common.loading')}</span>
-          {:else if availableCoupons.length === 0 && !hasCoupons}
-            <p class="shop-checkout-discount-card__tip">{$i18n.t('checkout.couponsPlaceholder')}</p>
-          {:else}
-            {#if availableCoupons.length > 0}
-              <div class="shop-coupon-list">
-                {#each availableCoupons as coupon (coupon.id)}
-                  {@const isNonCombinable = coupon.combineWithCoupons === false}
-                  {@const isNonCombinableWithDiscount = coupon.combineWithOrderDiscount === false}
-                  {@const couponRejection = rejectedCouponMap.get(coupon.id!)}
-                  <label
-                    class="shop-coupon-item"
-                    class:shop-coupon-item--selected={selectedCouponIds.includes(coupon.id!)}
-                    class:shop-coupon-item--non-combinable={isNonCombinable}
-                    class:shop-coupon-item--rejected={!!couponRejection}
-                  >
-                    <input
-                      type="checkbox"
-                      class="shop-coupon-item__checkbox"
-                      checked={selectedCouponIds.includes(coupon.id!)}
-                      onchange={() => toggleCoupon(coupon.id!)}
-                    />
-                    <div class="shop-coupon-item__info">
-                      <span class="shop-coupon-item__name">
-                        {coupon.couponName}
-                        {#if isNonCombinable}
-                          <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
-                            {$i18n.t('checkout.couponNotCombinableLabel')}
-                          </span>
-                        {/if}
-                        {#if isNonCombinableWithDiscount}
-                          <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
-                            {$i18n.t('checkout.couponNotCombinableWithDiscountLabel')}
-                          </span>
-                        {/if}
+      <div class="shop-card shop-checkout-discount-card">
+        <h2 class="shop-card__title">{$i18n.t('checkout.coupons')}</h2>
+        {#if myCouponsQuery.isLoading}
+          <p class="shop-checkout-discount-card__state">{$i18n.t('common.loading')}</p>
+        {:else if myCouponsQuery.isError}
+          <p class="shop-checkout-discount-card__error shop-checkout-discount-card__state">
+            {$i18n.t('checkout.couponLoadError')}
+          </p>
+          <div class="shop-checkout-discount-card__actions">
+            <button
+              type="button"
+              class="shop-btn shop-btn-secondary"
+              onclick={() => myCouponsQuery.refetch()}
+            >
+              {$i18n.t('checkout.retryCoupons')}
+            </button>
+          </div>
+        {:else if availableCoupons.length === 0}
+          <p class="shop-checkout-discount-card__tip">
+            {hasCoupons ? $i18n.t('checkout.couponsAppliedOnly') : $i18n.t('checkout.couponsEmpty')}
+          </p>
+        {:else}
+          <div class="shop-coupon-list">
+            {#each availableCoupons as coupon (coupon.id)}
+              {@const isNonCombinable = coupon.combineWithCoupons === false}
+              {@const isNonCombinableWithDiscount = coupon.combineWithOrderDiscount === false}
+              {@const couponRejection = rejectedCouponMap.get(coupon.id!)}
+              {@const willReplaceSelection = couponWillReplaceSelection(coupon)}
+              <label
+                class="shop-coupon-item"
+                class:shop-coupon-item--selected={selectedCouponIds.includes(coupon.id!)}
+                class:shop-coupon-item--non-combinable={isNonCombinable}
+                class:shop-coupon-item--rejected={!!couponRejection}
+              >
+                <input
+                  type="checkbox"
+                  class="shop-coupon-item__checkbox"
+                  checked={selectedCouponIds.includes(coupon.id!)}
+                  onchange={() => toggleCoupon(coupon.id!)}
+                />
+                <div class="shop-coupon-item__info">
+                  <span class="shop-coupon-item__name">
+                    {coupon.couponName}
+                    {#if isNonCombinable}
+                      <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
+                        {$i18n.t('checkout.couponNotCombinableLabel')}
                       </span>
-                      <span class="shop-coupon-item__desc">
-                        {#if coupon.calculationType === 'AMOUNT'}
-                          {formatPrice(coupon.discountValue ?? 0)} off
-                        {:else if coupon.calculationType === 'PERCENTAGE'}
-                          {coupon.discountValue}% off
-                          {#if coupon.maxDiscountAmount}
-                            (max {formatPrice(coupon.maxDiscountAmount)}){/if}
-                        {/if}
-                        {#if coupon.minOrderAmount}
-                          · min order {formatPrice(coupon.minOrderAmount)}
-                        {/if}
+                    {/if}
+                    {#if isNonCombinableWithDiscount}
+                      <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
+                        {$i18n.t('checkout.couponNotCombinableWithDiscountLabel')}
                       </span>
-                      {#if coupon.expiresAt}
-                        <span class="shop-coupon-item__expires">
-                          {new Date(coupon.expiresAt).toLocaleDateString()}
-                        </span>
-                      {/if}
-                      {#if couponRejection}
-                        <span class="shop-coupon-item__error">
-                          {couponRejection.reasonMessage}
-                        </span>
-                      {/if}
-                    </div>
-                  </label>
-                {/each}
-              </div>
-            {/if}
-            {#if couponError}
-              <p class="shop-error">{couponError}</p>
-            {/if}
-            <div class="shop-checkout-discount-card__controls">
-              {#if availableCoupons.length > 0}
-                <button
-                  type="button"
-                  class="shop-btn shop-btn-secondary"
-                  disabled={applyCouponsMutation.isPending || !hasCouponChanges}
-                  onclick={applyCoupons}
-                >
-                  {#if applyCouponsMutation.isPending}
-                    <span class="shop-loading-spinner"></span>
-                  {:else}
-                    {$i18n.t('checkout.apply')}
+                    {/if}
+                  </span>
+                  {#if couponDescription(coupon)}
+                    <span class="shop-coupon-item__desc">{couponDescription(coupon)}</span>
                   {/if}
-                </button>
-              {/if}
-            </div>
+                  {#if coupon.expiresAt}
+                    <span class="shop-coupon-item__expires">
+                      {$i18n.t('checkout.couponExpiresAt', {
+                        date: formatCouponDate(coupon.expiresAt, $i18n.language),
+                      })}
+                    </span>
+                  {/if}
+                  {#if willReplaceSelection}
+                    <span class="shop-coupon-item__notice">
+                      {$i18n.t('checkout.couponSelectionWillReplace')}
+                    </span>
+                  {/if}
+                  {#if couponRejection}
+                    <span class="shop-coupon-item__error">
+                      {rejectedCouponReason(couponRejection)}
+                    </span>
+                  {/if}
+                </div>
+              </label>
+            {/each}
+          </div>
+          {#if couponError}
+            <p class="shop-checkout-discount-card__error">{couponError}</p>
           {/if}
-        </div>
-      {/if}
+          <div class="shop-checkout-discount-card__actions">
+            <button
+              type="button"
+              class="shop-btn shop-btn-secondary"
+              disabled={applyCouponsMutation.isPending || !hasCouponChanges}
+              onclick={applyCoupons}
+            >
+              {#if applyCouponsMutation.isPending}
+                <span class="shop-loading-spinner"></span>
+              {:else}
+                {$i18n.t('checkout.apply')}
+              {/if}
+            </button>
+          </div>
+        {/if}
+      </div>
 
       <div class="shop-card">
         <h2 class="shop-card__title">{$i18n.t('checkout.notes')}</h2>

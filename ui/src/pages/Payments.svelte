@@ -75,6 +75,16 @@
 
   const hasOrderDiscount = $derived(orderDiscountAmount > 0);
 
+  const orderSubtotalAmount = $derived(
+    orderQuery.data?.subtotalAmount ?? orderQuery.data?.totalAmount ?? 0
+  );
+
+  const orderShippingAmount = $derived(orderQuery.data?.shippingAmount ?? 0);
+
+  const orderPayableAmount = $derived(
+    orderQuery.data?.payableAmount ?? orderQuery.data?.totalAmount ?? 0
+  );
+
   const orderDiscountLabel = $derived.by(() => {
     const order = orderQuery.data as any;
     if (!order?.discountName) return get(i18n).t('payments.discount');
@@ -91,16 +101,16 @@
     ((orderQuery.data as any)?.rejectedCoupons ?? []) as RejectedCoupon[]
   );
 
-  const couponDiscountAmount = $derived(
-    ((orderQuery.data as any)?.couponDiscountAmount ?? 0) as number
-  );
-
-  const hasCoupons = $derived(appliedCoupons.length > 0);
-
   const hasRejectedCoupons = $derived(rejectedCoupons.length > 0);
 
   function couponLabel(c: AppliedCoupon) {
     return c.couponName ?? get(i18n).t('checkout.coupons');
+  }
+
+  function rejectedCouponReason(coupon: RejectedCoupon) {
+    return (
+      coupon.reasonMessage || coupon.reasonCode || get(i18n).t('checkout.couponRejectedFallback')
+    );
   }
 
   const paymentMethodsQuery = createQuery(
@@ -291,11 +301,11 @@
           <div class="shop-order-summary">
             <div class="shop-order-summary__row">
               <span>{$i18n.t('payments.itemsSubtotal')}</span>
-              <span>{formatPrice((orderQuery.data.totalAmount || 0) + orderDiscountAmount)}</span>
+              <span>{formatPrice(orderSubtotalAmount)}</span>
             </div>
             <div class="shop-order-summary__row">
               <span>{$i18n.t('payments.shipping')}</span>
-              <span>{formatPrice(0)}</span>
+              <span>{formatPrice(orderShippingAmount)}</span>
             </div>
             {#if hasOrderDiscount}
               <div class="shop-order-summary__row shop-order-summary__row--discount">
@@ -313,17 +323,18 @@
               {#each rejectedCoupons as rc (rc.customerCouponId)}
                 <div class="shop-order-summary__row shop-order-summary__row--rejected">
                   <span>{rc.couponName ?? $i18n.t('checkout.coupons')}</span>
-                  <span class="shop-order-summary__rejected" title={rc.reasonMessage}>
-                    {$i18n.t('checkout.couponsRejected')}
-                  </span>
+                  <span class="shop-order-summary__rejected"
+                    >{$i18n.t('checkout.couponsRejected')}</span
+                  >
                 </div>
+                <p class="shop-order-summary__rejected-reason">{rejectedCouponReason(rc)}</p>
               {/each}
             {/if}
             <div class="shop-divider"></div>
             <div class="shop-order-summary__row shop-order-summary__row--total">
               <span>{$i18n.t('payments.payableTotal')}</span>
               <span class="shop-order-summary__amount">
-                {formatPrice(orderQuery.data.totalAmount || 0)}
+                {formatPrice(orderPayableAmount)}
               </span>
             </div>
           </div>

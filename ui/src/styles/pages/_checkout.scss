@@ -131,6 +131,25 @@
     color: var(--shop-gray-500, #6b7280);
     font-size: var(--shop-font-size-sm, 0.875rem);
   }
+
+  &__state {
+    margin: 0;
+    color: var(--shop-gray-500, #6b7280);
+    font-size: var(--shop-font-size-sm, 0.875rem);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--shop-spacing-sm);
+  }
+
+  &__error {
+    margin: var(--shop-spacing-sm) 0 0;
+    color: var(--shop-color-error, #7a5050);
+    font-size: var(--shop-font-size-sm, 0.875rem);
+    line-height: 1.4;
+  }
 }
 
 .shop-coupon-list {
@@ -183,6 +202,14 @@
     font-size: var(--shop-font-size-xs, 0.75rem);
     color: var(--shop-gray-400);
     margin-top: 2px;
+  }
+
+  &__notice {
+    display: block;
+    font-size: var(--shop-font-size-xs, 0.75rem);
+    color: var(--shop-color-warning, #b45309);
+    margin-top: var(--shop-spacing-xs);
+    line-height: 1.4;
   }
 
   &__tag {

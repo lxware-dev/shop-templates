@@ -68,7 +68,20 @@
     "couponDiscountCombinableError": "该券不可与当前折扣叠加使用",
     "couponNotCombinableLabel": "不可叠加",
     "couponNotCombinableWithDiscountLabel": "不可与折扣叠加",
-    "couponsRejected": "不适用优惠券"
+    "couponsRejected": "不可用",
+    "couponLoadError": "优惠券加载失败，请重试。",
+    "retryCoupons": "重试",
+    "couponsEmpty": "暂无可用优惠券。",
+    "couponsAppliedOnly": "暂无其他可用优惠券，已使用的优惠券会显示在费用汇总中。",
+    "couponPartialApply": "部分优惠券未能使用，请查看标记的优惠券。",
+    "couponSelectionReplaced": "该券不可叠加，已替换之前选择的优惠券。",
+    "couponSelectionWillReplace": "选择该券会替换当前已选优惠券。",
+    "couponAmountOff": "减 {{amount}}",
+    "couponPercentageOff": "优惠 {{value}}%",
+    "couponMaxDiscount": "最高减 {{amount}}",
+    "couponMinOrder": "满 {{amount}} 可用",
+    "couponExpiresAt": "{{date}} 到期",
+    "couponRejectedFallback": "该优惠券不适用于当前订单。"
   },
   "addressForm": {
     "lastName": "姓 *",
