@@ -20,7 +20,9 @@
     "stock": "库存：{{count}} 件",
     "quantity": "数量",
     "addToCart": "加入购物车",
-    "buyNow": "立即购买"
+    "buyNow": "立即购买",
+    "externalBuyNow": "前往购买",
+    "externalRedirectHint": "点击后将在新窗口打开外部站点"
   },
   "cart": {
     "title": "购物车",

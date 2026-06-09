@@ -144,6 +144,12 @@
     }
   }
 
+  &__external-hint {
+    font-size: var(--shop-font-size-sm, 14px);
+    color: var(--shop-gray-500, hsl(0, 0%, 45%));
+    line-height: 1.5;
+  }
+
   &__quantity {
     display: flex;
     align-items: center;

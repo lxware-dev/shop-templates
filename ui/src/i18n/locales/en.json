@@ -20,7 +20,9 @@
     "stock": "Stock: {{count}} pcs",
     "quantity": "Quantity",
     "addToCart": "Add to cart",
-    "buyNow": "Buy now"
+    "buyNow": "Buy now",
+    "externalBuyNow": "Buy on external site",
+    "externalRedirectHint": "Opens the external site in a new tab"
   },
   "cart": {
     "title": "Cart",

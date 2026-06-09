@@ -20,7 +20,9 @@
     "stock": "庫存：{{count}} 件",
     "quantity": "數量",
     "addToCart": "加入購物車",
-    "buyNow": "立即購買"
+    "buyNow": "立即購買",
+    "externalBuyNow": "前往購買",
+    "externalRedirectHint": "點擊後將在新視窗開啟外部網站"
   },
   "cart": {
     "title": "購物車",

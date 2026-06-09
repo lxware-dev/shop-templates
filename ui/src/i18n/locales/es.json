@@ -19,8 +19,10 @@
     "price": "Precio",
     "stock": "Stock: {{count}} piezas",
     "quantity": "Cantidad",
-    "addToCart": "Añadir al carrito",
-    "buyNow": "Comprar ahora"
+    "addToCart": "Agregar al carrito",
+    "buyNow": "Comprar ahora",
+    "externalBuyNow": "Comprar en sitio externo",
+    "externalRedirectHint": "Se abrirá el sitio externo en una pestaña nueva"
   },
   "cart": {
     "title": "Carrito",
