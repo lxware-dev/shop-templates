@@ -44,6 +44,20 @@
     () => queryClient
   );
 
+  const shopConfigQuery = createQuery(
+    () => ({
+      queryKey: ['shop:config'],
+      queryFn: async () => {
+        return await ky
+          .get<{
+            inquiryRedirectUrl?: string;
+          }>('/apis/uc.api.ecommerce.halo.run/v1alpha1/ecommerceconfigs/shop')
+          .json();
+      },
+    }),
+    () => queryClient
+  );
+
   let variants = $derived(productQuery.data?.productVariants || []);
   let specDefinitions = $derived(
     (productQuery.data?.specDefinition || []).filter(
@@ -108,6 +122,10 @@
     }
     return !!selectedVariant.stock;
   });
+
+  let isInquiry = $derived(selectedVariant?.pricingType === 'INQUIRY');
+
+  let contactSalesUrl = $derived(shopConfigQuery.data?.inquiryRedirectUrl || null);
 
   function isSpecValueAvailable(specName?: string, specValue?: string): boolean {
     if (!specName || !specValue) {
@@ -174,6 +192,12 @@
       quantity--;
     }
   }
+
+  function handleContactSales() {
+    if (contactSalesUrl) {
+      window.open(contactSalesUrl, '_blank');
+    }
+  }
 </script>
 
 {#if productQuery.isLoading}
@@ -209,25 +233,6 @@
         {/if}
       </div>
     {:else}
-      <div class="buy-box__price">
-        <div class="buy-box__price-label">{$i18n.t('buyBox.price')}</div>
-        <div class="buy-box__price-value">
-          {#if selectedVariant}
-            {formatPrice(selectedVariant.price || 0)}
-          {:else if variants.length > 0}
-            {[
-              formatPrice(productQuery.data?.minPrice || 0),
-              formatPrice(productQuery.data?.maxPrice || 0),
-            ].join(' - ')}
-          {:else}
-            {formatPrice(0)}
-          {/if}
-          {#if selectedVariant?.originalPrice}
-            <del>{formatPrice(selectedVariant.originalPrice)}</del>
-          {/if}
-        </div>
-      </div>
-
       {#each specDefinitions as spec}
         <div class="buy-box__spec">
           <div class="buy-box__spec-label">{spec.name}</div>
@@ -250,68 +255,105 @@
         </div>
       {/each}
 
-      {#if selectedVariant && selectedVariant.trackInventory}
-        <div class="buy-box__stock">
-          <span class="buy-box__stock-value">
-            {$i18n.t('buyBox.stock', { count: selectedVariant.stock || 0 })}
-          </span>
+      {#if isInquiry}
+        <div class="buy-box__external-hint">
+          {$i18n.t('buyBox.contactSales')}
         </div>
-      {/if}
-
-      <div class="buy-box__quantity">
-        <span class="buy-box__quantity-label">{$i18n.t('buyBox.quantity')}</span>
-        <div class="shop-quantity">
-          <button
-            class="shop-quantity__btn"
-            onclick={decreaseQuantity}
-            disabled={!canDecreaseQuantity}
-          >
-            {@html MingcuteMinimizeLine}
-          </button>
-          <input
-            type="number"
-            class="shop-quantity__input"
-            bind:value={quantity}
-            min="1"
-            max={selectedVariant?.stock || 1}
-          />
-          <button
-            class="shop-quantity__btn"
-            onclick={increaseQuantity}
-            disabled={!canIncreaseQuantity}
-          >
-            {@html MingcuteAddLine}
-          </button>
-        </div>
-      </div>
-
-      <div class="buy-box__actions">
-        <form action={`/shop/cart?redirect_uri=${window.location.href}`} method="post">
-          <input type="hidden" name="_csrf" value={csrfToken} />
-          <input type="hidden" name="productVariantId" value={selectedVariant?.id} />
-          <input type="hidden" name="quantity" value={quantity} />
+        <div class="buy-box__actions">
           <button
             class="shop-btn shop-btn-primary shop-btn-lg"
-            type="submit"
-            disabled={!isSelectedVariantAvailable}
+            onclick={handleContactSales}
+            disabled={!contactSalesUrl}
           >
-            {$i18n.t('buyBox.addToCart')}
+            {$i18n.t('buyBox.contactSales')}
           </button>
-        </form>
-        <form action={`/shop/checkout/prepare?redirect_uri=${window.location.href}`} method="post">
-          <input type="hidden" name="_csrf" value={csrfToken} />
-          <input type="hidden" name="source" value="BUY_NOW" />
-          <input type="hidden" name="items[0].productVariantId" value={selectedVariant?.id} />
-          <input type="hidden" name="items[0].quantity" value={quantity} />
-          <button
-            class="shop-btn shop-btn-secondary shop-btn-lg"
-            type="submit"
-            disabled={!isSelectedVariantAvailable}
+        </div>
+      {:else}
+        <div class="buy-box__price">
+          <div class="buy-box__price-label">{$i18n.t('buyBox.price')}</div>
+          <div class="buy-box__price-value">
+            {#if selectedVariant}
+              {formatPrice(selectedVariant.price || 0)}
+            {:else if variants.length > 0}
+              {[
+                formatPrice(productQuery.data?.minPrice || 0),
+                formatPrice(productQuery.data?.maxPrice || 0),
+              ].join(' - ')}
+            {:else}
+              {formatPrice(0)}
+            {/if}
+            {#if selectedVariant?.originalPrice}
+              <del>{formatPrice(selectedVariant.originalPrice)}</del>
+            {/if}
+          </div>
+        </div>
+
+        {#if selectedVariant && selectedVariant.trackInventory}
+          <div class="buy-box__stock">
+            <span class="buy-box__stock-value">
+              {$i18n.t('buyBox.stock', { count: selectedVariant.stock || 0 })}
+            </span>
+          </div>
+        {/if}
+
+        <div class="buy-box__quantity">
+          <span class="buy-box__quantity-label">{$i18n.t('buyBox.quantity')}</span>
+          <div class="shop-quantity">
+            <button
+              class="shop-quantity__btn"
+              onclick={decreaseQuantity}
+              disabled={!canDecreaseQuantity}
+            >
+              {@html MingcuteMinimizeLine}
+            </button>
+            <input
+              type="number"
+              class="shop-quantity__input"
+              bind:value={quantity}
+              min="1"
+              max={selectedVariant?.stock || 1}
+            />
+            <button
+              class="shop-quantity__btn"
+              onclick={increaseQuantity}
+              disabled={!canIncreaseQuantity}
+            >
+              {@html MingcuteAddLine}
+            </button>
+          </div>
+        </div>
+
+        <div class="buy-box__actions">
+          <form action={`/shop/cart?redirect_uri=${window.location.href}`} method="post">
+            <input type="hidden" name="_csrf" value={csrfToken} />
+            <input type="hidden" name="productVariantId" value={selectedVariant?.id} />
+            <input type="hidden" name="quantity" value={quantity} />
+            <button
+              class="shop-btn shop-btn-primary shop-btn-lg"
+              type="submit"
+              disabled={!isSelectedVariantAvailable}
+            >
+              {$i18n.t('buyBox.addToCart')}
+            </button>
+          </form>
+          <form
+            action={`/shop/checkout/prepare?redirect_uri=${window.location.href}`}
+            method="post"
           >
-            {$i18n.t('buyBox.buyNow')}
-          </button>
-        </form>
-      </div>
+            <input type="hidden" name="_csrf" value={csrfToken} />
+            <input type="hidden" name="source" value="BUY_NOW" />
+            <input type="hidden" name="items[0].productVariantId" value={selectedVariant?.id} />
+            <input type="hidden" name="items[0].quantity" value={quantity} />
+            <button
+              class="shop-btn shop-btn-secondary shop-btn-lg"
+              type="submit"
+              disabled={!isSelectedVariantAvailable}
+            >
+              {$i18n.t('buyBox.buyNow')}
+            </button>
+          </form>
+        </div>
+      {/if}
     {/if}
   </div>
 {/if}
