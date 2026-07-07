@@ -22,7 +22,8 @@
     "addToCart": "Add to cart",
     "buyNow": "Buy now",
     "externalBuyNow": "Buy on external site",
-    "externalRedirectHint": "Opens the external site in a new tab"
+    "externalRedirectHint": "Opens the external site in a new tab",
+    "contactSales": "Contact Sales"
   },
   "cart": {
     "title": "Cart",
