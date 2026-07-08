@@ -24,6 +24,21 @@
     "externalBuyNow": "Buy on external site",
     "externalRedirectHint": "Opens the external site in a new tab"
   },
+  "subscription": {
+    "title": "Subscription Plans",
+    "subscribe": "Subscribe",
+    "viewSubscription": "View Subscription",
+    "subscribeError": "Failed to subscribe. Please try again.",
+    "trialDays": "{{days}}-day free trial",
+    "interval": {
+      "week": "/week",
+      "week_plural": "Every {{count}} weeks",
+      "month": "/month",
+      "month_plural": "Every {{count}} months",
+      "year": "/year",
+      "year_plural": "Every {{count}} years"
+    }
+  },
   "cart": {
     "title": "Cart",
     "subtitle": "{{count}} items",

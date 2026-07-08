@@ -44,6 +44,112 @@
     () => queryClient
   );
 
+  // Subscription plan types (inline, not in api-client yet)
+  interface SubscriptionPlanResponse {
+    id: number;
+    name: string;
+    description?: string;
+    productId: number;
+    productVariantId?: number;
+    intervalCount: number;
+    intervalUnit: 'WEEK' | 'MONTH' | 'YEAR';
+    price: number;
+    originalPrice?: number;
+    currency: string;
+    trialDays: number;
+    maxBillingCycles?: number;
+    setupFee?: number;
+  }
+
+  interface SubscriptionPlansPage {
+    content: SubscriptionPlanResponse[];
+    totalElements: number;
+  }
+
+  const plansQuery = createQuery(
+    () => ({
+      queryKey: ['shop:subscription-plans', id],
+      queryFn: async () => {
+        return await ky
+          .get<SubscriptionPlansPage>(
+            `/apis/uc.api.ecommerce.halo.run/v1alpha1/subscription-plans?productId=${id}&size=50`
+          )
+          .json();
+      },
+    }),
+    () => queryClient
+  );
+
+  // Fetch user's active subscriptions for the current product's plans
+  interface SubscriptionResponse {
+    id: number;
+    subscriptionPlanId: number;
+  }
+
+  interface SubscriptionsPage {
+    content: SubscriptionResponse[];
+    totalElements: number;
+  }
+
+  // Build planIds query params once plans are loaded; re-fetch when plans change
+  let planIdsParams = $derived(
+    (plansQuery.data?.content || []).map((p) => `planIds=${p.id}`).join('&')
+  );
+
+  const mySubscriptionsQuery = createQuery(
+    () => ({
+      queryKey: ['shop:my-subscriptions', planIdsParams],
+      queryFn: async () => {
+        if (!planIdsParams) {
+          return { content: [], totalElements: 0 } as SubscriptionsPage;
+        }
+        return await ky
+          .get<SubscriptionsPage>(
+            `/apis/uc.api.ecommerce.halo.run/v1alpha1/subscriptions?${planIdsParams}&status=ACTIVE&size=100`
+          )
+          .json();
+      },
+    }),
+    () => queryClient
+  );
+
+  // Map of planId -> subscriptionId for active subscriptions
+  let subscribedPlanIds = $derived(
+    new Map(
+      (mySubscriptionsQuery.data?.content || []).map((sub) => [sub.subscriptionPlanId, sub.id])
+    )
+  );
+
+  let subscribing = $state(false);
+  let subscribeError = $state('');
+
+  async function handleSubscribe(planId: number) {
+    subscribing = true;
+    subscribeError = '';
+    try {
+      await ky
+        .post('/apis/uc.api.ecommerce.halo.run/v1alpha1/subscriptions', {
+          json: { subscriptionPlanId: planId },
+          headers: { 'X-XSRF-TOKEN': csrfToken },
+        })
+        .json();
+      window.location.href = '/uc/shop/subscriptions';
+    } catch (err: any) {
+      subscribing = false;
+      try {
+        const body = await err.response?.json();
+        subscribeError = body?.detail || $i18n.t('subscription.subscribeError');
+      } catch {
+        subscribeError = $i18n.t('subscription.subscribeError');
+      }
+    }
+  }
+
+  function getIntervalText(count: number, unit: string): string {
+    const key = `subscription.interval.${unit.toLowerCase()}`;
+    return $i18n.t(key, { count });
+  }
+
   let variants = $derived(productQuery.data?.productVariants || []);
   let specDefinitions = $derived(
     (productQuery.data?.specDefinition || []).filter(
@@ -284,6 +390,70 @@
           </button>
         </div>
       </div>
+
+      {#if plansQuery.data?.content?.length}
+        <div class="buy-box__subscription-plans">
+          <div class="buy-box__subscription-plans-title">
+            {$i18n.t('subscription.title')}
+          </div>
+          {#each plansQuery.data.content as plan}
+            {@const existingSubId = subscribedPlanIds.get(plan.id)}
+            <div class="buy-box__subscription-plan">
+              <div class="buy-box__subscription-plan-info">
+                <div class="buy-box__subscription-plan-name">{plan.name}</div>
+                {#if plan.description}
+                  <div class="buy-box__subscription-plan-desc">
+                    {plan.description}
+                  </div>
+                {/if}
+                <div class="buy-box__subscription-plan-meta">
+                  <span>
+                    {getIntervalText(plan.intervalCount, plan.intervalUnit)}
+                  </span>
+                  {#if plan.trialDays > 0}
+                    <span class="buy-box__subscription-plan-trial">
+                      {$i18n.t('subscription.trialDays', {
+                        days: plan.trialDays,
+                      })}
+                    </span>
+                  {/if}
+                </div>
+              </div>
+              <div class="buy-box__subscription-plan-action">
+                <div class="buy-box__subscription-plan-price">
+                  <span class="buy-box__subscription-plan-price-value">
+                    {formatPrice(plan.price)}
+                  </span>
+                  {#if plan.originalPrice}
+                    <del class="buy-box__subscription-plan-price-original">
+                      {formatPrice(plan.originalPrice)}
+                    </del>
+                  {/if}
+                </div>
+                {#if existingSubId != null}
+                  <a
+                    class="shop-btn shop-btn-secondary shop-btn-sm"
+                    href={`/uc/shop/subscriptions/${existingSubId}`}
+                  >
+                    {$i18n.t('subscription.viewSubscription')}
+                  </a>
+                {:else}
+                  <button
+                    class="shop-btn shop-btn-primary shop-btn-sm"
+                    onclick={() => handleSubscribe(plan.id)}
+                    disabled={subscribing}
+                  >
+                    {$i18n.t('subscription.subscribe')}
+                  </button>
+                {/if}
+              </div>
+            </div>
+          {/each}
+          {#if subscribeError}
+            <div class="buy-box__subscription-error">{subscribeError}</div>
+          {/if}
+        </div>
+      {/if}
 
       <div class="buy-box__actions">
         <form action={`/shop/cart?redirect_uri=${window.location.href}`} method="post">
