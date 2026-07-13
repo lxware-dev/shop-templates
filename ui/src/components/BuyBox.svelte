@@ -44,6 +44,17 @@
     () => queryClient
   );
 
+  interface ContactInformation {
+    label: string;
+    type: 'LINK' | 'IMAGE';
+    icon?: string;
+    linkLabel?: string;
+    linkUrl?: string;
+    image?: string;
+    imageHref?: string;
+    help?: string;
+  }
+
   const shopConfigQuery = createQuery(
     () => ({
       queryKey: ['shop:config'],
@@ -51,6 +62,7 @@
         return await ky
           .get<{
             inquiryRedirectUrl?: string;
+            contacts?: ContactInformation[];
           }>('/apis/uc.api.ecommerce.halo.run/v1alpha1/ecommerceconfigs/shop')
           .json();
       },
@@ -126,6 +138,7 @@
   let isInquiry = $derived(selectedVariant?.pricingType === 'INQUIRY');
 
   let contactSalesUrl = $derived(shopConfigQuery.data?.inquiryRedirectUrl || null);
+  let contacts = $derived(shopConfigQuery.data?.contacts || []);
 
   function isSpecValueAvailable(specName?: string, specValue?: string): boolean {
     if (!specName || !specValue) {
@@ -256,18 +269,54 @@
       {/each}
 
       {#if isInquiry}
-        <div class="buy-box__external-hint">
-          {$i18n.t('buyBox.contactSales')}
-        </div>
-        <div class="buy-box__actions">
-          <button
-            class="shop-btn shop-btn-primary shop-btn-lg"
-            onclick={handleContactSales}
-            disabled={!contactSalesUrl}
-          >
+        {#if contactSalesUrl}
+          <div class="buy-box__external-hint">
             {$i18n.t('buyBox.contactSales')}
-          </button>
-        </div>
+          </div>
+          <div class="buy-box__actions">
+            <button class="shop-btn shop-btn-primary shop-btn-lg" onclick={handleContactSales}>
+              {$i18n.t('buyBox.contactSales')}
+            </button>
+          </div>
+        {:else if contacts.length > 0}
+          <div class="buy-box__contacts">
+            {#each contacts as contact}
+              <div class="buy-box__contact-item">
+                <span class="buy-box__contact-label">{contact.label}</span>
+                {#if contact.type === 'LINK' && contact.linkUrl}
+                  <a
+                    class="buy-box__contact-link"
+                    href={contact.linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {contact.linkLabel || contact.linkUrl}
+                  </a>
+                {:else if contact.type === 'IMAGE' && contact.image}
+                  {#if contact.imageHref}
+                    <a href={contact.imageHref} target="_blank" rel="noopener noreferrer">
+                      <img class="buy-box__contact-image" src={contact.image} alt={contact.label} />
+                    </a>
+                  {:else}
+                    <img class="buy-box__contact-image" src={contact.image} alt={contact.label} />
+                  {/if}
+                {/if}
+                {#if contact.help}
+                  <span class="buy-box__contact-help">{contact.help}</span>
+                {/if}
+              </div>
+            {/each}
+          </div>
+        {:else}
+          <div class="buy-box__external-hint">
+            {$i18n.t('buyBox.contactSales')}
+          </div>
+          <div class="buy-box__actions">
+            <button class="shop-btn shop-btn-primary shop-btn-lg" disabled>
+              {$i18n.t('buyBox.contactSales')}
+            </button>
+          </div>
+        {/if}
       {:else}
         <div class="buy-box__price">
           <div class="buy-box__price-label">{$i18n.t('buyBox.price')}</div>
