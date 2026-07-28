@@ -136,13 +136,13 @@
     subscribing = true;
     subscribeError = '';
     try {
-      await ky
+      const subscription = await ky
         .post('/apis/uc.api.ecommerce.halo.run/v1alpha1/subscriptions', {
           json: { subscriptionPlanId: planId },
           headers: { 'X-XSRF-TOKEN': csrfToken },
         })
-        .json();
-      window.location.href = '/uc/shop/subscriptions';
+        .json<{ id: number }>();
+      window.location.href = `/uc/shop/subscriptions/${subscription.id}`;
     } catch (err: any) {
       subscribing = false;
       try {
