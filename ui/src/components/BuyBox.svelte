@@ -5,6 +5,7 @@
     props: {
       id: { reflect: true, type: 'Number', attribute: 'id' },
       csrfToken: { reflect: true, type: 'String', attribute: 'csrftoken' },
+      authenticated: { reflect: true, type: 'Boolean', attribute: 'authenticated' },
     },
   }}
 />
@@ -26,7 +27,11 @@
   import SpecButton from './SpecButton.svelte';
   import i18n from '../i18n';
 
-  let { id, csrfToken }: { id: number; csrfToken: string } = $props();
+  let {
+    id,
+    csrfToken,
+    authenticated = false,
+  }: { id: number; csrfToken: string; authenticated?: boolean } = $props();
 
   const queryClient = new QueryClient();
 
@@ -72,7 +77,7 @@
       queryFn: async () => {
         return await ky
           .get<SubscriptionPlansPage>(
-            `/apis/uc.api.ecommerce.halo.run/v1alpha1/subscription-plans?productId=${id}&size=50`
+            `/apis/uc.api.ecommerce.halo.run/v1alpha1/products/${id}/subscription-plans?size=50`
           )
           .json();
       },
@@ -100,7 +105,7 @@
     () => ({
       queryKey: ['shop:my-subscriptions', planIdsParams],
       queryFn: async () => {
-        if (!planIdsParams) {
+        if (!authenticated || !planIdsParams) {
           return { content: [], totalElements: 0 } as SubscriptionsPage;
         }
         return await ky
@@ -124,6 +129,10 @@
   let subscribeError = $state('');
 
   async function handleSubscribe(planId: number) {
+    if (!authenticated) {
+      window.location.href = '/login?redirect_uri=' + encodeURIComponent(window.location.href);
+      return;
+    }
     subscribing = true;
     subscribeError = '';
     try {
