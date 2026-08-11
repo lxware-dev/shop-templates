@@ -22,7 +22,8 @@
     "addToCart": "加入购物车",
     "buyNow": "立即购买",
     "externalBuyNow": "前往购买",
-    "externalRedirectHint": "点击后将在新窗口打开外部站点"
+    "externalRedirectHint": "点击后将在新窗口打开外部站点",
+    "contactSales": "联系销售"
   },
   "subscription": {
     "title": "订阅计划",
