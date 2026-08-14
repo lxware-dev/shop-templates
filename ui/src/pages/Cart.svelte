@@ -10,7 +10,7 @@
 
 <script lang="ts">
   import { type CartItemResponse } from '@halo-dev/api-client';
-  import { createQuery, QueryClient } from '@tanstack/svelte-query';
+  import { createQuery, QueryClient, setQueryClientContext } from '@tanstack/svelte-query';
   import Decimal from 'decimal.js';
   import ky from 'ky';
   import CartItem from './components/CartItem.svelte';
@@ -22,6 +22,7 @@
   let { csrfToken } = $props<{ csrfToken: string }>();
 
   const queryClient = new QueryClient();
+  setQueryClientContext(queryClient);
 
   const query = createQuery(
     () => ({
@@ -70,7 +71,7 @@
     {:else}
       <div class="shop-cart__items" transition:fade={{ duration: 200 }}>
         {#each query.data ?? [] as item}
-          <CartItem {item} {queryClient} />
+          <CartItem {item} />
         {/each}
       </div>
     {/if}

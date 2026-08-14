@@ -1,3 +1,4 @@
+import 'iconify-icon';
 import './components/BuyBox.svelte';
 import './pages/Cart.svelte';
 import './pages/Checkout.svelte';

@@ -5,18 +5,19 @@
   import mediumZoom, { type Zoom } from 'medium-zoom';
   import i18n from '../i18n';
 
-  const {
+  let {
     isSelected,
     isAvailable,
     imageUrl,
     value,
-    ...rest
+    onclick,
   }: {
     isSelected: boolean;
     isAvailable: boolean;
     imageUrl?: string;
     value?: string;
-  } & HTMLButtonAttributes = $props();
+    onclick?: HTMLButtonAttributes['onclick'];
+  } = $props();
 
   let imgEl: HTMLImageElement | undefined = $state();
 
@@ -49,7 +50,7 @@
   class:buy-box__spec-option--disabled={!isAvailable}
   class:buy-box__spec-option--with-image={imageUrl}
   disabled={!isAvailable}
-  {...rest}
+  {onclick}
 >
   {#if imageUrl}
     <img

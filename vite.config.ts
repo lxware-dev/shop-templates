@@ -10,6 +10,7 @@ export default defineConfig({
     outDir: 'shop-dist',
     deps: {
       alwaysBundle: ['medium-zoom', 'swiper/**', '@halo-dev/shop-ui/**'],
+      onlyBundle: ['medium-zoom', 'swiper'],
     },
     outputOptions: {
       minify: true,

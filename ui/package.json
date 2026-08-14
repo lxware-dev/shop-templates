@@ -36,6 +36,7 @@
     "@tanstack/svelte-query": "^6.1.0",
     "decimal.js": "^10.6.0",
     "i18next": "^26.0.3",
+    "iconify-icon": "^3.0.2",
     "ky": "^1.14.3",
     "medium-zoom": "^1.1.0",
     "qrcode": "^1.5.4",

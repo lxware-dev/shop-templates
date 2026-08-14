@@ -1,6 +1,6 @@
 <script lang="ts">
   import { type CartItemResponse } from '@halo-dev/api-client';
-  import { createMutation, useIsFetching, type QueryClient } from '@tanstack/svelte-query';
+  import { createMutation, getQueryClientContext, useIsFetching } from '@tanstack/svelte-query';
   import { getThumbnailUrl } from '../../utils/thumbnail';
   import Decimal from 'decimal.js';
   import MingcuteAddLine from '~icons/mingcute/add-line?raw';
@@ -11,7 +11,9 @@
   import { get } from 'svelte/store';
   import i18n from '../../i18n';
 
-  let { item, queryClient }: { item: CartItemResponse; queryClient: QueryClient } = $props();
+  let { item }: { item: CartItemResponse } = $props();
+
+  const queryClient = getQueryClientContext();
 
   let imageUrl = $derived(item.productVariant?.imageUrl || item.product?.coverImageUrl);
   let specValueText = $derived(
@@ -51,7 +53,7 @@
     () => queryClient
   );
 
-  let fetchingCount = useIsFetching({}, queryClient);
+  const fetchingCount = useIsFetching({}, queryClient);
   let isBusy = $derived(fetchingCount.current > 0 || updateQuantityMutation.isPending);
 
   let canIncreaseQuantity = $derived.by(() => {
