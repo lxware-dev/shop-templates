@@ -282,28 +282,39 @@
           <div class="buy-box__contacts">
             {#each contacts as contact}
               <div class="buy-box__contact-item">
-                <span class="buy-box__contact-label">{contact.label}</span>
-                {#if contact.type === 'LINK' && contact.linkUrl}
-                  <a
-                    class="buy-box__contact-link"
-                    href={contact.linkUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {contact.linkLabel || contact.linkUrl}
-                  </a>
-                {:else if contact.type === 'IMAGE' && contact.image}
-                  {#if contact.imageHref}
-                    <a href={contact.imageHref} target="_blank" rel="noopener noreferrer">
-                      <img class="buy-box__contact-image" src={contact.image} alt={contact.label} />
-                    </a>
-                  {:else}
-                    <img class="buy-box__contact-image" src={contact.image} alt={contact.label} />
+                <span class="buy-box__contact-label">
+                  {#if contact.icon}
+                    <iconify-icon icon={contact.icon}></iconify-icon>
                   {/if}
-                {/if}
-                {#if contact.help}
-                  <span class="buy-box__contact-help">{contact.help}</span>
-                {/if}
+                  {contact.label}
+                </span>
+                <div class="buy-box__contact-content">
+                  {#if contact.type === 'LINK' && contact.linkUrl}
+                    <a
+                      class="buy-box__contact-link"
+                      href={contact.linkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {contact.linkLabel || contact.linkUrl}
+                    </a>
+                  {:else if contact.type === 'IMAGE' && contact.image}
+                    {#if contact.imageHref}
+                      <a href={contact.imageHref} target="_blank" rel="noopener noreferrer">
+                        <img
+                          class="buy-box__contact-image"
+                          src={contact.image}
+                          alt={contact.label}
+                        />
+                      </a>
+                    {:else}
+                      <img class="buy-box__contact-image" src={contact.image} alt={contact.label} />
+                    {/if}
+                  {/if}
+                  {#if contact.help}
+                    <span class="buy-box__contact-help">{contact.help}</span>
+                  {/if}
+                </div>
               </div>
             {/each}
           </div>
