@@ -231,6 +231,102 @@
     }
   }
 
+  &__subscription-plans {
+    display: flex;
+    flex-direction: column;
+    gap: var(--shop-spacing-md, 16px);
+    padding: var(--shop-spacing-md, 16px) 0;
+    border-top: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
+    border-bottom: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
+
+    &-title {
+      font-size: var(--shop-font-size-base, 16px);
+      font-weight: 600;
+      color: var(--shop-gray-900, hsl(0, 0%, 9%));
+    }
+  }
+
+  &__subscription-plan {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--shop-spacing-md, 16px);
+    padding: var(--shop-spacing-sm, 12px);
+    background-color: var(--shop-color-base-100, white);
+    border: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
+    border-radius: var(--shop-border-radius, 8px);
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--shop-spacing-xs, 4px);
+      flex: 1;
+    }
+
+    &-name {
+      font-size: var(--shop-font-size-sm, 14px);
+      font-weight: 600;
+      color: var(--shop-gray-900, hsl(0, 0%, 9%));
+    }
+
+    &-desc {
+      font-size: var(--shop-font-size-xs, 12px);
+      color: var(--shop-gray-500, hsl(0, 0%, 45%));
+      line-height: 1.4;
+    }
+
+    &-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--shop-spacing-sm, 8px);
+      font-size: var(--shop-font-size-xs, 12px);
+      color: var(--shop-gray-600, hsl(0, 0%, 32%));
+    }
+
+    &-trial {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      font-size: var(--shop-font-size-xs, 12px);
+      color: var(--shop-color-success, hsl(142, 10%, 30%));
+      background-color: hsl(142, 10%, 95%);
+      border-radius: var(--shop-border-radius-sm, 4px);
+    }
+
+    &-action {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--shop-spacing-xs, 8px);
+      flex-shrink: 0;
+    }
+
+    &-price {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+
+      &-value {
+        font-size: var(--shop-font-size-lg, 20px);
+        font-weight: 700;
+        color: var(--shop-gray-900, hsl(0, 0%, 9%));
+      }
+
+      &-original {
+        font-size: var(--shop-font-size-xs, 12px);
+        color: var(--shop-gray-400, hsl(0, 0%, 64%));
+      }
+    }
+  }
+
+  &__subscription-error {
+    font-size: var(--shop-font-size-sm, 14px);
+    color: var(--shop-color-error, hsl(0, 80%, 50%));
+    text-align: center;
+    padding: var(--shop-spacing-xs, 8px);
+  }
+
   &__actions {
     display: flex;
     gap: var(--shop-spacing-md, 16px);

@@ -25,6 +25,21 @@
     "externalRedirectHint": "Se abrirá el sitio externo en una pestaña nueva",
     "contactSales": "Contactar ventas"
   },
+  "subscription": {
+    "title": "Planes de suscripción",
+    "subscribe": "Suscribirse",
+    "viewSubscription": "Ver suscripción",
+    "subscribeError": "Error al suscribirse. Inténtalo de nuevo.",
+    "trialDays": "{{days}} días de prueba gratis",
+    "interval": {
+      "week": "/semana",
+      "week_plural": "Cada {{count}} semanas",
+      "month": "/mes",
+      "month_plural": "Cada {{count}} meses",
+      "year": "/año",
+      "year_plural": "Cada {{count}} años"
+    }
+  },
   "cart": {
     "title": "Carrito",
     "subtitle": "{{count}} artículos",

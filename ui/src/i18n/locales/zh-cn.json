@@ -25,6 +25,21 @@
     "externalRedirectHint": "点击后将在新窗口打开外部站点",
     "contactSales": "联系销售"
   },
+  "subscription": {
+    "title": "订阅计划",
+    "subscribe": "立即订阅",
+    "viewSubscription": "查看订阅",
+    "subscribeError": "订阅失败，请稍后重试",
+    "trialDays": "{{days}} 天免费试用",
+    "interval": {
+      "week": "/周",
+      "week_plural": "每 {{count}} 周",
+      "month": "/月",
+      "month_plural": "每 {{count}} 个月",
+      "year": "/年",
+      "year_plural": "每 {{count}} 年"
+    }
+  },
   "cart": {
     "title": "购物车",
     "subtitle": "共 {{count}} 件商品",

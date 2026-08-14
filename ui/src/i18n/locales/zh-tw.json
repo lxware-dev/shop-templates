@@ -25,6 +25,21 @@
     "externalRedirectHint": "點擊後將在新視窗開啟外部網站",
     "contactSales": "聯絡銷售"
   },
+  "subscription": {
+    "title": "訂閱計畫",
+    "subscribe": "立即訂閱",
+    "viewSubscription": "查看訂閱",
+    "subscribeError": "訂閱失敗，請稍後重試",
+    "trialDays": "{{days}} 天免費試用",
+    "interval": {
+      "week": "/週",
+      "week_plural": "每 {{count}} 週",
+      "month": "/月",
+      "month_plural": "每 {{count}} 個月",
+      "year": "/年",
+      "year_plural": "每 {{count}} 年"
+    }
+  },
   "cart": {
     "title": "購物車",
     "subtitle": "共 {{count}} 件商品",
