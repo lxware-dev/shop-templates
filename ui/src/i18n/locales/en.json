@@ -18,6 +18,7 @@
     "loadFailed": "Failed to load: {{message}}",
     "price": "Price",
     "stock": "Stock: {{count}} pcs",
+    "perOrderLimit": "Limit {{count}} per order",
     "quantity": "Quantity",
     "addToCart": "Add to cart",
     "buyNow": "Buy now",

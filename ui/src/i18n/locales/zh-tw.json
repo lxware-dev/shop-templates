@@ -18,6 +18,7 @@
     "loadFailed": "載入失敗：{{message}}",
     "price": "價格",
     "stock": "庫存：{{count}} 件",
+    "perOrderLimit": "限購 {{count}} 件",
     "quantity": "數量",
     "addToCart": "加入購物車",
     "buyNow": "立即購買",

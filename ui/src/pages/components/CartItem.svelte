@@ -56,16 +56,35 @@
   const fetchingCount = useIsFetching({}, queryClient);
   let isBusy = $derived(fetchingCount.current > 0 || updateQuantityMutation.isPending);
 
-  let canIncreaseQuantity = $derived.by(() => {
-    if (!item.productVariant?.trackInventory) {
-      return true;
+  let maxQuantity = $derived.by(() => {
+    const limits: number[] = [];
+    if (item.productVariant?.trackInventory) {
+      limits.push(item.productVariant.stock || 0);
     }
-    return (item.quantity || 1) < (item.productVariant?.stock || 0);
+    if (item.productVariant?.maxPerOrder && item.productVariant.maxPerOrder > 0) {
+      limits.push(item.productVariant.maxPerOrder);
+    }
+    return limits.length > 0 ? Math.min(...limits) : Number.POSITIVE_INFINITY;
+  });
+
+  let canIncreaseQuantity = $derived.by(() => {
+    return (item.quantity || 1) < maxQuantity;
   });
 
   let canDecreaseQuantity = $derived.by(() => {
     return (item.quantity || 1) > 1;
   });
+
+  function handleQuantityInput(event: Event) {
+    const next = Number((event.currentTarget as HTMLInputElement).value);
+    if (Number.isNaN(next)) {
+      return;
+    }
+    const clamped = Math.min(Math.max(1, next), maxQuantity);
+    if (clamped !== (item.quantity || 1)) {
+      updateQuantityMutation.mutate(clamped);
+    }
+  }
 </script>
 
 <div class="shop-cart-item">
@@ -107,9 +126,8 @@
       class="shop-quantity__input"
       value={item.quantity || 1}
       min="1"
-      max={item.productVariant?.stock || 1}
-      onchange={(e) =>
-        updateQuantityMutation.mutate(Number((e.target as HTMLInputElement)?.value || 1))}
+      max={Number.isFinite(maxQuantity) ? maxQuantity : undefined}
+      onchange={handleQuantityInput}
       disabled={isBusy}
     />
     <button
