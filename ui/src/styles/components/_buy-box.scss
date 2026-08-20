@@ -231,6 +231,11 @@
     }
   }
 
+  &__limit-hint {
+    font-size: var(--shop-font-size-xs, 12px);
+    color: var(--shop-gray-500, hsl(0, 0%, 45%));
+  }
+
   &__actions {
     display: flex;
     gap: var(--shop-spacing-md, 16px);
