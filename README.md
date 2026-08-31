@@ -32,6 +32,7 @@
 3. `shop/cart.html`：购物车页面
 4. `shop/checkout.html`：结算页面
 5. `shop/payments.html`：支付页面
+6. `shop/subscription.html`：订阅产品详情页面，仅用于订阅类型产品
 
 示例仓库：[lxware-dev/theme-shop-starter](https://github.com/lxware-dev/theme-shop-starter)
 

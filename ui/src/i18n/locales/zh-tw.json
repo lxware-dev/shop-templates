@@ -25,6 +25,61 @@
     "externalRedirectHint": "點擊後將在新視窗開啟外部網站",
     "contactSales": "聯絡銷售"
   },
+  "subscription": {
+    "selectPlan": "選擇方案",
+    "allPlans": "全部方案",
+    "switchHint": "點擊其他方案可前往使用者中心切換。",
+    "noPlans": "暫無上架方案",
+    "billingTabsLabel": "計費週期",
+    "group": {
+      "MONTHLY": "按月付費",
+      "YEARLY": "按年付費",
+      "ONE_TIME": "一次性",
+      "LIFETIME": "買斷/永久",
+      "OTHER": "其他"
+    },
+    "billingMode": {
+      "SUBSCRIPTION": "訂閱",
+      "ONE_TIME": "一次性",
+      "LIFETIME": "買斷/永久"
+    },
+    "billingPeriod": {
+      "MONTHLY": "按月",
+      "YEARLY": "按年"
+    },
+    "perMonth": "/月",
+    "perYear": "/年",
+    "trial": "試用 {{days}} 天",
+    "resubscribeNotice": "再次購買將恢復訂閱，試用不會再觸發。",
+    "quantityRange": "{{min}} - {{max}} 份",
+    "decreaseQuantity": "減少數量",
+    "increaseQuantity": "增加數量",
+    "decreaseAddonQuantity": "減少加購數量",
+    "increaseAddonQuantity": "增加加購數量",
+    "addonsTitle": "可選加購項",
+    "addonPriceUnset": "價格未設定",
+    "summaryTrialNow": "試用 {{days}} 天 · 現在應付",
+    "summaryDueNow": "應付",
+    "summaryAfterTrial": "之後",
+    "summaryAfterEach": "之後每期",
+    "currentPlan": "目前方案",
+    "goSwitch": "去切換",
+    "addingToCart": "加入中…",
+    "addCartFailed": "加入購物車失敗",
+    "manageTitle": "當前訂閱",
+    "managePlan": "計劃",
+    "manageStatus": "狀態",
+    "managePeriodEnd": "當前週期至",
+    "manageGoUc": "去使用者中心管理",
+    "forever": "永久",
+    "status": {
+      "TRIALING": "試用中",
+      "ACTIVE": "生效中",
+      "PAST_DUE": "已逾期",
+      "CANCELLED": "已取消",
+      "EXPIRED": "已過期"
+    }
+  },
   "cart": {
     "title": "購物車",
     "subtitle": "共 {{count}} 件商品",

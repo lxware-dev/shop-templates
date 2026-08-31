@@ -25,6 +25,61 @@
     "externalRedirectHint": "Se abrirá el sitio externo en una pestaña nueva",
     "contactSales": "Contactar ventas"
   },
+  "subscription": {
+    "selectPlan": "Selecciona un plan",
+    "allPlans": "Todos los planes",
+    "switchHint": "Toca otro plan para cambiarlo en el centro de usuario.",
+    "noPlans": "No hay planes disponibles",
+    "billingTabsLabel": "Período de facturación",
+    "group": {
+      "MONTHLY": "Mensual",
+      "YEARLY": "Anual",
+      "ONE_TIME": "Pago único",
+      "LIFETIME": "De por vida",
+      "OTHER": "Otro"
+    },
+    "billingMode": {
+      "SUBSCRIPTION": "Suscripción",
+      "ONE_TIME": "Pago único",
+      "LIFETIME": "De por vida"
+    },
+    "billingPeriod": {
+      "MONTHLY": "Mensual",
+      "YEARLY": "Anual"
+    },
+    "perMonth": "/mes",
+    "perYear": "/año",
+    "trial": "Prueba gratuita de {{days}} días",
+    "resubscribeNotice": "Al comprar de nuevo se restablecerá tu suscripción. La prueba gratuita no se volverá a ofrecer.",
+    "quantityRange": "{{min}} - {{max}}",
+    "decreaseQuantity": "Disminuir cantidad",
+    "increaseQuantity": "Aumentar cantidad",
+    "decreaseAddonQuantity": "Disminuir cantidad del complemento",
+    "increaseAddonQuantity": "Aumentar cantidad del complemento",
+    "addonsTitle": "Complementos opcionales",
+    "addonPriceUnset": "Precio no configurado",
+    "summaryTrialNow": "Prueba gratuita {{days}} días · a pagar ahora",
+    "summaryDueNow": "A pagar ahora",
+    "summaryAfterTrial": "Después",
+    "summaryAfterEach": "Después por período",
+    "currentPlan": "Plan actual",
+    "goSwitch": "Cambiar",
+    "addingToCart": "Agregando...",
+    "addCartFailed": "Error al agregar al carrito",
+    "manageTitle": "Suscripción actual",
+    "managePlan": "Plan",
+    "manageStatus": "Estado",
+    "managePeriodEnd": "Fin del período actual",
+    "manageGoUc": "Gestionar en el centro de usuario",
+    "forever": "De por vida",
+    "status": {
+      "TRIALING": "En prueba",
+      "ACTIVE": "Activa",
+      "PAST_DUE": "Vencida",
+      "CANCELLED": "Cancelada",
+      "EXPIRED": "Caducada"
+    }
+  },
   "cart": {
     "title": "Carrito",
     "subtitle": "{{count}} artículos",

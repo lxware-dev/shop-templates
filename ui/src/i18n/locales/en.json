@@ -25,6 +25,61 @@
     "externalRedirectHint": "Opens the external site in a new tab",
     "contactSales": "Contact Sales"
   },
+  "subscription": {
+    "selectPlan": "Select a plan",
+    "allPlans": "All plans",
+    "switchHint": "Tap another plan to switch it in the user center.",
+    "noPlans": "No plans available",
+    "billingTabsLabel": "Billing period",
+    "group": {
+      "MONTHLY": "Monthly",
+      "YEARLY": "Yearly",
+      "ONE_TIME": "One-time",
+      "LIFETIME": "Lifetime",
+      "OTHER": "Other"
+    },
+    "billingMode": {
+      "SUBSCRIPTION": "Subscription",
+      "ONE_TIME": "One-time",
+      "LIFETIME": "Lifetime"
+    },
+    "billingPeriod": {
+      "MONTHLY": "Monthly",
+      "YEARLY": "Yearly"
+    },
+    "perMonth": "/mo",
+    "perYear": "/yr",
+    "trial": "{{days}}-day free trial",
+    "resubscribeNotice": "Buying again will restore your subscription. The free trial will not be offered again.",
+    "quantityRange": "{{min}} - {{max}}",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "decreaseAddonQuantity": "Decrease add-on quantity",
+    "increaseAddonQuantity": "Increase add-on quantity",
+    "addonsTitle": "Optional add-ons",
+    "addonPriceUnset": "Price not set",
+    "summaryTrialNow": "Free trial {{days}} days · due now",
+    "summaryDueNow": "Due now",
+    "summaryAfterTrial": "Then",
+    "summaryAfterEach": "Then per period",
+    "currentPlan": "Current plan",
+    "goSwitch": "Switch",
+    "addingToCart": "Adding...",
+    "addCartFailed": "Failed to add to cart",
+    "manageTitle": "Current subscription",
+    "managePlan": "Plan",
+    "manageStatus": "Status",
+    "managePeriodEnd": "Current period ends",
+    "manageGoUc": "Manage in user center",
+    "forever": "Lifetime",
+    "status": {
+      "TRIALING": "Trialing",
+      "ACTIVE": "Active",
+      "PAST_DUE": "Past due",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired"
+    }
+  },
   "cart": {
     "title": "Cart",
     "subtitle": "{{count}} items",

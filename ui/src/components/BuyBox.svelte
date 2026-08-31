@@ -15,6 +15,7 @@
     type ProductVariantResponse,
     type SpecDefinitionPayload,
     type SpecValuePayload,
+    type SubscriptionProductResponse,
     ProductResponseProductTypeEnum,
   } from '@halo-dev/api-client';
   import { createQuery, QueryClient } from '@tanstack/svelte-query';
@@ -24,6 +25,7 @@
   import { formatPrice } from '../utils/price';
   import { fade } from 'svelte/transition';
   import SpecButton from './SpecButton.svelte';
+  import SubscriptionBuyBox from './SubscriptionBuyBox.svelte';
   import i18n from '../i18n';
 
   let { id, csrfToken }: { id: number; csrfToken: string } = $props();
@@ -40,6 +42,25 @@
           )
           .json();
       },
+    }),
+    () => queryClient
+  );
+
+  const isSubscription = $derived(
+    productQuery.data?.productType === ProductResponseProductTypeEnum.Subscription
+  );
+
+  const subscriptionQuery = createQuery(
+    () => ({
+      queryKey: ['shop:subscription-product', id],
+      queryFn: async () => {
+        return await ky
+          .get<SubscriptionProductResponse>(
+            `/apis/uc.api.ecommerce.halo.run/v1alpha1/subscription-products/${id}`
+          )
+          .json();
+      },
+      enabled: isSubscription,
     }),
     () => queryClient
   );
@@ -217,6 +238,19 @@
   {$i18n.t('common.loading')}
 {:else if productQuery.isError}
   {$i18n.t('buyBox.loadFailed', { message: productQuery.error.message })}
+{:else if isSubscription}
+  {#if subscriptionQuery.isLoading}
+    {$i18n.t('common.loading')}
+  {:else if subscriptionQuery.isError}
+    {$i18n.t('buyBox.loadFailed', { message: subscriptionQuery.error.message })}
+  {:else if subscriptionQuery.data}
+    <SubscriptionBuyBox
+      {csrfToken}
+      plans={subscriptionQuery.data.plans ?? []}
+      addons={subscriptionQuery.data.addons ?? []}
+      currentSubscription={subscriptionQuery.data.currentSubscription ?? null}
+    />
+  {/if}
 {:else}
   <div class="buy-box" transition:fade={{ duration: 200 }}>
     {#if isExternal}

@@ -25,6 +25,61 @@
     "externalRedirectHint": "点击后将在新窗口打开外部站点",
     "contactSales": "联系销售"
   },
+  "subscription": {
+    "selectPlan": "选择计划",
+    "allPlans": "全部套餐",
+    "switchHint": "点击其他套餐可前往用户中心切换。",
+    "noPlans": "暂无上架计划",
+    "billingTabsLabel": "计费周期",
+    "group": {
+      "MONTHLY": "按月付费",
+      "YEARLY": "按年付费",
+      "ONE_TIME": "一次性",
+      "LIFETIME": "买断/永久",
+      "OTHER": "其他"
+    },
+    "billingMode": {
+      "SUBSCRIPTION": "订阅",
+      "ONE_TIME": "一次性",
+      "LIFETIME": "买断/永久"
+    },
+    "billingPeriod": {
+      "MONTHLY": "按月",
+      "YEARLY": "按年"
+    },
+    "perMonth": "/月",
+    "perYear": "/年",
+    "trial": "试用 {{days}} 天",
+    "resubscribeNotice": "再次购买将恢复订阅，试用不会再触发。",
+    "quantityRange": "{{min}} - {{max}} 份",
+    "decreaseQuantity": "减少数量",
+    "increaseQuantity": "增加数量",
+    "decreaseAddonQuantity": "减少加购数量",
+    "increaseAddonQuantity": "增加加购数量",
+    "addonsTitle": "可选加购项",
+    "addonPriceUnset": "价格未设置",
+    "summaryTrialNow": "试用 {{days}} 天 · 现在应付",
+    "summaryDueNow": "应付",
+    "summaryAfterTrial": "之后",
+    "summaryAfterEach": "之后每期",
+    "currentPlan": "当前套餐",
+    "goSwitch": "去切换",
+    "addingToCart": "加入中…",
+    "addCartFailed": "加入购物车失败",
+    "manageTitle": "当前订阅",
+    "managePlan": "计划",
+    "manageStatus": "状态",
+    "managePeriodEnd": "当前周期至",
+    "manageGoUc": "去用户中心管理",
+    "forever": "永久",
+    "status": {
+      "TRIALING": "试用中",
+      "ACTIVE": "生效中",
+      "PAST_DUE": "已逾期",
+      "CANCELLED": "已取消",
+      "EXPIRED": "已过期"
+    }
+  },
   "cart": {
     "title": "购物车",
     "subtitle": "共 {{count}} 件商品",

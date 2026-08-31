@@ -19,6 +19,7 @@
 @include meta.load-css('components/product-list');
 @include meta.load-css('components/product-card');
 @include meta.load-css('components/buy-box');
+@include meta.load-css('components/subscription');
 
 // Pages
 @include meta.load-css('pages/home');
