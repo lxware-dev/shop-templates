@@ -26,6 +26,8 @@
     "contactSales": "联系销售"
   },
   "subscription": {
+    "badge": "订阅",
+    "addonLabel": "加购 · {{name}}",
     "selectPlan": "选择计划",
     "allPlans": "全部套餐",
     "switchHint": "点击其他套餐可前往用户中心切换。",

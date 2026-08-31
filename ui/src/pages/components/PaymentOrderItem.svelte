@@ -4,6 +4,7 @@
   import { type OrderItemResponse } from '@halo-dev/api-client';
   import { formatPrice } from '../../utils/price';
   import Decimal from 'decimal.js';
+  import SubscriptionLineMeta from './SubscriptionLineMeta.svelte';
 
   let { item }: { item: OrderItemResponse } = $props();
 
@@ -31,6 +32,7 @@
     <a href={`/shop/product/${item.productId}`} target="_blank" class="shop-order-item__name">
       {item.itemTitle}
     </a>
+    <SubscriptionLineMeta productId={item.productId} variantId={item.productVariantId} />
     {#if specValueText}
       <span class="shop-order-item__variant">{specValueText}</span>
     {/if}

@@ -450,3 +450,32 @@
     }
   }
 }
+
+.shop-subscription-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--shop-font-size-sm, 14px);
+  color: var(--shop-gray-600, hsl(0, 0%, 32%));
+  line-height: 1.4;
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    font-size: var(--shop-font-size-xs, 12px);
+    font-weight: 500;
+    line-height: 1.2;
+    border-radius: 999px;
+    background: var(--shop-color-base-200, #fafafa);
+    color: var(--shop-gray-600, #525252);
+    border: 1px solid var(--shop-gray-200, #e6e6e6);
+  }
+
+  &__period::before {
+    content: '·';
+    margin: 0 4px;
+    color: var(--shop-gray-400, hsl(0, 0%, 64%));
+  }
+}

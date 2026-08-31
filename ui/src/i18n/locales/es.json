@@ -26,6 +26,8 @@
     "contactSales": "Contactar ventas"
   },
   "subscription": {
+    "badge": "Suscripción",
+    "addonLabel": "Complemento · {{name}}",
     "selectPlan": "Selecciona un plan",
     "allPlans": "Todos los planes",
     "switchHint": "Toca otro plan para cambiarlo en el centro de usuario.",

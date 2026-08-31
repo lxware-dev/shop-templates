@@ -10,7 +10,7 @@
 />
 
 <script lang="ts">
-  import { createQuery, QueryClient } from '@tanstack/svelte-query';
+  import { createQuery, QueryClient, setQueryClientContext } from '@tanstack/svelte-query';
   import ky from 'ky';
   import { formatPrice } from '../utils/price';
   import { fade } from 'svelte/transition';
@@ -54,6 +54,7 @@
   let { orderCode, csrfToken }: { orderCode: string; csrfToken: string } = $props();
 
   const queryClient = new QueryClient();
+  setQueryClientContext(queryClient);
 
   const orderQuery = createQuery(
     () => ({

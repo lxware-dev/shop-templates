@@ -26,6 +26,8 @@
     "contactSales": "聯絡銷售"
   },
   "subscription": {
+    "badge": "訂閱",
+    "addonLabel": "加購 · {{name}}",
     "selectPlan": "選擇方案",
     "allPlans": "全部方案",
     "switchHint": "點擊其他方案可前往使用者中心切換。",
