@@ -36,7 +36,6 @@
     "group": {
       "MONTHLY": "Monthly",
       "YEARLY": "Yearly",
-      "ONE_TIME": "One-time",
       "LIFETIME": "Lifetime",
       "OTHER": "Other"
     },

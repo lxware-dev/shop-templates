@@ -36,7 +36,6 @@
     "group": {
       "MONTHLY": "按月付费",
       "YEARLY": "按年付费",
-      "ONE_TIME": "一次性",
       "LIFETIME": "买断/永久",
       "OTHER": "其他"
     },

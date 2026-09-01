@@ -30,17 +30,13 @@
     currentSubscription?: SubscriptionResponse | null;
   } = $props();
 
-  // 按计费周期聚合分组，顺序与后台「按月/按年/一次性/买断/其他」保持一致
-  const GROUP_KEYS = ['MONTHLY', 'YEARLY', 'ONE_TIME', 'LIFETIME', 'OTHER'];
+  // 按计费周期聚合分组；一次性计划并入对应周期分组（月/年），顺序与后台保持一致
+  const GROUP_KEYS = ['MONTHLY', 'YEARLY', 'LIFETIME', 'OTHER'];
 
   function billingGroupKey(plan: SubscriptionPlanResponse): string {
-    if (plan.billingMode === 'SUBSCRIPTION') {
-      if (plan.billingPeriod === 'MONTHLY') return 'MONTHLY';
-      if (plan.billingPeriod === 'YEARLY') return 'YEARLY';
-      return 'OTHER';
-    }
-    if (plan.billingMode === 'ONE_TIME') return 'ONE_TIME';
     if (plan.billingMode === 'LIFETIME') return 'LIFETIME';
+    if (plan.billingPeriod === 'MONTHLY') return 'MONTHLY';
+    if (plan.billingPeriod === 'YEARLY') return 'YEARLY';
     return 'OTHER';
   }
 
@@ -54,14 +50,17 @@
     return '';
   }
 
-  function billingLabel(plan: SubscriptionPlanResponse): string {
-    const modeLabel = plan.billingMode
+  function billingModeLabel(plan: SubscriptionPlanResponse): string {
+    return plan.billingMode
       ? String(
           $i18n.t('subscription.billingMode.' + plan.billingMode, {
             defaultValue: plan.billingMode,
           })
         )
       : '';
+  }
+
+  function billingLabel(plan: SubscriptionPlanResponse): string {
     const periodLabel = plan.billingPeriod
       ? String(
           $i18n.t('subscription.billingPeriod.' + plan.billingPeriod, {
@@ -69,7 +68,7 @@
           })
         )
       : '';
-    return [modeLabel, periodLabel].filter(Boolean).join(' ');
+    return [billingModeLabel(plan), periodLabel].filter(Boolean).join(' ');
   }
 
   function addonMax(addon: SubscriptionAddonResponse): number {
@@ -353,6 +352,8 @@
       </span>
       {#if groupKey === 'OTHER'}
         <span class="shop-subscription__plan-billing">{billingLabel(plan)}</span>
+      {:else if plan.billingMode === 'ONE_TIME'}
+        <span class="shop-subscription__plan-billing">{billingModeLabel(plan)}</span>
       {/if}
     </span>
     <span class="shop-subscription__plan-aside">

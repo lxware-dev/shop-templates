@@ -36,7 +36,6 @@
     "group": {
       "MONTHLY": "Mensual",
       "YEARLY": "Anual",
-      "ONE_TIME": "Pago único",
       "LIFETIME": "De por vida",
       "OTHER": "Otro"
     },
