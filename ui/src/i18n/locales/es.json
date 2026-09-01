@@ -36,13 +36,13 @@
     "group": {
       "MONTHLY": "Mensual",
       "YEARLY": "Anual",
-      "LIFETIME": "De por vida",
+      "LIFETIME": "Permanente",
       "OTHER": "Otro"
     },
     "billingMode": {
-      "SUBSCRIPTION": "Suscripción",
-      "ONE_TIME": "Pago único",
-      "LIFETIME": "De por vida"
+      "SUBSCRIPTION": "Recurrente",
+      "ONE_TIME": "Prepago",
+      "LIFETIME": "Permanente"
     },
     "billingPeriod": {
       "MONTHLY": "Mensual",

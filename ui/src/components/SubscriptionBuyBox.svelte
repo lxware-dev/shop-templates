@@ -30,7 +30,7 @@
     currentSubscription?: SubscriptionResponse | null;
   } = $props();
 
-  // 按计费周期聚合分组；一次性计划并入对应周期分组（月/年），顺序与后台保持一致
+  // 按计费周期聚合分组；预付一期计划并入对应周期分组（月/年），顺序与后台保持一致
   const GROUP_KEYS = ['MONTHLY', 'YEARLY', 'LIFETIME', 'OTHER'];
 
   function billingGroupKey(plan: SubscriptionPlanResponse): string {

@@ -45,21 +45,28 @@
 
   const periodLabel = $derived.by(() => {
     if (!line) return '';
-    if (line.billingPeriod) {
-      return String(
-        $i18n.t('subscription.billingPeriod.' + line.billingPeriod, {
-          defaultValue: line.billingPeriod,
-        })
-      );
+    const modeLabel = line.billingMode
+      ? String(
+          $i18n.t('subscription.billingMode.' + line.billingMode, {
+            defaultValue: line.billingMode,
+          })
+        )
+      : '';
+    const period = line.billingPeriod
+      ? String(
+          $i18n.t('subscription.billingPeriod.' + line.billingPeriod, {
+            defaultValue: line.billingPeriod,
+          })
+        )
+      : '';
+    if (!period || line.billingMode === 'LIFETIME') {
+      return modeLabel;
     }
-    if (line.billingMode === 'LIFETIME' || line.billingMode === 'ONE_TIME') {
-      return String(
-        $i18n.t('subscription.billingMode.' + line.billingMode, {
-          defaultValue: line.billingMode,
-        })
-      );
+    // 预付一期在按月/按年分组里需要和连续计费区分开
+    if (line.billingMode === 'ONE_TIME') {
+      return [modeLabel, period].filter(Boolean).join(' ');
     }
-    return '';
+    return period;
   });
 </script>
 

@@ -36,13 +36,13 @@
     "group": {
       "MONTHLY": "按月付费",
       "YEARLY": "按年付费",
-      "LIFETIME": "买断/永久",
+      "LIFETIME": "买断",
       "OTHER": "其他"
     },
     "billingMode": {
-      "SUBSCRIPTION": "订阅",
-      "ONE_TIME": "一次性",
-      "LIFETIME": "买断/永久"
+      "SUBSCRIPTION": "连续计费",
+      "ONE_TIME": "预付一期",
+      "LIFETIME": "买断"
     },
     "billingPeriod": {
       "MONTHLY": "按月",

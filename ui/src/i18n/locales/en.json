@@ -40,8 +40,8 @@
       "OTHER": "Other"
     },
     "billingMode": {
-      "SUBSCRIPTION": "Subscription",
-      "ONE_TIME": "One-time",
+      "SUBSCRIPTION": "Recurring",
+      "ONE_TIME": "Prepaid",
       "LIFETIME": "Lifetime"
     },
     "billingPeriod": {
