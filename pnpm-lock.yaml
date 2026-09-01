@@ -310,7 +310,7 @@ packages:
     os: [win32]
 
   '@halo-dev/api-client@file:ui/halo-dev-api-client-2.26.0.tgz':
-    resolution: {integrity: sha512-mLaYYTNqWDOmqNZsXy5IrNnemmNHYFiurZ7r+fg4yEJIYJGj22yJZ/GuglOzx2XCEgTr1rNk1vtCoZGcIF+sHg==, tarball: file:ui/halo-dev-api-client-2.26.0.tgz}
+    resolution: {integrity: sha512-BTrLEpRqGgn5d4opr2Kg5apa0h8mXmM2giCRsEMdWnyJlRXbt/3Wf9ajn6C3q1cTVbYn6/mpAUDTneF0Wc/+Rg==, tarball: file:ui/halo-dev-api-client-2.26.0.tgz}
     version: 2.26.0
     peerDependencies:
       axios: ^1.16.0

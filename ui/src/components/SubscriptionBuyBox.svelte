@@ -40,6 +40,18 @@
     return 'OTHER';
   }
 
+  function planTitle(plan: SubscriptionPlanResponse): string {
+    const tier = plan.tier?.trim();
+    return tier || plan.name || '';
+  }
+
+  function comparePlans(a: SubscriptionPlanResponse, b: SubscriptionPlanResponse): number {
+    const tierA = a.tierId ?? Number.MAX_SAFE_INTEGER;
+    const tierB = b.tierId ?? Number.MAX_SAFE_INTEGER;
+    if (tierA !== tierB) return tierA - tierB;
+    return (a.id ?? 0) - (b.id ?? 0);
+  }
+
   function groupLabel(key: string): string {
     return $i18n.t('subscription.group.' + key, { defaultValue: key });
   }
@@ -105,7 +117,7 @@
     }
     return GROUP_KEYS.filter((key) => groups.has(key)).map((key) => ({
       key,
-      plans: groups.get(key) as SubscriptionPlanResponse[],
+      plans: (groups.get(key) as SubscriptionPlanResponse[]).sort(comparePlans),
     }));
   });
 
@@ -344,12 +356,7 @@
 {#snippet planBody(plan: SubscriptionPlanResponse, groupKey: string)}
   <span class="shop-subscription__plan-body">
     <span class="shop-subscription__plan-main">
-      <span class="shop-subscription__plan-name">
-        {plan.name}
-        {#if plan.tier}
-          <span class="shop-subscription__plan-tier">{plan.tier}</span>
-        {/if}
-      </span>
+      <span class="shop-subscription__plan-name">{planTitle(plan)}</span>
       {#if groupKey === 'OTHER'}
         <span class="shop-subscription__plan-billing">{billingLabel(plan)}</span>
       {:else if plan.billingMode === 'ONE_TIME'}
