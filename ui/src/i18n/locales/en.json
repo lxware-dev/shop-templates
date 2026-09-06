@@ -28,8 +28,8 @@
   "subscription": {
     "badge": "Subscription",
     "addonLabel": "Add-on · {{name}}",
-    "selectPlan": "Select a plan",
-    "allPlans": "All plans",
+    "selectPlan": "Select a tier",
+    "allPlans": "All tiers",
     "switchHint": "Tap another plan to switch it in the user center.",
     "noPlans": "No plans available",
     "billingTabsLabel": "Billing period",

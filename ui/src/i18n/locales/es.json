@@ -28,8 +28,8 @@
   "subscription": {
     "badge": "Suscripción",
     "addonLabel": "Complemento · {{name}}",
-    "selectPlan": "Selecciona un plan",
-    "allPlans": "Todos los planes",
+    "selectPlan": "Selecciona un nivel",
+    "allPlans": "Todos los niveles",
     "switchHint": "Toca otro plan para cambiarlo en el centro de usuario.",
     "noPlans": "No hay planes disponibles",
     "billingTabsLabel": "Período de facturación",

@@ -28,8 +28,8 @@
   "subscription": {
     "badge": "订阅",
     "addonLabel": "加购 · {{name}}",
-    "selectPlan": "选择计划",
-    "allPlans": "全部套餐",
+    "selectPlan": "选择档次",
+    "allPlans": "全部档次",
     "switchHint": "点击其他套餐可前往用户中心切换。",
     "noPlans": "暂无上架计划",
     "billingTabsLabel": "计费周期",

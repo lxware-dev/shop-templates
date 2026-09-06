@@ -49,19 +49,19 @@
     }
   }
 
-  &__periods {
+  &__groups {
     display: flex;
     flex-direction: column;
     gap: var(--shop-spacing-lg, 24px);
   }
 
-  &__period {
+  &__group {
     display: flex;
     flex-direction: column;
     gap: var(--shop-spacing-sm, 8px);
   }
 
-  &__period-name {
+  &__group-name {
     font-size: var(--shop-font-size-base, 16px);
     font-weight: 600;
     color: var(--shop-gray-900, hsl(0, 0%, 9%));
@@ -161,6 +161,11 @@
     font-size: var(--shop-font-size-base, 16px);
     font-weight: 600;
     color: var(--shop-gray-900, hsl(0, 0%, 9%));
+  }
+
+  &__plan-sku {
+    font-size: var(--shop-font-size-sm, 14px);
+    color: var(--shop-gray-500, hsl(0, 0%, 45%));
   }
 
   &__plan-tier {

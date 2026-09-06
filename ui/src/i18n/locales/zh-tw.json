@@ -28,8 +28,8 @@
   "subscription": {
     "badge": "訂閱",
     "addonLabel": "加購 · {{name}}",
-    "selectPlan": "選擇方案",
-    "allPlans": "全部方案",
+    "selectPlan": "選擇檔次",
+    "allPlans": "全部檔次",
     "switchHint": "點擊其他方案可前往使用者中心切換。",
     "noPlans": "暫無上架方案",
     "billingTabsLabel": "計費週期",
