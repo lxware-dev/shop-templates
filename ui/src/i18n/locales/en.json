@@ -50,6 +50,7 @@
     },
     "perMonth": "/mo",
     "perYear": "/yr",
+    "savePercent": "Save {{percent}}%",
     "trial": "{{days}}-day free trial",
     "resubscribeNotice": "Buying again will restore your subscription. The free trial will not be offered again.",
     "quantityRange": "{{min}} - {{max}}",

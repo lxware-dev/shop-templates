@@ -50,6 +50,7 @@
     },
     "perMonth": "/mes",
     "perYear": "/año",
+    "savePercent": "Ahorra {{percent}}%",
     "trial": "Prueba gratuita de {{days}} días",
     "resubscribeNotice": "Al comprar de nuevo se restablecerá tu suscripción. La prueba gratuita no se volverá a ofrecer.",
     "quantityRange": "{{min}} - {{max}}",

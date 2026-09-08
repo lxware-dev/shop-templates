@@ -50,6 +50,7 @@
     },
     "perMonth": "/月",
     "perYear": "/年",
+    "savePercent": "省 {{percent}}%",
     "trial": "试用 {{days}} 天",
     "resubscribeNotice": "再次购买将恢复订阅，试用不会再触发。",
     "quantityRange": "{{min}} - {{max}} 份",
