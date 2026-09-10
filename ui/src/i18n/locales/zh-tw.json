@@ -69,6 +69,8 @@
     "addingToCart": "加入中…",
     "addCartFailed": "加入購物車失敗",
     "manageTitle": "當前訂閱",
+    "manageTitleMultiple": "我的訂閱（{{count}} 個）",
+    "manageMultipleHint": "每條訂閱獨立續費與變更，請在使用者中心逐條管理。",
     "managePlan": "計劃",
     "manageStatus": "狀態",
     "managePeriodEnd": "當前週期至",

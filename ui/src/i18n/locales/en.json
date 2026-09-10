@@ -69,6 +69,8 @@
     "addingToCart": "Adding...",
     "addCartFailed": "Failed to add to cart",
     "manageTitle": "Current subscription",
+    "manageTitleMultiple": "Your subscriptions ({{count}})",
+    "manageMultipleHint": "Each subscription renews and changes on its own. Manage one of them in the user center.",
     "managePlan": "Plan",
     "manageStatus": "Status",
     "managePeriodEnd": "Current period ends",

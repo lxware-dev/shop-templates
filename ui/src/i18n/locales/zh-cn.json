@@ -69,6 +69,8 @@
     "addingToCart": "加入中…",
     "addCartFailed": "加入购物车失败",
     "manageTitle": "当前订阅",
+    "manageTitleMultiple": "我的订阅（{{count}} 个）",
+    "manageMultipleHint": "每条订阅独立续费与变更，请在用户中心逐条管理。",
     "managePlan": "计划",
     "manageStatus": "状态",
     "managePeriodEnd": "当前周期至",

@@ -248,7 +248,8 @@
       {csrfToken}
       plans={subscriptionQuery.data.plans ?? []}
       addons={subscriptionQuery.data.addons ?? []}
-      currentSubscription={subscriptionQuery.data.currentSubscription ?? null}
+      subscriptions={subscriptionQuery.data.subscriptions ?? []}
+      singleSubscription={subscriptionQuery.data.singleSubscription ?? true}
     />
   {/if}
 {:else}

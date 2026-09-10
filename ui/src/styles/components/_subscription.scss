@@ -396,6 +396,19 @@
     color: var(--shop-gray-400, hsl(0, 0%, 64%));
   }
 
+  .shop-subscription-manage__item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 10px;
+    border-top: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
+
+    &:first-of-type {
+      padding-top: 0;
+      border-top: none;
+    }
+  }
+
   .shop-subscription-manage .shop-btn {
     width: fit-content;
   }

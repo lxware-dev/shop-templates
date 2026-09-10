@@ -69,6 +69,8 @@
     "addingToCart": "Agregando...",
     "addCartFailed": "Error al agregar al carrito",
     "manageTitle": "Suscripción actual",
+    "manageTitleMultiple": "Tus suscripciones ({{count}})",
+    "manageMultipleHint": "Cada suscripción se renueva y cambia por su cuenta. Gestiónala en el centro de usuario.",
     "managePlan": "Plan",
     "manageStatus": "Estado",
     "managePeriodEnd": "Fin del período actual",

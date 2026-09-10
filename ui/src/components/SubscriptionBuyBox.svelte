@@ -18,17 +18,31 @@
     total?: boolean;
   }
 
+  const LIVE_STATUSES = ['TRIALING', 'ACTIVE', 'PAST_DUE'];
+
   let {
     csrfToken = '',
     plans = [],
     addons = [],
-    currentSubscription = null,
+    subscriptions = [],
+    singleSubscription = true,
   }: {
     csrfToken?: string;
     plans?: SubscriptionPlanResponse[];
     addons?: SubscriptionAddonResponse[];
-    currentSubscription?: SubscriptionResponse | null;
+    /** Every subscription of the signed-in customer on this product line, live ones first. */
+    subscriptions?: SubscriptionResponse[];
+    /** Product line policy: one live subscription per customer, or one per purchase. */
+    singleSubscription?: boolean;
   } = $props();
+
+  // The backend orders subscriptions live-first, so the head is the one the user center would manage.
+  const currentSubscription = $derived(subscriptions[0] ?? null);
+  const liveSubscriptions = $derived(
+    subscriptions.filter((subscription) => LIVE_STATUSES.includes(subscription.status ?? ''))
+  );
+  const hasHistory = $derived(subscriptions.length > 0);
+  const hasLiveSubscription = $derived(liveSubscriptions.length > 0);
 
   const GROUP_KEYS = ['MONTHLY', 'YEARLY', 'LIFETIME', 'OTHER'];
   const MODE_ORDER: Record<string, number> = {
@@ -137,15 +151,28 @@
     return percent > 0 ? percent : null;
   }
 
-  const isSwitch = $derived(
-    !!currentSubscription &&
-      ['TRIALING', 'ACTIVE', 'PAST_DUE'].includes(currentSubscription.status ?? '')
-  );
-  const resubscribable = $derived(
-    !!currentSubscription && ['EXPIRED', 'CANCELLED'].includes(currentSubscription.status ?? '')
-  );
-  const currentPlanId = $derived(currentSubscription?.planId ?? null);
-  const currentSubscriptionId = $derived(currentSubscription?.id ?? null);
+  // Switch semantics only exist when the product line allows a single subscription.
+  const isSwitch = $derived(singleSubscription && hasLiveSubscription);
+  // Customers whose subscriptions all ended may buy again, but the free trial is gone.
+  const resubscribable = $derived(hasHistory && !hasLiveSubscription);
+  // Multi-subscription product lines always sell "another subscription", never a switch.
+  const showManageList = $derived(isSwitch || (!singleSubscription && hasHistory));
+  const trialOffered = $derived(!hasHistory);
+  const currentPlanId = $derived(isSwitch ? (currentSubscription?.planId ?? null) : null);
+  const currentSubscriptionId = $derived(isSwitch ? (currentSubscription?.id ?? null) : null);
+
+  function periodEndOf(subscription: SubscriptionResponse): string {
+    const instant = subscription.paidThroughAt ?? subscription.currentPeriodEndAt;
+    if (!instant) return $i18n.t('subscription.forever');
+    return formatDateTime(instant);
+  }
+
+  function planNameOf(subscription: SubscriptionResponse): string {
+    const name = subscription.planName;
+    if (name && name.trim().length > 0) return name;
+    const plan = allPlans.find((p) => p.id === subscription.planId);
+    return plan?.name ?? String(subscription.planId ?? '');
+  }
 
   const planGroups = $derived.by(() => {
     const groups = new Map<string, SubscriptionPlanResponse[]>();
@@ -199,22 +226,7 @@
 
   const lastPlanByGroup: Record<string, number> = {};
 
-  const currentPlanName = $derived.by(() => {
-    if (!currentSubscription) return '';
-    const name = currentSubscription.planName;
-    if (name && name.trim().length > 0) return name;
-    const plan = allPlans.find((p) => p.id === currentSubscription.planId);
-    return plan?.name ?? String(currentSubscription.planId ?? '');
-  });
-
-  const periodEndLabel = $derived.by(() => {
-    if (!currentSubscription) return '';
-    const instant = currentSubscription.paidThroughAt ?? currentSubscription.currentPeriodEndAt;
-    if (!instant) return $i18n.t('subscription.forever');
-    return formatDateTime(instant);
-  });
-
-  // 有当前订阅时默认展开其所在分组，否则展开第一组
+  // 有当前订阅（多订阅时为最新生效的一条）时默认展开其所在分组，否则展开第一组
   $effect(() => {
     if (activeGroupKey === null && planGroups.length > 0) {
       const matched = planGroups.find((group) =>
@@ -321,7 +333,7 @@
     if (isSwitch || !selectedPlan) return null;
     const qty = Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
     const planAmount = new Decimal(selectedPlan.price ?? 0).times(qty);
-    const trial = !!selectedPlan.trialEnabled && !resubscribable;
+    const trial = !!selectedPlan.trialEnabled && trialOffered;
     const nowPlanAmount = trial ? new Decimal(selectedPlan.trialPrice ?? 0).times(qty) : planAmount;
     const rows: SummaryRow[] = [];
     let addonTotal = new Decimal(0);
@@ -368,7 +380,7 @@
   const showSummary = $derived.by(() => {
     if (!summaryRows || summaryRows.length === 0) return false;
     const hasAddonRows = summaryRows.some((row) => !row.total && !row.muted);
-    const trial = !!selectedPlan?.trialEnabled && !resubscribable;
+    const trial = !!selectedPlan?.trialEnabled && trialOffered;
     const qty = Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
     return hasAddonRows || trial || qty > 1;
   });
@@ -445,7 +457,7 @@
           {$i18n.t('subscription.savePercent', { percent: savePercent })}
         </span>
       {/if}
-      {#if !isSwitch && plan.trialEnabled && !resubscribable}
+      {#if trialOffered && plan.trialEnabled}
         <span class="shop-subscription__plan-trial">
           {$i18n.t('subscription.trial', { days: plan.trialDays ?? '' })}
         </span>
@@ -462,31 +474,50 @@
 {/snippet}
 
 <div class="buy-box shop-subscription" transition:fade={{ duration: 200 }}>
-  {#if isSwitch && currentSubscription}
+  {#if showManageList && currentSubscription}
     <section class="shop-subscription-manage">
       <div class="shop-subscription-manage__head">
-        <h2 class="shop-subscription-manage__title">{$i18n.t('subscription.manageTitle')}</h2>
-        <span
-          class="shop-subscription-status"
-          class:shop-subscription-status--warning={currentSubscription.status === 'PAST_DUE'}
-          class:shop-subscription-status--success={currentSubscription.status !== 'PAST_DUE'}
-        >
-          {$i18n.t('subscription.status.' + (currentSubscription.status ?? ''), {
-            defaultValue: currentSubscription.status ?? '',
-          })}
-        </span>
+        <h2 class="shop-subscription-manage__title">
+          {singleSubscription
+            ? $i18n.t('subscription.manageTitle')
+            : $i18n.t('subscription.manageTitleMultiple', {
+                count: subscriptions.length,
+              })}
+        </h2>
       </div>
-      <p class="shop-subscription-manage__summary">
-        <span>{currentPlanName}</span>
-        <span class="shop-subscription-manage__dot" aria-hidden="true">·</span>
-        <span>{$i18n.t('subscription.managePeriodEnd')} {periodEndLabel}</span>
-      </p>
-      <a
-        class="shop-btn shop-btn-secondary shop-btn-sm"
-        href={`/uc/shop/subscriptions/${currentSubscription.id}`}
-      >
-        {$i18n.t('subscription.manageGoUc')}
-      </a>
+      {#each singleSubscription ? [currentSubscription] : subscriptions as subscription (subscription.id)}
+        <div class="shop-subscription-manage__item">
+          <div class="shop-subscription-manage__head">
+            <span
+              class="shop-subscription-status"
+              class:shop-subscription-status--warning={subscription.status === 'PAST_DUE'}
+              class:shop-subscription-status--success={subscription.status !== 'PAST_DUE'}
+            >
+              {$i18n.t('subscription.status.' + (subscription.status ?? ''), {
+                defaultValue: subscription.status ?? '',
+              })}
+            </span>
+          </div>
+          <p class="shop-subscription-manage__summary">
+            <span>{planNameOf(subscription)}</span>
+            {#if subscription.status !== 'EXPIRED' && subscription.status !== 'CANCELLED'}
+              <span class="shop-subscription-manage__dot" aria-hidden="true">·</span>
+              <span>{$i18n.t('subscription.managePeriodEnd')} {periodEndOf(subscription)}</span>
+            {/if}
+          </p>
+          <a
+            class="shop-btn shop-btn-secondary shop-btn-sm"
+            href={`/uc/shop/subscriptions/${subscription.id}`}
+          >
+            {$i18n.t('subscription.manageGoUc')}
+          </a>
+        </div>
+      {/each}
+      {#if !singleSubscription}
+        <p class="shop-subscription__switch-hint">
+          {$i18n.t('subscription.manageMultipleHint')}
+        </p>
+      {/if}
     </section>
   {/if}
 
