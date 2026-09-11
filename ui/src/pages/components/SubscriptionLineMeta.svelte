@@ -62,7 +62,7 @@
     if (!period || line.billingMode === 'LIFETIME') {
       return modeLabel;
     }
-    // 预付一期在按月/按年分组里需要和连续计费区分开
+    // 单期购买需要和连续购买区分开（两者都按月/按年）
     if (line.billingMode === 'ONE_TIME') {
       return [modeLabel, period].filter(Boolean).join(' ');
     }

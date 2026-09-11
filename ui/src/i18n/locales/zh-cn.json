@@ -27,21 +27,20 @@
   },
   "subscription": {
     "badge": "订阅",
-    "selectPlan": "选择档次",
-    "allPlans": "全部档次",
     "switchHint": "点击其他套餐可前往用户中心切换。",
     "noPlans": "暂无上架计划",
-    "billingTabsLabel": "计费周期",
-    "group": {
-      "MONTHLY": "按月付费",
-      "YEARLY": "按年付费",
-      "LIFETIME": "买断",
+    "tierTabsLabel": "档次",
+    "periodTabsLabel": "购买周期",
+    "period": {
+      "MONTHLY": "按月",
+      "YEARLY": "按年",
+      "LIFETIME": "永久",
       "OTHER": "其他"
     },
     "billingMode": {
-      "SUBSCRIPTION": "连续计费",
-      "ONE_TIME": "预付一期",
-      "LIFETIME": "买断"
+      "SUBSCRIPTION": "连续购买",
+      "ONE_TIME": "单期购买",
+      "LIFETIME": "永久买断"
     },
     "billingPeriod": {
       "MONTHLY": "按月",

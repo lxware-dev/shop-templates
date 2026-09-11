@@ -27,12 +27,11 @@
   },
   "subscription": {
     "badge": "Subscription",
-    "selectPlan": "Select a tier",
-    "allPlans": "All tiers",
     "switchHint": "Tap another plan to switch it in the user center.",
     "noPlans": "No plans available",
-    "billingTabsLabel": "Billing period",
-    "group": {
+    "tierTabsLabel": "Tier",
+    "periodTabsLabel": "Purchase period",
+    "period": {
       "MONTHLY": "Monthly",
       "YEARLY": "Yearly",
       "LIFETIME": "Lifetime",
@@ -40,7 +39,7 @@
     },
     "billingMode": {
       "SUBSCRIPTION": "Recurring",
-      "ONE_TIME": "Prepaid",
+      "ONE_TIME": "Single period",
       "LIFETIME": "Lifetime"
     },
     "billingPeriod": {

@@ -27,12 +27,11 @@
   },
   "subscription": {
     "badge": "Suscripción",
-    "selectPlan": "Selecciona un nivel",
-    "allPlans": "Todos los niveles",
     "switchHint": "Toca otro plan para cambiarlo en el centro de usuario.",
     "noPlans": "No hay planes disponibles",
-    "billingTabsLabel": "Período de facturación",
-    "group": {
+    "tierTabsLabel": "Nivel",
+    "periodTabsLabel": "Período de compra",
+    "period": {
       "MONTHLY": "Mensual",
       "YEARLY": "Anual",
       "LIFETIME": "Permanente",
@@ -40,7 +39,7 @@
     },
     "billingMode": {
       "SUBSCRIPTION": "Recurrente",
-      "ONE_TIME": "Prepago",
+      "ONE_TIME": "Período único",
       "LIFETIME": "Permanente"
     },
     "billingPeriod": {
