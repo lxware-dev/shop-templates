@@ -27,7 +27,6 @@
   },
   "subscription": {
     "badge": "訂閱",
-    "addonLabel": "加購 · {{name}}",
     "selectPlan": "選擇檔次",
     "allPlans": "全部檔次",
     "switchHint": "點擊其他方案可前往使用者中心切換。",
@@ -56,10 +55,6 @@
     "quantityRange": "{{min}} - {{max}} 份",
     "decreaseQuantity": "減少數量",
     "increaseQuantity": "增加數量",
-    "decreaseAddonQuantity": "減少加購數量",
-    "increaseAddonQuantity": "增加加購數量",
-    "addonsTitle": "可選加購項",
-    "addonPriceUnset": "價格未設定",
     "summaryTrialNow": "試用 {{days}} 天 · 現在應付",
     "summaryDueNow": "應付",
     "summaryAfterTrial": "之後",

@@ -74,11 +74,7 @@
   <span class="shop-subscription-line">
     <span class="shop-subscription-line__badge">{$i18n.t('subscription.badge')}</span>
     <span class="shop-subscription-line__detail">
-      {#if line.kind === 'addon'}
-        {$i18n.t('subscription.addonLabel', { name: line.name })}
-      {:else}
-        {line.name}
-      {/if}
+      {line.name}
       {#if periodLabel}
         <span class="shop-subscription-line__period">{periodLabel}</span>
       {/if}

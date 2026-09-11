@@ -3,11 +3,7 @@
   import { fade } from 'svelte/transition';
   import MingcuteAddLine from '~icons/mingcute/add-line?raw';
   import MingcuteMinimizeLine from '~icons/mingcute/minimize-line?raw';
-  import {
-    type SubscriptionAddonResponse,
-    type SubscriptionPlanResponse,
-    type SubscriptionResponse,
-  } from '@halo-dev/api-client';
+  import { type SubscriptionPlanResponse, type SubscriptionResponse } from '@halo-dev/api-client';
   import i18n from '../i18n';
   import { formatPrice } from '../utils/price';
 
@@ -23,13 +19,11 @@
   let {
     csrfToken = '',
     plans = [],
-    addons = [],
     subscriptions = [],
     singleSubscription = true,
   }: {
     csrfToken?: string;
     plans?: SubscriptionPlanResponse[];
-    addons?: SubscriptionAddonResponse[];
     /** Every subscription of the signed-in customer on this product line, live ones first. */
     subscriptions?: SubscriptionResponse[];
     /** Product line policy: one live subscription per customer, or one per purchase. */
@@ -116,10 +110,6 @@
     return billingLabel(plan);
   }
 
-  function addonMax(addon: SubscriptionAddonResponse): number {
-    return addon.maxQuantity ?? Number.POSITIVE_INFINITY;
-  }
-
   function formatDateTime(instant: string): string {
     const date = new Date(instant);
     if (Number.isNaN(date.getTime())) return instant;
@@ -203,10 +193,6 @@
   const planMin = $derived(Math.max(1, selectedPlan?.minQuantity ?? 1));
   const planMax = $derived(Math.max(planMin, selectedPlan?.maxQuantity ?? planMin));
 
-  const visibleAddons = $derived(
-    selectedPlan ? addons.filter((addon) => addon.billingPeriod === selectedPlan.billingPeriod) : []
-  );
-
   const saveByPlanId = $derived.by(() => {
     const map = new Map<number, number>();
     for (const plan of allPlans) {
@@ -220,7 +206,6 @@
   let activeGroupKey = $state<string | null>(null);
   let selectedPlanId = $state<number | null>(null);
   let quantity = $state(1);
-  let addonQties = $state<Record<number, number>>({});
   let submitting = $state(false);
   let error = $state<string | null>(null);
 
@@ -258,20 +243,6 @@
     }
   });
 
-  // 切换计费周期时清空不匹配的加购数量
-  let lastAddonPeriod: string | null | undefined = undefined;
-  $effect(() => {
-    const period = selectedPlan?.billingPeriod ?? null;
-    if (lastAddonPeriod !== undefined && period !== lastAddonPeriod) {
-      for (const addon of addons) {
-        if (addon.billingPeriod !== period && (addonQties[addon.id as number] ?? 0) !== 0) {
-          addonQties[addon.id as number] = 0;
-        }
-      }
-    }
-    lastAddonPeriod = period;
-  });
-
   function switchGroup(key: string) {
     if (key === activeGroupKey) return;
     if (
@@ -284,49 +255,10 @@
     activeGroupKey = key;
   }
 
-  function setAddonQty(addon: SubscriptionAddonResponse, raw: string) {
-    const key = addon.id as number;
-    const parsed = Number(raw);
-    let value = Number.isFinite(parsed) ? Math.floor(parsed) : 0;
-    if (value < 0) {
-      value = 0;
-    } else if (value > 0) {
-      const min = Math.max(1, addon.minQuantity ?? 1);
-      if (value < min) value = min;
-    }
-    const max = addonMax(addon);
-    if (Number.isFinite(max) && value > max) value = max;
-    addonQties[key] = value;
-  }
-
-  function stepAddon(addon: SubscriptionAddonResponse, delta: number) {
-    const key = addon.id as number;
-    const current = addonQties[key] ?? 0;
-    const min = Math.max(1, addon.minQuantity ?? 1);
-    const max = addonMax(addon);
-    let value = current;
-    if (delta > 0) {
-      value = value <= 0 ? min : value + 1;
-    } else {
-      value = value <= min ? 0 : value - 1;
-    }
-    if (Number.isFinite(max) && value > max) value = max;
-    addonQties[key] = value;
-  }
-
   const cartLines = $derived.by(() => {
     if (!selectedPlan) return [];
     const qty = Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
-    const lines: { productVariantId: number; quantity: number }[] = [
-      { productVariantId: selectedPlan.variantId ?? 0, quantity: qty },
-    ];
-    for (const addon of visibleAddons) {
-      const addonQty = addonQties[addon.id as number] ?? 0;
-      if (addonQty > 0) {
-        lines.push({ productVariantId: addon.variantId ?? 0, quantity: addonQty });
-      }
-    }
-    return lines;
+    return [{ productVariantId: selectedPlan.variantId ?? 0, quantity: qty }];
   });
 
   const summaryRows = $derived.by(() => {
@@ -336,16 +268,8 @@
     const trial = !!selectedPlan.trialEnabled && trialOffered;
     const nowPlanAmount = trial ? new Decimal(selectedPlan.trialPrice ?? 0).times(qty) : planAmount;
     const rows: SummaryRow[] = [];
-    let addonTotal = new Decimal(0);
-    for (const addon of visibleAddons) {
-      const addonQty = addonQties[addon.id as number] ?? 0;
-      if (addonQty <= 0) continue;
-      const amount = new Decimal(addon.price ?? 0).times(addonQty);
-      addonTotal = addonTotal.add(amount);
-      rows.push({ label: `${addon.name} × ${addonQty}`, amount: formatPrice(amount.toNumber()) });
-    }
-    const nowTotal = nowPlanAmount.add(addonTotal);
-    const laterTotal = planAmount.add(addonTotal);
+    const nowTotal = nowPlanAmount;
+    const laterTotal = planAmount;
     const recurring = selectedPlan.billingMode === 'SUBSCRIPTION' && !!periodSuffix(selectedPlan);
     if (trial) {
       rows.push({
@@ -379,10 +303,9 @@
 
   const showSummary = $derived.by(() => {
     if (!summaryRows || summaryRows.length === 0) return false;
-    const hasAddonRows = summaryRows.some((row) => !row.total && !row.muted);
     const trial = !!selectedPlan?.trialEnabled && trialOffered;
     const qty = Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
-    return hasAddonRows || trial || qty > 1;
+    return trial || qty > 1;
   });
 
   async function handleAddToCart() {
@@ -627,58 +550,6 @@
         <span class="shop-subscription__qty-hint">
           {$i18n.t('subscription.quantityRange', { min: planMin, max: planMax })}
         </span>
-      </div>
-    {/if}
-
-    {#if visibleAddons.length > 0}
-      <div class="shop-subscription__addons">
-        <div class="shop-subscription__addons-title">{$i18n.t('subscription.addonsTitle')}</div>
-        <div class="shop-subscription__addon-rows">
-          {#each visibleAddons as addon (addon.id)}
-            <div class="shop-subscription__addon">
-              <span class="shop-subscription__addon-info">
-                <span class="shop-subscription__addon-name">{addon.name}</span>
-                {#if addon.price != null}
-                  <span class="shop-subscription__addon-price">{formatPrice(addon.price)}</span>
-                {:else}
-                  <span
-                    class="shop-subscription__addon-price shop-subscription__addon-price--empty"
-                  >
-                    {$i18n.t('subscription.addonPriceUnset')}
-                  </span>
-                {/if}
-              </span>
-              <div class="shop-quantity">
-                <button
-                  type="button"
-                  class="shop-quantity__btn"
-                  onclick={() => stepAddon(addon, -1)}
-                  disabled={(addonQties[addon.id as number] ?? 0) <= 0}
-                  aria-label={$i18n.t('subscription.decreaseAddonQuantity')}
-                >
-                  {@html MingcuteMinimizeLine}
-                </button>
-                <input
-                  type="number"
-                  class="shop-quantity__input"
-                  min="0"
-                  max={addon.maxQuantity ?? ''}
-                  value={addonQties[addon.id as number] ?? 0}
-                  onchange={(event) => setAddonQty(addon, event.currentTarget.value)}
-                />
-                <button
-                  type="button"
-                  class="shop-quantity__btn"
-                  onclick={() => stepAddon(addon, 1)}
-                  disabled={(addonQties[addon.id as number] ?? 0) >= addonMax(addon)}
-                  aria-label={$i18n.t('subscription.increaseAddonQuantity')}
-                >
-                  {@html MingcuteAddLine}
-                </button>
-              </div>
-            </div>
-          {/each}
-        </div>
       </div>
     {/if}
 

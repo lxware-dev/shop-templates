@@ -247,7 +247,6 @@
     <SubscriptionBuyBox
       {csrfToken}
       plans={subscriptionQuery.data.plans ?? []}
-      addons={subscriptionQuery.data.addons ?? []}
       subscriptions={subscriptionQuery.data.subscriptions ?? []}
       singleSubscription={subscriptionQuery.data.singleSubscription ?? true}
     />

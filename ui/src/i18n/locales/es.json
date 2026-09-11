@@ -27,7 +27,6 @@
   },
   "subscription": {
     "badge": "Suscripción",
-    "addonLabel": "Complemento · {{name}}",
     "selectPlan": "Selecciona un nivel",
     "allPlans": "Todos los niveles",
     "switchHint": "Toca otro plan para cambiarlo en el centro de usuario.",
@@ -56,10 +55,6 @@
     "quantityRange": "{{min}} - {{max}}",
     "decreaseQuantity": "Disminuir cantidad",
     "increaseQuantity": "Aumentar cantidad",
-    "decreaseAddonQuantity": "Disminuir cantidad del complemento",
-    "increaseAddonQuantity": "Aumentar cantidad del complemento",
-    "addonsTitle": "Complementos opcionales",
-    "addonPriceUnset": "Precio no configurado",
     "summaryTrialNow": "Prueba gratuita {{days}} días · a pagar ahora",
     "summaryDueNow": "A pagar ahora",
     "summaryAfterTrial": "Después",

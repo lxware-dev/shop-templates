@@ -27,7 +27,6 @@
   },
   "subscription": {
     "badge": "Subscription",
-    "addonLabel": "Add-on · {{name}}",
     "selectPlan": "Select a tier",
     "allPlans": "All tiers",
     "switchHint": "Tap another plan to switch it in the user center.",
@@ -56,10 +55,6 @@
     "quantityRange": "{{min}} - {{max}}",
     "decreaseQuantity": "Decrease quantity",
     "increaseQuantity": "Increase quantity",
-    "decreaseAddonQuantity": "Decrease add-on quantity",
-    "increaseAddonQuantity": "Increase add-on quantity",
-    "addonsTitle": "Optional add-ons",
-    "addonPriceUnset": "Price not set",
     "summaryTrialNow": "Free trial {{days}} days · due now",
     "summaryDueNow": "Due now",
     "summaryAfterTrial": "Then",

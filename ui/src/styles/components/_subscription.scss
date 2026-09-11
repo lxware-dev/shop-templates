@@ -249,56 +249,6 @@
     color: var(--shop-gray-400, hsl(0, 0%, 64%));
   }
 
-  &__addons {
-    display: flex;
-    flex-direction: column;
-    gap: var(--shop-spacing-sm, 8px);
-  }
-
-  &__addons-title {
-    font-size: var(--shop-font-size-sm, 14px);
-    font-weight: 600;
-    color: var(--shop-gray-900, hsl(0, 0%, 9%));
-  }
-
-  &__addon-rows {
-    display: flex;
-    flex-direction: column;
-    gap: var(--shop-spacing-sm, 8px);
-  }
-
-  &__addon {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--shop-spacing-md, 16px);
-    padding: 10px 12px;
-    background-color: var(--shop-color-base-100, white);
-    border: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
-    border-radius: var(--shop-border-radius, 8px);
-  }
-
-  &__addon-info {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  &__addon-name {
-    font-size: var(--shop-font-size-sm, 14px);
-    color: var(--shop-gray-900, hsl(0, 0%, 9%));
-  }
-
-  &__addon-price {
-    font-size: var(--shop-font-size-xs, 12px);
-    color: var(--shop-gray-500, hsl(0, 0%, 45%));
-
-    &--empty {
-      color: var(--shop-color-error, hsl(0, 10%, 35%));
-    }
-  }
-
   &__notice {
     margin: 0;
     font-size: var(--shop-font-size-sm, 14px);
@@ -435,10 +385,6 @@
   @media (max-width: 480px) {
     .shop-subscription__plans {
       grid-template-columns: minmax(0, 1fr);
-    }
-
-    .shop-subscription__addon {
-      flex-wrap: wrap;
     }
 
     .shop-subscription__actions {
