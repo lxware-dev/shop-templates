@@ -18,6 +18,7 @@
     "loadFailed": "Error al cargar: {{message}}",
     "price": "Precio",
     "stock": "Stock: {{count}} piezas",
+    "perOrderLimit": "Límite de {{count}} por pedido",
     "quantity": "Cantidad",
     "addToCart": "Agregar al carrito",
     "buyNow": "Comprar ahora",
