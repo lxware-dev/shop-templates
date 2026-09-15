@@ -10,7 +10,6 @@
   import { toast } from 'svelte-sonner';
   import { get } from 'svelte/store';
   import i18n from '../../i18n';
-  import SubscriptionBadge from './SubscriptionBadge.svelte';
   import SubscriptionLineMeta from './SubscriptionLineMeta.svelte';
 
   let { item }: { item: CartItemResponse } = $props();
@@ -101,14 +100,9 @@
     />
   {/if}
   <div class="shop-cart-item__info">
-    <div class="shop-cart-item__title">
-      {#if isSubscription}
-        <SubscriptionBadge />
-      {/if}
-      <a href={`/shop/product/${item.product?.id}`} class="shop-cart-item__name">
-        {item.product?.title}
-      </a>
-    </div>
+    <a href={`/shop/product/${item.product?.id}`} class="shop-cart-item__name">
+      {item.product?.title}
+    </a>
     {#if isSubscription}
       <SubscriptionLineMeta
         productId={item.product?.id}
