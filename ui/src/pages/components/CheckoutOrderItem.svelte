@@ -4,6 +4,7 @@
   import { ProductResponseProductTypeEnum, type CheckoutItemResponse } from '@halo-dev/api-client';
   import { formatPrice } from '../../utils/price';
   import Decimal from 'decimal.js';
+  import SubscriptionBadge from './SubscriptionBadge.svelte';
   import SubscriptionLineMeta from './SubscriptionLineMeta.svelte';
 
   let { item }: { item: CheckoutItemResponse } = $props();
@@ -33,9 +34,14 @@
     />
   {/if}
   <div class="shop-order-item__info">
-    <a href={`/shop/product/${item.product?.id}`} target="_blank" class="shop-order-item__name">
-      {item.product?.title}
-    </a>
+    <div class="shop-order-item__title">
+      {#if isSubscription}
+        <SubscriptionBadge />
+      {/if}
+      <a href={`/shop/product/${item.product?.id}`} target="_blank" class="shop-order-item__name">
+        {item.product?.title}
+      </a>
+    </div>
     {#if isSubscription}
       <SubscriptionLineMeta
         productId={item.product?.id}

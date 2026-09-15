@@ -72,12 +72,9 @@
 
 {#if line}
   <span class="shop-subscription-line">
-    <span class="shop-subscription-line__badge">{$i18n.t('subscription.badge')}</span>
-    <span class="shop-subscription-line__detail">
-      {line.name}
-      {#if periodLabel}
-        <span class="shop-subscription-line__period">{periodLabel}</span>
-      {/if}
-    </span>
+    {line.name}
+    {#if periodLabel}
+      <span class="shop-subscription-line__period">{periodLabel}</span>
+    {/if}
   </span>
 {/if}

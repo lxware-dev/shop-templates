@@ -4,9 +4,12 @@
   import { type OrderItemResponse } from '@halo-dev/api-client';
   import { formatPrice } from '../../utils/price';
   import Decimal from 'decimal.js';
+  import SubscriptionBadge from './SubscriptionBadge.svelte';
   import SubscriptionLineMeta from './SubscriptionLineMeta.svelte';
 
   let { item }: { item: OrderItemResponse } = $props();
+
+  let isSubscription = $derived(!!item.subscriptionMetadata);
 
   let specValueText = $derived(
     item.productVariantSnapshot?.specValues
@@ -29,9 +32,14 @@
     />
   {/if}
   <div class="shop-order-item__info">
-    <a href={`/shop/product/${item.productId}`} target="_blank" class="shop-order-item__name">
-      {item.itemTitle}
-    </a>
+    <div class="shop-order-item__title">
+      {#if isSubscription}
+        <SubscriptionBadge />
+      {/if}
+      <a href={`/shop/product/${item.productId}`} target="_blank" class="shop-order-item__name">
+        {item.itemTitle}
+      </a>
+    </div>
     <SubscriptionLineMeta productId={item.productId} variantId={item.productVariantId} />
     {#if specValueText}
       <span class="shop-order-item__variant">{specValueText}</span>

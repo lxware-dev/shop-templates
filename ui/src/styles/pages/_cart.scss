@@ -35,6 +35,12 @@
     gap: var(--shop-spacing-xs);
   }
 
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   &__name {
     font-size: var(--shop-font-size-lg);
     font-weight: 600;
