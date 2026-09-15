@@ -31,7 +31,7 @@
     "switchHint": "Tap another plan to switch it in the user center.",
     "noPlans": "No plans available",
     "tierTabsLabel": "Tier",
-    "periodTabsLabel": "Purchase period",
+    "periodTabsLabel": "Period",
     "period": {
       "MONTHLY": "Monthly",
       "YEARLY": "Yearly",

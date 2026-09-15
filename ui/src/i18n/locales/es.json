@@ -31,7 +31,7 @@
     "switchHint": "Toca otro plan para cambiarlo en el centro de usuario.",
     "noPlans": "No hay planes disponibles",
     "tierTabsLabel": "Nivel",
-    "periodTabsLabel": "Período de compra",
+    "periodTabsLabel": "Período",
     "period": {
       "MONTHLY": "Mensual",
       "YEARLY": "Anual",

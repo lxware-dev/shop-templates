@@ -31,7 +31,7 @@
     "switchHint": "点击其他套餐可前往用户中心切换。",
     "noPlans": "暂无上架计划",
     "tierTabsLabel": "档次",
-    "periodTabsLabel": "购买周期",
+    "periodTabsLabel": "周期",
     "period": {
       "MONTHLY": "按月",
       "YEARLY": "按年",
