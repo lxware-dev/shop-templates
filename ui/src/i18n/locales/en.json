@@ -84,7 +84,11 @@
     "couponMaxDiscount": "max {{amount}}",
     "couponMinOrder": "min order {{amount}}",
     "couponExpiresAt": "Expires {{date}}",
-    "couponRejectedFallback": "This coupon is not available for this order."
+    "couponRejectedFallback": "This coupon is not available for this order.",
+    "email": "Email",
+    "emailHelp": "Order confirmation and the access link are sent to this email.",
+    "guestLoginPrompt": "If this email already belongs to an account, log in before checking out.",
+    "subscriptionRequiresLogin": "Subscription products require you to log in."
   },
   "addressForm": {
     "lastName": "Last name *",
@@ -119,7 +123,12 @@
     "loadPaymentResponseFailed": "Failed to load payment response. Please refresh and try again.",
     "unsupportedPaymentMethod": "This payment method is not supported yet. Please contact the administrator.",
     "paymentTransactionNumber": "Payment transaction number *",
-    "paymentConfirmed": "I have completed the payment"
+    "paymentConfirmed": "I have completed the payment",
+    "accessEmail": "Email",
+    "accessEmailHelp": "Enter the email used at checkout. We will send an order access link to it.",
+    "sendAccessLink": "Send access link",
+    "accessLinkSent": "If the email matches, an access link has been sent.",
+    "accessLinkFailed": "Could not send the link. Please try again."
   },
   "paymentMethods": {
     "scanToPay": "Please use {{provider}} to scan the QR code and complete the payment",

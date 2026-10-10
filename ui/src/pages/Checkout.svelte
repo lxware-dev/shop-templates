@@ -5,6 +5,7 @@
     props: {
       contextId: { reflect: true, type: 'String', attribute: 'contextid' },
       csrfToken: { reflect: true, type: 'String', attribute: 'csrftoken' },
+      authenticated: { reflect: true, type: 'String', attribute: 'authenticated' },
     },
   }}
 />
@@ -39,7 +40,13 @@
   import { get } from 'svelte/store';
   import i18n from '../i18n';
 
-  let { contextId, csrfToken }: { contextId: string; csrfToken: string } = $props();
+  let {
+    contextId,
+    csrfToken,
+    authenticated,
+  }: { contextId: string; csrfToken: string; authenticated?: string } = $props();
+
+  let isAuthenticated = $derived(authenticated === 'true');
 
   const queryClient = new QueryClient();
 
@@ -48,11 +55,7 @@
     () => ({
       queryKey: ['shop:checkout:context', contextId],
       queryFn: async () => {
-        return await ky
-          .get<CheckoutContextResponse>(
-            `/apis/uc.api.ecommerce.halo.run/v1alpha1/checkout/${contextId}`
-          )
-          .json();
+        return await ky.get<CheckoutContextResponse>(`/shop/checkout/${contextId}/context`).json();
       },
     }),
     () => queryClient
@@ -66,6 +69,7 @@
           .get<UserAddressResponse[]>('/apis/uc.api.ecommerce.halo.run/v1alpha1/user-addresses')
           .json();
       },
+      enabled: isAuthenticated,
     }),
     () => queryClient
   );
@@ -99,6 +103,7 @@
       queryFn: async () => {
         return await ky.get<CustomerCouponResponse[]>('/shop/coupons/mine').json();
       },
+      enabled: isAuthenticated,
       staleTime: 30_000,
     }),
     () => queryClient
@@ -374,7 +379,7 @@
   <form action={`/shop/checkout/${contextId}/submit`} method="POST" class="shop-checkout">
     <input type="hidden" name="_csrf" value={csrfToken} />
 
-    {#if contextQuery.data?.isShippingRequired}
+    {#if isAuthenticated && contextQuery.data?.isShippingRequired}
       <input type="hidden" name="saveAsNewAddress" value={!selectedAddressId} />
     {/if}
 
@@ -386,36 +391,62 @@
     {/each}
 
     <div class="shop-checkout__form">
+      {#if !isAuthenticated}
+        <div class="shop-card">
+          <h2 class="shop-card__title">{$i18n.t('checkout.email')}</h2>
+          <div class="shop-form-group">
+            <label class="shop-label" for="guest-email">{$i18n.t('checkout.email')}</label>
+            <input
+              class="shop-input"
+              id="guest-email"
+              type="email"
+              name="email"
+              required
+              autocomplete="email"
+            />
+          </div>
+          <p class="shop-checkout-discount-card__tip">{$i18n.t('checkout.emailHelp')}</p>
+          <p class="shop-checkout-discount-card__tip">{$i18n.t('checkout.guestLoginPrompt')}</p>
+          <p class="shop-checkout-discount-card__tip">
+            {$i18n.t('checkout.subscriptionRequiresLogin')}
+          </p>
+        </div>
+      {/if}
+
       {#if contextQuery.data?.isShippingRequired}
         <div class="shop-card">
           <h2 class="shop-card__title">{$i18n.t('checkout.shippingAddress')}</h2>
-          {#if addressQuery.isLoading}
+          {#if isAuthenticated && addressQuery.isLoading}
             {$i18n.t('common.loading')}
           {:else}
             <div class="shop-address-form" in:fade={{ duration: 200 }}>
-              <div class="shop-form-group">
-                <label class="shop-label" for="address-selector">
-                  {$i18n.t('checkout.selectShippingAddress')}
-                </label>
-                <select
-                  class="shop-select"
-                  id="address-selector"
-                  name="selectedAddressId"
-                  bind:value={selectedAddressId}
-                >
-                  {#each addressQuery.data ?? [] as address (address.id)}
-                    <option value={address.id}>
-                      {[address.lastName, address.firstName].filter(Boolean).join(' ')}
-                      {address.contactPhone}
-                      {[address.province, address.city, address.district, address.streetAddress]
-                        .filter(Boolean)
-                        .join('')}{address.isDefault ? $i18n.t('common.defaultAddressSuffix') : ''}
-                    </option>
-                  {/each}
-                  <option value="">{$i18n.t('checkout.fillNewAddress')}</option>
-                </select>
-              </div>
-              {#if !selectedAddressId}
+              {#if isAuthenticated}
+                <div class="shop-form-group">
+                  <label class="shop-label" for="address-selector">
+                    {$i18n.t('checkout.selectShippingAddress')}
+                  </label>
+                  <select
+                    class="shop-select"
+                    id="address-selector"
+                    name="selectedAddressId"
+                    bind:value={selectedAddressId}
+                  >
+                    {#each addressQuery.data ?? [] as address (address.id)}
+                      <option value={address.id}>
+                        {[address.lastName, address.firstName].filter(Boolean).join(' ')}
+                        {address.contactPhone}
+                        {[address.province, address.city, address.district, address.streetAddress]
+                          .filter(Boolean)
+                          .join('')}{address.isDefault
+                          ? $i18n.t('common.defaultAddressSuffix')
+                          : ''}
+                      </option>
+                    {/each}
+                    <option value="">{$i18n.t('checkout.fillNewAddress')}</option>
+                  </select>
+                </div>
+              {/if}
+              {#if !isAuthenticated || !selectedAddressId}
                 <AddressForm />
               {/if}
             </div>
@@ -467,103 +498,107 @@
         <p class="shop-checkout-discount-card__tip">{$i18n.t('checkout.discountTip')}</p>
       </div>
 
-      <div class="shop-card shop-checkout-discount-card">
-        <h2 class="shop-card__title">{$i18n.t('checkout.coupons')}</h2>
-        {#if myCouponsQuery.isLoading}
-          <p class="shop-checkout-discount-card__state">{$i18n.t('common.loading')}</p>
-        {:else if myCouponsQuery.isError}
-          <p class="shop-checkout-discount-card__error shop-checkout-discount-card__state">
-            {$i18n.t('checkout.couponLoadError')}
-          </p>
-          <div class="shop-checkout-discount-card__actions">
-            <button
-              type="button"
-              class="shop-btn shop-btn-secondary"
-              onclick={() => myCouponsQuery.refetch()}
-            >
-              {$i18n.t('checkout.retryCoupons')}
-            </button>
-          </div>
-        {:else if availableCoupons.length === 0}
-          <p class="shop-checkout-discount-card__tip">
-            {hasCoupons ? $i18n.t('checkout.couponsAppliedOnly') : $i18n.t('checkout.couponsEmpty')}
-          </p>
-        {:else}
-          <div class="shop-coupon-list">
-            {#each availableCoupons as coupon (coupon.id)}
-              {@const isNonCombinable = coupon.combineWithCoupons === false}
-              {@const isNonCombinableWithDiscount = coupon.combineWithOrderDiscount === false}
-              {@const couponRejection = rejectedCouponMap.get(coupon.id!)}
-              {@const willReplaceSelection = couponWillReplaceSelection(coupon)}
-              <label
-                class="shop-coupon-item"
-                class:shop-coupon-item--selected={selectedCouponIds.includes(coupon.id!)}
-                class:shop-coupon-item--non-combinable={isNonCombinable}
-                class:shop-coupon-item--rejected={!!couponRejection}
+      {#if isAuthenticated}
+        <div class="shop-card shop-checkout-discount-card">
+          <h2 class="shop-card__title">{$i18n.t('checkout.coupons')}</h2>
+          {#if myCouponsQuery.isLoading}
+            <p class="shop-checkout-discount-card__state">{$i18n.t('common.loading')}</p>
+          {:else if myCouponsQuery.isError}
+            <p class="shop-checkout-discount-card__error shop-checkout-discount-card__state">
+              {$i18n.t('checkout.couponLoadError')}
+            </p>
+            <div class="shop-checkout-discount-card__actions">
+              <button
+                type="button"
+                class="shop-btn shop-btn-secondary"
+                onclick={() => myCouponsQuery.refetch()}
               >
-                <input
-                  type="checkbox"
-                  class="shop-coupon-item__checkbox"
-                  checked={selectedCouponIds.includes(coupon.id!)}
-                  onchange={() => toggleCoupon(coupon.id!)}
-                />
-                <div class="shop-coupon-item__info">
-                  <span class="shop-coupon-item__name">
-                    {coupon.couponName}
-                    {#if isNonCombinable}
-                      <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
-                        {$i18n.t('checkout.couponNotCombinableLabel')}
+                {$i18n.t('checkout.retryCoupons')}
+              </button>
+            </div>
+          {:else if availableCoupons.length === 0}
+            <p class="shop-checkout-discount-card__tip">
+              {hasCoupons
+                ? $i18n.t('checkout.couponsAppliedOnly')
+                : $i18n.t('checkout.couponsEmpty')}
+            </p>
+          {:else}
+            <div class="shop-coupon-list">
+              {#each availableCoupons as coupon (coupon.id)}
+                {@const isNonCombinable = coupon.combineWithCoupons === false}
+                {@const isNonCombinableWithDiscount = coupon.combineWithOrderDiscount === false}
+                {@const couponRejection = rejectedCouponMap.get(coupon.id!)}
+                {@const willReplaceSelection = couponWillReplaceSelection(coupon)}
+                <label
+                  class="shop-coupon-item"
+                  class:shop-coupon-item--selected={selectedCouponIds.includes(coupon.id!)}
+                  class:shop-coupon-item--non-combinable={isNonCombinable}
+                  class:shop-coupon-item--rejected={!!couponRejection}
+                >
+                  <input
+                    type="checkbox"
+                    class="shop-coupon-item__checkbox"
+                    checked={selectedCouponIds.includes(coupon.id!)}
+                    onchange={() => toggleCoupon(coupon.id!)}
+                  />
+                  <div class="shop-coupon-item__info">
+                    <span class="shop-coupon-item__name">
+                      {coupon.couponName}
+                      {#if isNonCombinable}
+                        <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
+                          {$i18n.t('checkout.couponNotCombinableLabel')}
+                        </span>
+                      {/if}
+                      {#if isNonCombinableWithDiscount}
+                        <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
+                          {$i18n.t('checkout.couponNotCombinableWithDiscountLabel')}
+                        </span>
+                      {/if}
+                    </span>
+                    {#if couponDescription(coupon)}
+                      <span class="shop-coupon-item__desc">{couponDescription(coupon)}</span>
+                    {/if}
+                    {#if coupon.expiresAt}
+                      <span class="shop-coupon-item__expires">
+                        {$i18n.t('checkout.couponExpiresAt', {
+                          date: formatCouponDate(coupon.expiresAt, $i18n.language),
+                        })}
                       </span>
                     {/if}
-                    {#if isNonCombinableWithDiscount}
-                      <span class="shop-coupon-item__tag shop-coupon-item__tag--warn">
-                        {$i18n.t('checkout.couponNotCombinableWithDiscountLabel')}
+                    {#if willReplaceSelection}
+                      <span class="shop-coupon-item__notice">
+                        {$i18n.t('checkout.couponSelectionWillReplace')}
                       </span>
                     {/if}
-                  </span>
-                  {#if couponDescription(coupon)}
-                    <span class="shop-coupon-item__desc">{couponDescription(coupon)}</span>
-                  {/if}
-                  {#if coupon.expiresAt}
-                    <span class="shop-coupon-item__expires">
-                      {$i18n.t('checkout.couponExpiresAt', {
-                        date: formatCouponDate(coupon.expiresAt, $i18n.language),
-                      })}
-                    </span>
-                  {/if}
-                  {#if willReplaceSelection}
-                    <span class="shop-coupon-item__notice">
-                      {$i18n.t('checkout.couponSelectionWillReplace')}
-                    </span>
-                  {/if}
-                  {#if couponRejection}
-                    <span class="shop-coupon-item__error">
-                      {rejectedCouponReason(couponRejection)}
-                    </span>
-                  {/if}
-                </div>
-              </label>
-            {/each}
-          </div>
-          {#if couponError}
-            <p class="shop-checkout-discount-card__error">{couponError}</p>
+                    {#if couponRejection}
+                      <span class="shop-coupon-item__error">
+                        {rejectedCouponReason(couponRejection)}
+                      </span>
+                    {/if}
+                  </div>
+                </label>
+              {/each}
+            </div>
+            {#if couponError}
+              <p class="shop-checkout-discount-card__error">{couponError}</p>
+            {/if}
+            <div class="shop-checkout-discount-card__actions">
+              <button
+                type="button"
+                class="shop-btn shop-btn-secondary"
+                disabled={applyCouponsMutation.isPending || !hasCouponChanges}
+                onclick={applyCoupons}
+              >
+                {#if applyCouponsMutation.isPending}
+                  <span class="shop-loading-spinner"></span>
+                {:else}
+                  {$i18n.t('checkout.apply')}
+                {/if}
+              </button>
+            </div>
           {/if}
-          <div class="shop-checkout-discount-card__actions">
-            <button
-              type="button"
-              class="shop-btn shop-btn-secondary"
-              disabled={applyCouponsMutation.isPending || !hasCouponChanges}
-              onclick={applyCoupons}
-            >
-              {#if applyCouponsMutation.isPending}
-                <span class="shop-loading-spinner"></span>
-              {:else}
-                {$i18n.t('checkout.apply')}
-              {/if}
-            </button>
-          </div>
-        {/if}
-      </div>
+        </div>
+      {/if}
 
       <div class="shop-card">
         <h2 class="shop-card__title">{$i18n.t('checkout.notes')}</h2>

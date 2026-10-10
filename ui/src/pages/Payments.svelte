@@ -5,6 +5,7 @@
     props: {
       orderCode: { reflect: true, type: 'String', attribute: 'ordercode' },
       csrfToken: { reflect: true, type: 'String', attribute: 'csrftoken' },
+      authenticated: { reflect: true, type: 'String', attribute: 'authenticated' },
     },
   }}
 />
@@ -51,7 +52,37 @@
   import EasyPay from './components/payment-methods/EasyPay.svelte';
   import i18n from '../i18n';
 
-  let { orderCode, csrfToken }: { orderCode: string; csrfToken: string } = $props();
+  let {
+    orderCode,
+    csrfToken,
+    authenticated,
+  }: { orderCode: string; csrfToken: string; authenticated?: string } = $props();
+
+  let isAuthenticated = $derived(authenticated === 'true');
+  let orderUrl = $derived(
+    isAuthenticated ? `/uc/shop/orders/${orderCode}` : `/shop/order/${orderCode}`
+  );
+  let accessEmail = $state('');
+  let accessLinkSent = $state(false);
+  let accessLinkPending = $state(false);
+
+  async function sendAccessLink() {
+    accessLinkPending = true;
+    try {
+      await ky.post(`/shop/order/${orderCode}/access-link`, {
+        json: { email: accessEmail },
+        headers: {
+          Accept: 'application/json',
+          'X-XSRF-TOKEN': csrfToken,
+        },
+      });
+      accessLinkSent = true;
+    } catch {
+      toast.error(get(i18n).t('payments.accessLinkFailed'));
+    } finally {
+      accessLinkPending = false;
+    }
+  }
 
   const queryClient = new QueryClient();
 
@@ -60,7 +91,9 @@
       queryKey: ['shop:order', orderCode],
       queryFn: async () => {
         return await ky
-          .get<OrderResponse>(`/apis/uc.api.ecommerce.halo.run/v1alpha1/orders/${orderCode}`)
+          .get<OrderResponse>(`/shop/order/${orderCode}`, {
+            headers: { Accept: 'application/json' },
+          })
           .json();
       },
     }),
@@ -118,9 +151,7 @@
       queryKey: ['shop:payment:methods', orderCode],
       queryFn: async () => {
         return await ky
-          .get<
-            PaymentMethodPublicResponse[]
-          >(`/apis/uc.api.ecommerce.halo.run/v1alpha1/orders/${orderCode}/payment-methods`)
+          .get<PaymentMethodPublicResponse[]>(`/shop/order/${orderCode}/payment-methods`)
           .json();
       },
       enabled: isPendingPayment,
@@ -158,16 +189,14 @@
         }
 
         return await ky
-          .post<PaymentInitiateResponse>(
-            `/apis/uc.api.ecommerce.halo.run/v1alpha1/orders/${orderCode}/initiate-payment`,
-            {
-              json: {
-                paymentMethodId: selectedPaymentMethodId,
-                returnUrl: window.location.href,
-                preferredResponseType,
-              },
-            }
-          )
+          .post<PaymentInitiateResponse>(`/shop/order/${orderCode}/initiate-payment`, {
+            json: {
+              paymentMethodId: selectedPaymentMethodId,
+              returnUrl: window.location.href,
+              preferredResponseType,
+            },
+            headers: { 'X-XSRF-TOKEN': csrfToken },
+          })
           .json();
       },
       enabled: !!selectedPaymentMethodId,
@@ -186,7 +215,7 @@
       queryFn: async () => {
         return await ky
           .get<PaymentSessionUcResponseStatusEnum>(
-            `/apis/uc.api.ecommerce.halo.run/v1alpha1/payment-sessions/${paymentResponseQuery.data?.sessionCode}/status`
+            `/shop/order/${orderCode}/payment-sessions/${paymentResponseQuery.data?.sessionCode}/status`
           )
           .json();
       },
@@ -200,7 +229,7 @@
     if (paymentStatusQuery.data === 'SUCCESS') {
       toast.success(get(i18n).t('payments.paymentSuccess'));
       setTimeout(() => {
-        window.location.href = `/uc/shop/orders/${orderCode}`;
+        window.location.href = orderUrl;
       }, 1000);
     }
   });
@@ -233,11 +262,43 @@
   {#if orderQuery.isLoading}
     <div>{$i18n.t('common.loading')}</div>
   {:else if orderQuery.isError}
-    <div>{$i18n.t('payments.loadOrderFailed')}</div>
+    <div class="shop-card">
+      <h2 class="shop-card__title">{$i18n.t('payments.accessEmail')}</h2>
+      <p class="shop-checkout-discount-card__tip">{$i18n.t('payments.accessEmailHelp')}</p>
+      <form
+        class="shop-address-form"
+        onsubmit={(event) => {
+          event.preventDefault();
+          sendAccessLink();
+        }}
+      >
+        <div class="shop-form-group">
+          <label class="shop-label" for="access-email">{$i18n.t('payments.accessEmail')}</label>
+          <input
+            class="shop-input"
+            id="access-email"
+            type="email"
+            required
+            autocomplete="email"
+            bind:value={accessEmail}
+          />
+        </div>
+        <button
+          type="submit"
+          class="shop-btn shop-btn-primary"
+          disabled={accessLinkPending || !accessEmail}
+        >
+          {$i18n.t('payments.sendAccessLink')}
+        </button>
+      </form>
+      {#if accessLinkSent}
+        <p class="shop-checkout-discount-card__tip">{$i18n.t('payments.accessLinkSent')}</p>
+      {/if}
+    </div>
   {:else if !isPendingPayment}
     <div>
       {$i18n.t('payments.orderNotPayablePrefix')}
-      <a href={`/uc/shop/orders/${orderCode}`}>{$i18n.t('common.viewOrderDetails')}</a>
+      <a href={orderUrl}>{$i18n.t('common.viewOrderDetails')}</a>
       {$i18n.t('payments.orderNotPayableSuffix')}
     </div>
   {:else if orderQuery.data}
@@ -375,18 +436,12 @@
               <button type="submit" class="shop-btn shop-btn-primary shop-btn-lg">
                 {$i18n.t('payments.paymentConfirmed')}
               </button>
-              <a
-                href={`/uc/shop/orders/${orderCode}`}
-                class="shop-btn shop-btn-secondary shop-btn-lg"
-              >
+              <a href={orderUrl} class="shop-btn shop-btn-secondary shop-btn-lg">
                 {$i18n.t('common.viewOrderDetails')}
               </a>
             </form>
           {:else}
-            <a
-              href={`/uc/shop/orders/${orderCode}`}
-              class="shop-btn shop-btn-secondary shop-btn-lg"
-            >
+            <a href={orderUrl} class="shop-btn shop-btn-secondary shop-btn-lg">
               {$i18n.t('common.viewOrderDetails')}
             </a>
           {/if}

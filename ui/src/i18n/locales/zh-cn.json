@@ -84,7 +84,11 @@
     "couponMaxDiscount": "最高减 {{amount}}",
     "couponMinOrder": "满 {{amount}} 可用",
     "couponExpiresAt": "{{date}} 到期",
-    "couponRejectedFallback": "该优惠券不适用于当前订单。"
+    "couponRejectedFallback": "该优惠券不适用于当前订单。",
+    "email": "邮箱",
+    "emailHelp": "订单确认和访问链接会发到这个邮箱。",
+    "guestLoginPrompt": "如果这个邮箱已经注册，请先登录后再结账。",
+    "subscriptionRequiresLogin": "订阅商品需要登录后购买。"
   },
   "addressForm": {
     "lastName": "姓 *",
@@ -119,7 +123,12 @@
     "loadPaymentResponseFailed": "加载支付响应失败，请刷新重试",
     "unsupportedPaymentMethod": "暂不支持该支付方式，请联系管理员",
     "paymentTransactionNumber": "支付交易号 *",
-    "paymentConfirmed": "已确认支付"
+    "paymentConfirmed": "已确认支付",
+    "accessEmail": "邮箱",
+    "accessEmailHelp": "填写下单时使用的邮箱，我们会把订单访问链接发到这个邮箱。",
+    "sendAccessLink": "发送访问链接",
+    "accessLinkSent": "如果邮箱匹配，访问链接已发送。",
+    "accessLinkFailed": "发送失败，请稍后重试。"
   },
   "paymentMethods": {
     "scanToPay": "请使用 {{provider}} 扫描二维码完成支付",
