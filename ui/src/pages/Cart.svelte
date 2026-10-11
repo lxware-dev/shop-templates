@@ -28,9 +28,7 @@
     () => ({
       queryKey: ['shop:cart:items'],
       queryFn: async () => {
-        return await ky
-          .get<CartItemResponse[]>('/apis/uc.api.ecommerce.halo.run/v1alpha1/cart-items')
-          .json();
+        return await ky.get<CartItemResponse[]>('/shop/cart/items').json();
       },
     }),
     () => queryClient
@@ -71,7 +69,7 @@
     {:else}
       <div class="shop-cart__items" transition:fade={{ duration: 200 }}>
         {#each query.data ?? [] as item}
-          <CartItem {item} />
+          <CartItem {item} {csrfToken} />
         {/each}
       </div>
     {/if}

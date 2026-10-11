@@ -11,7 +11,7 @@
   import { get } from 'svelte/store';
   import i18n from '../../i18n';
 
-  let { item }: { item: CartItemResponse } = $props();
+  let { item, csrfToken }: { item: CartItemResponse; csrfToken: string } = $props();
 
   const queryClient = getQueryClientContext();
 
@@ -28,7 +28,9 @@
   });
 
   async function handleDelete(item: CartItemResponse) {
-    await ky.delete(`/apis/uc.api.ecommerce.halo.run/v1alpha1/cart-items/${item.id}`).json();
+    await ky.delete(`/shop/cart/items/${item.id}`, {
+      headers: { 'X-XSRF-TOKEN': csrfToken },
+    });
     queryClient.invalidateQueries({ queryKey: ['shop:cart:items'] });
   }
 
@@ -37,8 +39,9 @@
       mutationKey: ['shop:cart:items:update'],
       mutationFn: async (quantity: number) => {
         return await ky
-          .put(`/apis/uc.api.ecommerce.halo.run/v1alpha1/cart-items/${item.id}`, {
+          .put(`/shop/cart/items/${item.id}`, {
             json: { quantity },
+            headers: { 'X-XSRF-TOKEN': csrfToken },
           })
           .json();
       },

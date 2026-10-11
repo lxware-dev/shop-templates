@@ -85,7 +85,11 @@
     "couponMaxDiscount": "máx. {{amount}}",
     "couponMinOrder": "pedido mínimo {{amount}}",
     "couponExpiresAt": "Vence el {{date}}",
-    "couponRejectedFallback": "Este cupón no está disponible para este pedido."
+    "couponRejectedFallback": "Este cupón no está disponible para este pedido.",
+    "email": "Correo",
+    "emailHelp": "La confirmación del pedido y el enlace de acceso se envían a este correo.",
+    "guestLoginPrompt": "Si este correo ya pertenece a una cuenta, inicie sesión antes de pagar.",
+    "subscriptionRequiresLogin": "Los productos de suscripción requieren iniciar sesión."
   },
   "addressForm": {
     "lastName": "Apellido *",
@@ -120,7 +124,12 @@
     "loadPaymentResponseFailed": "Error al cargar la respuesta de pago. Actualice e intente de nuevo.",
     "unsupportedPaymentMethod": "Este método de pago aún no es compatible. Póngase en contacto con el administrador.",
     "paymentTransactionNumber": "Número de transacción de pago *",
-    "paymentConfirmed": "He completado el pago"
+    "paymentConfirmed": "He completado el pago",
+    "accessEmail": "Correo",
+    "accessEmailHelp": "Introduzca el correo usado al pagar. Le enviaremos un enlace de acceso al pedido.",
+    "sendAccessLink": "Enviar enlace de acceso",
+    "accessLinkSent": "Si el correo coincide, se ha enviado un enlace de acceso.",
+    "accessLinkFailed": "No se pudo enviar el enlace. Inténtelo de nuevo."
   },
   "paymentMethods": {
     "scanToPay": "Utilice {{provider}} para escanear el código QR y completar el pago",
