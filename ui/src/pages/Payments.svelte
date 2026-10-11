@@ -107,6 +107,25 @@
     return c.couponName ?? get(i18n).t('checkout.coupons');
   }
 
+  async function paymentInitiateError(error: unknown): Promise<Error> {
+    const response = (error as { response?: Response }).response;
+    if (!response || typeof response.json !== 'function') {
+      return new Error(get(i18n).t('payments.loadPaymentResponseFailed'));
+    }
+    try {
+      const body = (await response.json()) as { code?: string; detail?: string } | undefined;
+      if (body?.code === 'WECHAT_PAY_REENTRY') {
+        return new Error(get(i18n).t('payments.wechatPayReentry'));
+      }
+      if (body?.detail) {
+        return new Error(body.detail);
+      }
+    } catch {
+      // The response was not a problem document.
+    }
+    return new Error(get(i18n).t('payments.loadPaymentResponseFailed'));
+  }
+
   function rejectedCouponReason(coupon: RejectedCoupon) {
     return (
       coupon.reasonMessage || coupon.reasonCode || get(i18n).t('checkout.couponRejectedFallback')
@@ -150,25 +169,38 @@
         let preferredResponseType: PaymentInitiateRequestPreferredResponseTypeEnum =
           PaymentInitiateRequestPreferredResponseTypeEnum.RedirectUrl;
 
+        // Phone browsers outside WeChat use H5. The WeChat webview cannot open an H5 link, so it
+        // keeps the Native QR code for long-press. Desktop also stays on the QR code.
+        const wechatH5 =
+          selectedPaymentMethod?.provider === PaymentMethodPublicResponseProviderEnum.WechatPay &&
+          typeof navigator !== 'undefined' &&
+          /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) &&
+          !/MicroMessenger/i.test(navigator.userAgent);
+
         if (
-          selectedPaymentMethod?.provider === PaymentMethodPublicResponseProviderEnum.WechatPay ||
-          selectedPaymentMethod?.provider === PaymentMethodPublicResponseProviderEnum.EasyPay
+          !wechatH5 &&
+          (selectedPaymentMethod?.provider === PaymentMethodPublicResponseProviderEnum.WechatPay ||
+            selectedPaymentMethod?.provider === PaymentMethodPublicResponseProviderEnum.EasyPay)
         ) {
           preferredResponseType = PaymentInitiateRequestPreferredResponseTypeEnum.QrcodeUrl;
         }
 
-        return await ky
-          .post<PaymentInitiateResponse>(
-            `/apis/uc.api.ecommerce.halo.run/v1alpha1/orders/${orderCode}/initiate-payment`,
-            {
-              json: {
-                paymentMethodId: selectedPaymentMethodId,
-                returnUrl: window.location.href,
-                preferredResponseType,
-              },
-            }
-          )
-          .json();
+        try {
+          return await ky
+            .post<PaymentInitiateResponse>(
+              `/apis/uc.api.ecommerce.halo.run/v1alpha1/orders/${orderCode}/initiate-payment`,
+              {
+                json: {
+                  paymentMethodId: selectedPaymentMethodId,
+                  returnUrl: window.location.href,
+                  preferredResponseType,
+                },
+              }
+            )
+            .json();
+        } catch (error) {
+          throw await paymentInitiateError(error);
+        }
       },
       enabled: !!selectedPaymentMethodId,
     }),
@@ -348,7 +380,9 @@
           {#if paymentResponseQuery.isLoading}
             <div>{$i18n.t('common.loading')}</div>
           {:else if paymentResponseQuery.isError}
-            <div>{$i18n.t('payments.loadPaymentResponseFailed')}</div>
+            <div>
+              {paymentResponseQuery.error?.message || $i18n.t('payments.loadPaymentResponseFailed')}
+            </div>
           {:else if paymentResponseQuery.data}
             {#if PaymentMethodComponent}
               <PaymentMethodComponent paymentResponse={paymentResponseQuery.data} />

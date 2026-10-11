@@ -117,6 +117,7 @@
     "discount": "Descuento",
     "paymentTitle": "Pago",
     "loadPaymentResponseFailed": "Error al cargar la respuesta de pago. Actualice e intente de nuevo.",
+    "wechatPayReentry": "Este pedido ya tiene un pago de WeChat sin terminar. Vuelve a la página original para completarlo o crea un pedido nuevo para pagar aquí.",
     "unsupportedPaymentMethod": "Este método de pago aún no es compatible. Póngase en contacto con el administrador.",
     "paymentTransactionNumber": "Número de transacción de pago *",
     "paymentConfirmed": "He completado el pago"
@@ -127,6 +128,7 @@
     "paymentInfoUnavailable": "La información de pago no está disponible. Póngase en contacto con el administrador.",
     "alipayUnavailable": "La información de pago de Alipay no está disponible. Póngase en contacto con el administrador.",
     "wechatUnavailable": "La información de pago de WeChat no está disponible. Póngase en contacto con el administrador.",
+    "wechatH5RedirectTip": "WeChat Pay se abre en esta página. Al terminar, volverás aquí.",
     "stripeUnavailable": "La información de pago de Stripe no está disponible. Póngase en contacto con el administrador.",
     "manualUnavailable": "La información de pago manual no está disponible. Póngase en contacto con el administrador.",
     "bankTransferUnavailable": "La información de transferencia bancaria no está disponible. Póngase en contacto con el administrador.",

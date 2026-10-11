@@ -117,6 +117,7 @@
     "discount": "優惠",
     "paymentTitle": "支付",
     "loadPaymentResponseFailed": "載入支付響應失敗，請刷新重試",
+    "wechatPayReentry": "這筆訂單已有一筆未完成的微信支付。請回到原來的頁面完成支付；如需改在這裡支付，請重新下單。",
     "unsupportedPaymentMethod": "暫不支援該支付方式，請聯絡管理員",
     "paymentTransactionNumber": "支付交易號 *",
     "paymentConfirmed": "已確認支付"
@@ -127,6 +128,7 @@
     "paymentInfoUnavailable": "暫無支付資訊，請聯絡管理員",
     "alipayUnavailable": "暫無支付寶支付資訊，請聯絡管理員",
     "wechatUnavailable": "暫無微信支付資訊，請聯絡管理員",
+    "wechatH5RedirectTip": "將在目前頁面跳轉至微信完成支付，支付完成後會回到此頁。",
     "stripeUnavailable": "暫無 Stripe 支付資訊，請聯絡管理員",
     "manualUnavailable": "暫無手動支付資訊，請聯絡管理員",
     "bankTransferUnavailable": "暫無銀行轉帳資訊，請聯絡管理員",
