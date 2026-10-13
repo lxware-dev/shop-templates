@@ -11,7 +11,12 @@
 />
 
 <script lang="ts">
-  import { createQuery, createMutation, QueryClient } from '@tanstack/svelte-query';
+  import {
+    createQuery,
+    createMutation,
+    QueryClient,
+    setQueryClientContext,
+  } from '@tanstack/svelte-query';
   import ky from 'ky';
   import {
     type CheckoutContextResponse,
@@ -49,6 +54,7 @@
   let isAuthenticated = $derived(authenticated === 'true');
 
   const queryClient = new QueryClient();
+  setQueryClientContext(queryClient);
 
   // Context
   const contextQuery = createQuery(
