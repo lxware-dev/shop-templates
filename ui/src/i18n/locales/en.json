@@ -26,6 +26,59 @@
     "externalRedirectHint": "Opens the external site in a new tab",
     "contactSales": "Contact Sales"
   },
+  "subscription": {
+    "badge": "Subscription",
+    "switchHint": "Tap another plan to switch it in the user center.",
+    "noPlans": "No plans available",
+    "tierTabsLabel": "Tier",
+    "periodTabsLabel": "Period",
+    "period": {
+      "MONTHLY": "Monthly",
+      "YEARLY": "Yearly",
+      "LIFETIME": "Lifetime",
+      "OTHER": "Other"
+    },
+    "billingMode": {
+      "SUBSCRIPTION": "Recurring",
+      "ONE_TIME": "Single period",
+      "LIFETIME": "Lifetime"
+    },
+    "billingPeriod": {
+      "MONTHLY": "Monthly",
+      "YEARLY": "Yearly"
+    },
+    "perMonth": "/mo",
+    "perYear": "/yr",
+    "savePercent": "Save {{percent}}%",
+    "trial": "{{days}}-day free trial",
+    "resubscribeNotice": "Buying again will restore your subscription. The free trial will not be offered again.",
+    "quantityRange": "{{min}} - {{max}}",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "summaryTrialNow": "Free trial {{days}} days · due now",
+    "summaryDueNow": "Due now",
+    "summaryAfterTrial": "Then",
+    "summaryAfterEach": "Then per period",
+    "currentPlan": "Current plan",
+    "goSwitch": "Switch",
+    "addingToCart": "Adding...",
+    "addCartFailed": "Failed to add to cart",
+    "manageTitle": "Current subscription",
+    "manageTitleMultiple": "Your subscriptions ({{count}})",
+    "manageMultipleHint": "Each subscription renews and changes on its own. Manage one of them in the user center.",
+    "managePlan": "Plan",
+    "manageStatus": "Status",
+    "managePeriodEnd": "Current period ends",
+    "manageGoUc": "Manage in user center",
+    "forever": "Lifetime",
+    "status": {
+      "TRIALING": "Trialing",
+      "ACTIVE": "Active",
+      "PAST_DUE": "Past due",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired"
+    }
+  },
   "cart": {
     "title": "Cart",
     "subtitle": "{{count}} items",

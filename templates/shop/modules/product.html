@@ -33,7 +33,10 @@
   <div class="shop-product-content">
     <div class="shop-product-content__description" th:utext="${product.content}"></div>
 
-    <table th:if="${!#lists.isEmpty(product.specDefinition)}" class="shop-product-content__specs">
+    <table
+      th:if="${(product.productType == null or product.productType.toString() != 'SUBSCRIPTION') and !#lists.isEmpty(product.specDefinition)}"
+      class="shop-product-content__specs"
+    >
       <tbody>
         <tr th:each="spec : ${product.specDefinition}">
           <td th:text="${spec.name}"></td>

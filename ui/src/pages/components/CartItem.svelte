@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type CartItemResponse } from '@halo-dev/api-client';
+  import { ProductResponseProductTypeEnum, type CartItemResponse } from '@halo-dev/api-client';
   import { createMutation, getQueryClientContext, useIsFetching } from '@tanstack/svelte-query';
   import { getThumbnailUrl } from '../../utils/thumbnail';
   import Decimal from 'decimal.js';
@@ -10,12 +10,16 @@
   import { toast } from 'svelte-sonner';
   import { get } from 'svelte/store';
   import i18n from '../../i18n';
+  import SubscriptionLineMeta from './SubscriptionLineMeta.svelte';
 
   let { item, csrfToken }: { item: CartItemResponse; csrfToken: string } = $props();
 
   const queryClient = getQueryClientContext();
 
   let imageUrl = $derived(item.productVariant?.imageUrl || item.product?.coverImageUrl);
+  let isSubscription = $derived(
+    item.product?.productType === ProductResponseProductTypeEnum.Subscription
+  );
   let specValueText = $derived(
     item.productVariant?.specValues
       ?.map((specValue) => specValue.name + ': ' + specValue.value)
@@ -102,7 +106,13 @@
     <a href={`/shop/product/${item.product?.id}`} class="shop-cart-item__name">
       {item.product?.title}
     </a>
-    {#if specValueText}
+    {#if isSubscription}
+      <SubscriptionLineMeta
+        productId={item.product?.id}
+        variantId={item.productVariant?.id}
+        enabled={isSubscription}
+      />
+    {:else if specValueText}
       <p class="shop-cart-item__variant">{specValueText}</p>
     {/if}
     <div>

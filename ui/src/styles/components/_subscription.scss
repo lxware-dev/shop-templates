@@ -1,0 +1,414 @@
+// 订阅产品页（服务端渲染部分）与订阅买盒组件 shop-subscription-buy-box
+.shop-subscription {
+  gap: var(--shop-spacing-md, 16px);
+
+  &__empty {
+    padding: var(--shop-spacing-lg, 24px) var(--shop-spacing-md, 16px);
+    text-align: center;
+    font-size: var(--shop-font-size-sm, 14px);
+    color: var(--shop-gray-500, hsl(0, 0%, 45%));
+    background-color: var(--shop-gray-50, hsl(0, 0%, 98%));
+    border: 1px dashed var(--shop-gray-300, hsl(0, 0%, 83%));
+    border-radius: var(--shop-border-radius, 8px);
+  }
+
+  &__switch-hint {
+    margin: 0;
+    font-size: var(--shop-font-size-sm, 14px);
+    color: var(--shop-gray-500, hsl(0, 0%, 45%));
+  }
+
+  &__picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--shop-spacing-sm, 8px);
+  }
+
+  // 两个维度（档次 / 购买周期）各占一行 Tab，标签列共用宽度以便两行对齐
+  &__axes {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
+    gap: var(--shop-spacing-sm, 8px);
+  }
+
+  &__axis-label {
+    flex: none;
+    font-size: var(--shop-font-size-xs, 12px);
+    font-weight: 500;
+    color: var(--shop-gray-500, hsl(0, 0%, 45%));
+    white-space: nowrap;
+  }
+
+  &__tabs {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    padding: 3px;
+    gap: 2px;
+    background-color: var(--shop-gray-100, hsl(0, 0%, 96%));
+    border-radius: var(--shop-border-radius, 8px);
+  }
+
+  &__tab {
+    flex: 1;
+    min-width: 0;
+    padding: 7px 10px;
+    font-size: var(--shop-font-size-sm, 14px);
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--shop-gray-600, hsl(0, 0%, 32%));
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: var(--shop-transition, all 0.2s ease);
+
+    &:hover:not(.is-active) {
+      color: var(--shop-gray-900, hsl(0, 0%, 9%));
+    }
+
+    &.is-active {
+      color: var(--shop-gray-900, hsl(0, 0%, 9%));
+      background-color: var(--shop-color-base-100, white);
+      box-shadow: var(--shop-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+    }
+  }
+
+  &__plans {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--shop-spacing-sm, 8px);
+  }
+
+  &__plan {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    cursor: pointer;
+    padding: 12px 14px;
+    background-color: var(--shop-color-base-100, white);
+    border: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
+    border-radius: var(--shop-border-radius, 8px);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease,
+      background-color 0.15s ease;
+
+    &:only-child {
+      grid-column: 1 / -1;
+    }
+
+    &:hover {
+      border-color: var(--shop-gray-400, hsl(0, 0%, 64%));
+    }
+
+    &.is-selected {
+      border-color: var(--shop-color-primary, hsl(0, 0%, 9%));
+      background-color: var(--shop-color-base-200, hsl(0, 0%, 98%));
+      box-shadow: 0 0 0 1px var(--shop-color-primary, hsl(0, 0%, 9%));
+    }
+
+    &:has(input:focus-visible) {
+      outline: 2px solid var(--shop-color-primary, hsl(0, 0%, 9%));
+      outline-offset: 2px;
+    }
+
+    &.is-current {
+      cursor: default;
+    }
+
+    input[type='radio'] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  a.shop-subscription__plan {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__plan-body {
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__plan-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__plan-name {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--shop-gray-900, hsl(0, 0%, 9%));
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__plan-billing {
+    font-size: var(--shop-font-size-xs, 12px);
+    color: var(--shop-gray-500, hsl(0, 0%, 45%));
+  }
+
+  &__plan-aside {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 8px;
+  }
+
+  &__plan-price {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--shop-gray-900, hsl(0, 0%, 9%));
+  }
+
+  &__plan-interval {
+    margin-left: 1px;
+    font-size: var(--shop-font-size-sm, 14px);
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--shop-gray-500, hsl(0, 0%, 45%));
+  }
+
+  &__plan-original {
+    font-size: var(--shop-font-size-xs, 12px);
+    font-weight: 400;
+    color: var(--shop-gray-400, hsl(0, 0%, 64%));
+    text-decoration: line-through;
+  }
+
+  &__plan-save {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--shop-color-success, hsl(142, 10%, 30%));
+    background-color: #45544a1f;
+    border-radius: 999px;
+    padding: 1px 7px;
+  }
+
+  &__plan-trial,
+  &__plan-current,
+  &__plan-action {
+    font-size: 11px;
+    line-height: 1.4;
+    border-radius: 999px;
+    padding: 1px 7px;
+  }
+
+  &__plan-trial {
+    color: var(--shop-gray-700, hsl(0, 0%, 25%));
+    background-color: var(--shop-gray-100, hsl(0, 0%, 96%));
+  }
+
+  &__plan-current {
+    color: var(--shop-color-success, hsl(142, 10%, 30%));
+    background-color: #45544a1f;
+  }
+
+  &__plan-action {
+    color: var(--shop-gray-600, hsl(0, 0%, 32%));
+    background-color: var(--shop-gray-100, hsl(0, 0%, 96%));
+  }
+
+  &__qty {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--shop-spacing-sm, 8px) var(--shop-spacing-md, 16px);
+  }
+
+  &__qty-label {
+    font-size: var(--shop-font-size-sm, 14px);
+    font-weight: 600;
+    color: var(--shop-gray-900, hsl(0, 0%, 9%));
+  }
+
+  &__qty-hint {
+    font-size: var(--shop-font-size-xs, 12px);
+    color: var(--shop-gray-400, hsl(0, 0%, 64%));
+  }
+
+  &__notice {
+    margin: 0;
+    font-size: var(--shop-font-size-sm, 14px);
+    color: var(--shop-gray-700, hsl(0, 0%, 25%));
+    background-color: var(--shop-gray-100, hsl(0, 0%, 96%));
+    border: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
+    border-radius: var(--shop-border-radius, 8px);
+    padding: var(--shop-spacing-sm, 8px) var(--shop-spacing-md, 16px);
+  }
+
+  &__error {
+    margin: 0;
+    font-size: var(--shop-font-size-sm, 14px);
+    color: var(--shop-color-error, hsl(0, 10%, 35%));
+    background-color: var(--shop-color-base-200, hsl(0, 0%, 98%));
+    border: 1px solid var(--shop-gray-300, hsl(0, 0%, 83%));
+    border-radius: var(--shop-border-radius, 8px);
+    padding: var(--shop-spacing-sm, 8px) var(--shop-spacing-md, 16px);
+  }
+
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--shop-spacing-xs, 4px);
+    padding: 12px 14px;
+    background-color: var(--shop-gray-50, hsl(0, 0%, 98%));
+    border-radius: var(--shop-border-radius, 8px);
+  }
+
+  &__summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--shop-spacing-md, 16px);
+    font-size: var(--shop-font-size-sm, 14px);
+    color: var(--shop-gray-700, hsl(0, 0%, 25%));
+
+    &--muted {
+      color: var(--shop-gray-500, hsl(0, 0%, 45%));
+    }
+
+    &--total {
+      margin-top: var(--shop-spacing-xs, 4px);
+      padding-top: var(--shop-spacing-sm, 8px);
+      border-top: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
+      font-size: var(--shop-font-size-base, 16px);
+      font-weight: 600;
+      color: var(--shop-gray-900, hsl(0, 0%, 9%));
+    }
+  }
+
+  &__actions {
+    padding-top: var(--shop-spacing-sm, 8px);
+
+    button.shop-btn {
+      flex: 1;
+    }
+  }
+
+  .shop-subscription-manage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--shop-spacing-sm, 8px);
+    padding: 12px 14px;
+    background-color: var(--shop-color-base-100, white);
+    border: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
+    border-radius: var(--shop-border-radius, 8px);
+  }
+
+  .shop-subscription-manage__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--shop-spacing-sm, 8px);
+  }
+
+  .shop-subscription-manage__title {
+    margin: 0;
+    font-size: var(--shop-font-size-sm, 14px);
+    font-weight: 600;
+    color: var(--shop-gray-900, hsl(0, 0%, 9%));
+  }
+
+  .shop-subscription-manage__summary {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 6px;
+    font-size: var(--shop-font-size-sm, 14px);
+    color: var(--shop-gray-700, hsl(0, 0%, 25%));
+    line-height: 1.45;
+  }
+
+  .shop-subscription-manage__dot {
+    color: var(--shop-gray-400, hsl(0, 0%, 64%));
+  }
+
+  .shop-subscription-manage__item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 10px;
+    border-top: 1px solid var(--shop-gray-200, hsl(0, 0%, 90%));
+
+    &:first-of-type {
+      padding-top: 0;
+      border-top: none;
+    }
+  }
+
+  .shop-subscription-manage .shop-btn {
+    width: fit-content;
+  }
+
+  .shop-subscription-status {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 500;
+
+    &--success {
+      background: #45544a1f;
+      color: var(--shop-color-success, hsl(142, 10%, 30%));
+    }
+
+    &--warning {
+      background: #675d4c1f;
+      color: var(--shop-color-warning, hsl(38, 15%, 35%));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .shop-subscription__axes {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--shop-spacing-xs, 4px);
+    }
+
+    .shop-subscription__plans {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .shop-subscription__actions {
+      flex-direction: column;
+
+      .shop-btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.shop-subscription-line {
+  font-size: var(--shop-font-size-sm, 14px);
+  color: var(--shop-gray-600, hsl(0, 0%, 32%));
+  line-height: 1.4;
+
+  &__period::before {
+    content: '·';
+    margin: 0 4px;
+    color: var(--shop-gray-400, hsl(0, 0%, 64%));
+  }
+}
