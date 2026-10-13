@@ -1,13 +1,17 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
   import { getThumbnailUrl } from '../../utils/thumbnail';
-  import { type CheckoutItemResponse } from '@halo-dev/api-client';
+  import { ProductResponseProductTypeEnum, type CheckoutItemResponse } from '@halo-dev/api-client';
   import { formatPrice } from '../../utils/price';
   import Decimal from 'decimal.js';
+  import SubscriptionLineMeta from './SubscriptionLineMeta.svelte';
 
   let { item }: { item: CheckoutItemResponse } = $props();
 
   let imageUrl = $derived(item.productVariant?.imageUrl || item.product?.coverImageUrl);
+  let isSubscription = $derived(
+    item.product?.productType === ProductResponseProductTypeEnum.Subscription
+  );
   let specValueText = $derived(
     item.productVariant?.specValues
       ?.map((specValue) => specValue.name + ': ' + specValue.value)
@@ -32,7 +36,13 @@
     <a href={`/shop/product/${item.product?.id}`} target="_blank" class="shop-order-item__name">
       {item.product?.title}
     </a>
-    {#if specValueText}
+    {#if isSubscription}
+      <SubscriptionLineMeta
+        productId={item.product?.id}
+        variantId={item.productVariant?.id}
+        enabled={isSubscription}
+      />
+    {:else if specValueText}
       <span class="shop-order-item__variant">{specValueText}</span>
     {/if}
     <span class="shop-order-item__quantity">x {item.quantity || 1}</span>

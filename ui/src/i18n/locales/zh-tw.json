@@ -26,6 +26,59 @@
     "externalRedirectHint": "點擊後將在新視窗開啟外部網站",
     "contactSales": "聯絡銷售"
   },
+  "subscription": {
+    "badge": "訂閱",
+    "switchHint": "點擊其他方案可前往使用者中心切換。",
+    "noPlans": "暫無上架方案",
+    "tierTabsLabel": "檔次",
+    "periodTabsLabel": "週期",
+    "period": {
+      "MONTHLY": "按月",
+      "YEARLY": "按年",
+      "LIFETIME": "永久",
+      "OTHER": "其他"
+    },
+    "billingMode": {
+      "SUBSCRIPTION": "連續購買",
+      "ONE_TIME": "單期購買",
+      "LIFETIME": "永久買斷"
+    },
+    "billingPeriod": {
+      "MONTHLY": "按月",
+      "YEARLY": "按年"
+    },
+    "perMonth": "/月",
+    "perYear": "/年",
+    "savePercent": "省 {{percent}}%",
+    "trial": "試用 {{days}} 天",
+    "resubscribeNotice": "再次購買將恢復訂閱，試用不會再觸發。",
+    "quantityRange": "{{min}} - {{max}} 份",
+    "decreaseQuantity": "減少數量",
+    "increaseQuantity": "增加數量",
+    "summaryTrialNow": "試用 {{days}} 天 · 現在應付",
+    "summaryDueNow": "應付",
+    "summaryAfterTrial": "之後",
+    "summaryAfterEach": "之後每期",
+    "currentPlan": "目前方案",
+    "goSwitch": "去切換",
+    "addingToCart": "加入中…",
+    "addCartFailed": "加入購物車失敗",
+    "manageTitle": "當前訂閱",
+    "manageTitleMultiple": "我的訂閱（{{count}} 個）",
+    "manageMultipleHint": "每條訂閱獨立續費與變更，請在使用者中心逐條管理。",
+    "managePlan": "計劃",
+    "manageStatus": "狀態",
+    "managePeriodEnd": "當前週期至",
+    "manageGoUc": "去使用者中心管理",
+    "forever": "永久",
+    "status": {
+      "TRIALING": "試用中",
+      "ACTIVE": "生效中",
+      "PAST_DUE": "已逾期",
+      "CANCELLED": "已取消",
+      "EXPIRED": "已過期"
+    }
+  },
   "cart": {
     "title": "購物車",
     "subtitle": "共 {{count}} 件商品",

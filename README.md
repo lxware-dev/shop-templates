@@ -28,7 +28,7 @@
 其他模板根据 `templates/shop` 目录在主题中创建即可，以下是所有模板的具体作用：
 
 1. `shop/products.html`：产品列表页面，完全采用 Thymeleaf 渲染
-2. `shop/product.html`：产品详情页面
+2. `shop/product.html`：产品详情页面（含订阅类型，买盒按产品类型展示订阅计划）
 3. `shop/cart.html`：购物车页面
 4. `shop/checkout.html`：结算页面
 5. `shop/payments.html`：支付页面
