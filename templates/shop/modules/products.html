@@ -6,7 +6,7 @@
 
   <div class="shop-filter">
     <div class="shop-filter__left">
-      <select class="shop-select" id="category-select">
+      <select class="shop-select" id="category-select" aria-label="商品分类">
         <option value="">全部分类</option>
         <option
           th:each="category : ${categoryTree}"
@@ -15,17 +15,21 @@
           th:selected="${#lists.contains(param.categoryId, #strings.toString(category.id))}"
         ></option>
       </select>
-      <input
-        type="text"
-        class="shop-input"
-        id="search-input"
-        placeholder="搜索商品..."
-        th:value="${param.keyword != null && !param.keyword.empty ? param.keyword[0] : ''}"
-      />
+      <div class="shop-filter__search">
+        <input
+          type="text"
+          class="shop-input"
+          id="search-input"
+          placeholder="搜索商品..."
+          aria-label="搜索商品"
+          th:value="${param.keyword != null && !param.keyword.empty ? param.keyword[0] : ''}"
+        />
+        <button type="button" class="shop-btn shop-btn-primary" id="search-button">搜索</button>
+      </div>
     </div>
 
     <div class="shop-filter__right">
-      <select class="shop-select" id="sort-select">
+      <select class="shop-select" id="sort-select" aria-label="排序方式">
         <option value="" th:selected="${param.sort == null || param.sort.empty}">默认排序</option>
         <option value="minPrice,asc" th:selected="${#lists.contains(param.sort, 'minPrice,asc')}">
           价格从低到高
@@ -44,6 +48,7 @@
     (function () {
       const categorySelect = document.getElementById('category-select');
       const searchInput = document.getElementById('search-input');
+      const searchButton = document.getElementById('search-button');
       const sortSelect = document.getElementById('sort-select');
 
       function updateFilters(params) {
@@ -72,12 +77,18 @@
         updateFilters({ categoryId: this.value });
       });
 
+      function submitSearch() {
+        updateFilters({ keyword: searchInput.value.trim() });
+      }
+
       searchInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
           e.preventDefault();
-          updateFilters({ keyword: this.value.trim() });
+          submitSearch();
         }
       });
+
+      searchButton.addEventListener('click', submitSearch);
 
       sortSelect.addEventListener('change', function () {
         updateFilters({ sort: this.value });
@@ -95,49 +106,82 @@
     })();
   </script>
 
-  <div class="shop-product-list">
+  <div class="shop-product-list" th:if="${!productPage.items.isEmpty()}">
     <a
       th:each="product : ${productPage.items}"
       th:href="@{/shop/product/{id}(id=${product.id})}"
       class="shop-product-card"
     >
-      <div th:unless="${#strings.isEmpty(product.coverImageUrl)}" class="shop-product-card__image">
-        <img th:src="${product.coverImageUrl}" th:alt="${product.title}" />
-      </div>
-      <div class="shop-product-card__info">
-        <h3 class="shop-product-card__name" th:text="${product.title}"></h3>
-        <span
-          th:if="${product.productType != null && product.productType.toString() == 'SUBSCRIPTION'}"
-          class="shop-product-card__badge"
+      <div class="shop-product-card__image">
+        <img
+          th:if="${!#strings.isEmpty(product.coverImageUrl)}"
+          th:src="${product.coverImageUrl}"
+          th:alt="${product.title}"
+          loading="lazy"
+        />
+        <div
+          class="shop-product-card__image-placeholder"
+          th:if="${#strings.isEmpty(product.coverImageUrl)}"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2.5"
+            stroke-width="1.5"
             stroke-linecap="round"
             stroke-linejoin="round"
             aria-hidden="true"
           >
-            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
-            <path d="M21 3v5h-5"></path>
-            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
-            <path d="M8 16H3v5"></path>
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <circle cx="9" cy="9" r="2"></circle>
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
           </svg>
-          <span>订阅</span>
-        </span>
-        <p class="shop-product-card__description" th:text="${product.description}"></p>
-        <div
-          th:if="${product.minPrice != null or product.minOriginalPrice != null}"
-          class="shop-product-card__footer"
-        >
+        </div>
+      </div>
+      <div class="shop-product-card__info">
+        <h3 class="shop-product-card__name" th:text="${product.title}"></h3>
+        <div class="shop-product-card__badges">
+          <span
+            th:if="${product.productType != null && product.productType.toString() == 'SUBSCRIPTION'}"
+            class="shop-product-card__badge"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+              <path d="M21 3v5h-5"></path>
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+              <path d="M8 16H3v5"></path>
+            </svg>
+            <span>订阅</span>
+          </span>
+          <span th:if="${product.minPrice == null}" class="shop-product-card__badge">
+            <span>询价</span>
+          </span>
+        </div>
+        <p
+          class="shop-product-card__description"
+          th:if="${!#strings.isEmpty(product.description)}"
+          th:text="${product.description}"
+        ></p>
+        <div th:if="${product.minPrice != null}" class="shop-product-card__footer">
           <div class="shop-product-card__price">
-            <span class="shop-product-card__price-current" th:text="${product.minPrice}"></span>
+            <span
+              class="shop-product-card__price-current"
+              th:text="|¥${#numbers.formatDecimal(product.minPrice, 1, 2)}|"
+            ></span>
             <s
               th:if="${product.minOriginalPrice != null}"
               class="shop-product-card__price-original"
-              th:text="${product.minOriginalPrice}"
+              th:text="|¥${#numbers.formatDecimal(product.minOriginalPrice, 1, 2)}|"
             ></s>
           </div>
         </div>
@@ -145,7 +189,33 @@
     </a>
   </div>
 
-  <div class="shop-pagination" th:if="${productPage.totalPages > 0}">
+  <div class="shop-empty" th:if="${productPage.items.isEmpty()}">
+    <div class="shop-empty__icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+      </svg>
+    </div>
+    <p class="shop-empty__title">没有找到相关商品</p>
+    <p class="shop-empty__desc">换个关键词或分类试试</p>
+    <div
+      class="shop-empty__actions"
+      th:if="${(param.keyword != null && !param.keyword.empty) || (param.categoryId != null && !param.categoryId.empty) || (param.sort != null && !param.sort.empty)}"
+    >
+      <a class="shop-btn shop-btn-secondary" th:href="@{/shop/products}">清除筛选条件</a>
+    </div>
+  </div>
+
+  <div class="shop-pagination" th:if="${productPage.totalPages > 1}">
     <button
       type="button"
       class="shop-btn shop-btn-secondary shop-btn-sm shop-pagination__button"

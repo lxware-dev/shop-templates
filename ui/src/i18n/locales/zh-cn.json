@@ -12,7 +12,8 @@
       "alipay": "支付宝",
       "wechat": "微信",
       "stripe": "Stripe"
-    }
+    },
+    "retry": "重试"
   },
   "buyBox": {
     "loadFailed": "加载失败：{{message}}",
@@ -82,19 +83,29 @@
   "cart": {
     "title": "购物车",
     "subtitle": "共 {{count}} 件商品",
-    "loadError": "加载错误：{{message}}",
-    "empty": "购物车为空",
     "summaryTitle": "订单摘要",
     "itemsTotal": "商品总计",
     "shipping": "运费",
     "pendingCalculation": "待计算",
     "total": "总计",
     "proceedToCheckout": "前往结算",
-    "continueShopping": "继续购物"
+    "continueShopping": "继续购物",
+    "loadFailed": "购物车加载失败，请稍后重试",
+    "emptyTitle": "购物车是空的",
+    "emptyDesc": "去挑选一些喜欢的商品吧",
+    "emptyAction": "去逛逛",
+    "inquiryExcluded": "{{count}} 件询价商品需联系客服下单，已从结算中排除"
   },
   "cartItem": {
     "updateQuantityFailed": "更新数量失败，请重试",
-    "remove": "删除"
+    "remove": "删除",
+    "removeConfirm": "确定从购物车中删除该商品吗？",
+    "removeFailed": "删除失败，请重试",
+    "inquiryBadge": "询价商品",
+    "inquiryNote": "请联系客服询价下单",
+    "quantity": "数量",
+    "increaseQuantity": "增加数量",
+    "decreaseQuantity": "减少数量"
   },
   "checkout": {
     "title": "结算",
@@ -142,7 +153,9 @@
     "email": "邮箱",
     "emailHelp": "订单确认和访问链接会发到这个邮箱。",
     "guestLoginPrompt": "如果这个邮箱已经注册，请先登录后再结账。",
-    "subscriptionRequiresLogin": "订阅商品需要登录后购买。"
+    "subscriptionRequiresLogin": "订阅商品需要登录后购买。",
+    "contextLoadFailed": "结算信息加载失败，请重试",
+    "submitting": "提交中…"
   },
   "addressForm": {
     "lastName": "姓 *",
@@ -183,7 +196,9 @@
     "accessEmailHelp": "填写下单时使用的邮箱，我们会把订单访问链接发到这个邮箱。",
     "sendAccessLink": "发送访问链接",
     "accessLinkSent": "如果邮箱匹配，访问链接已发送。",
-    "accessLinkFailed": "发送失败，请稍后重试。"
+    "accessLinkFailed": "发送失败，请稍后重试。",
+    "pollTimeout": "长时间未检测到支付结果，已停止自动刷新。",
+    "pollResume": "重新检测"
   },
   "paymentMethods": {
     "scanToPay": "请使用 {{provider}} 扫描二维码完成支付",

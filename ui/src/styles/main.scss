@@ -22,12 +22,12 @@
 @include meta.load-css('components/subscription');
 
 // Pages
-@include meta.load-css('pages/home');
+@include meta.load-css('pages/products');
 @include meta.load-css('pages/product');
 @include meta.load-css('pages/cart');
 @include meta.load-css('pages/checkout');
-@include meta.load-css('pages/checkout-success');
 @include meta.load-css('pages/payments');
+@include meta.load-css('pages/order');
 
 // Plugins
 @include meta.load-css('plugins/medium-zoom');

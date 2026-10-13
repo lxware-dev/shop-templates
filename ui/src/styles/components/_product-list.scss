@@ -1,9 +1,11 @@
+@use '../breakpoints' as *;
+
 .shop-product-list {
   display: grid;
   gap: var(--shop-spacing-lg);
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 
-  @media (max-width: 768px) {
+  @media (max-width: $shop-bp-md) {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
@@ -23,7 +25,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $shop-bp-md) {
   .shop-pagination {
     gap: var(--shop-spacing-sm);
   }

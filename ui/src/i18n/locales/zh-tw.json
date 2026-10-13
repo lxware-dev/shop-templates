@@ -12,7 +12,8 @@
       "alipay": "支付寶",
       "wechat": "微信",
       "stripe": "Stripe"
-    }
+    },
+    "retry": "重試"
   },
   "buyBox": {
     "loadFailed": "載入失敗：{{message}}",
@@ -82,19 +83,29 @@
   "cart": {
     "title": "購物車",
     "subtitle": "共 {{count}} 件商品",
-    "loadError": "載入錯誤：{{message}}",
-    "empty": "購物車為空",
     "summaryTitle": "訂單摘要",
     "itemsTotal": "商品總計",
     "shipping": "運費",
     "pendingCalculation": "待計算",
     "total": "總計",
     "proceedToCheckout": "前往結算",
-    "continueShopping": "繼續購物"
+    "continueShopping": "繼續購物",
+    "loadFailed": "購物車載入失敗，請稍後重試",
+    "emptyTitle": "購物車是空的",
+    "emptyDesc": "去挑選一些喜歡的商品吧",
+    "emptyAction": "去逛逛",
+    "inquiryExcluded": "{{count}} 件詢價商品需聯絡客服下單，已從結算中排除"
   },
   "cartItem": {
     "updateQuantityFailed": "更新數量失敗，請重試",
-    "remove": "刪除"
+    "remove": "刪除",
+    "removeConfirm": "確定從購物車中刪除該商品嗎？",
+    "removeFailed": "刪除失敗，請重試",
+    "inquiryBadge": "詢價商品",
+    "inquiryNote": "請聯絡客服詢價下單",
+    "quantity": "數量",
+    "increaseQuantity": "增加數量",
+    "decreaseQuantity": "減少數量"
   },
   "checkout": {
     "title": "結算",
@@ -142,7 +153,9 @@
     "email": "郵箱",
     "emailHelp": "訂單確認和訪問連結會發到這個郵箱。",
     "guestLoginPrompt": "如果這個郵箱已經註冊，請先登入後再結帳。",
-    "subscriptionRequiresLogin": "訂閱商品需要登入後購買。"
+    "subscriptionRequiresLogin": "訂閱商品需要登入後購買。",
+    "contextLoadFailed": "結算資訊載入失敗，請重試",
+    "submitting": "提交中…"
   },
   "addressForm": {
     "lastName": "姓 *",
@@ -183,7 +196,9 @@
     "accessEmailHelp": "填寫下單時使用的郵箱，我們會把訂單訪問連結發到這個郵箱。",
     "sendAccessLink": "發送訪問連結",
     "accessLinkSent": "如果郵箱匹配，訪問連結已發送。",
-    "accessLinkFailed": "發送失敗，請稍後重試。"
+    "accessLinkFailed": "發送失敗，請稍後重試。",
+    "pollTimeout": "長時間未檢測到支付結果，已停止自動刷新。",
+    "pollResume": "重新檢測"
   },
   "paymentMethods": {
     "scanToPay": "請使用 {{provider}} 掃描二維碼完成支付",

@@ -1,3 +1,5 @@
+@use '../breakpoints' as *;
+
 .shop-filter {
   display: flex;
   justify-content: space-between;
@@ -30,12 +32,23 @@
     flex: 1;
   }
 
+  &__search {
+    display: flex;
+    gap: var(--shop-spacing-sm);
+    flex: 1;
+    min-width: 0;
+
+    .shop-btn {
+      flex-shrink: 0;
+    }
+  }
+
   &__right .shop-select {
     width: 200px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $shop-bp-md) {
   .shop-filter {
     flex-direction: column;
     align-items: stretch;

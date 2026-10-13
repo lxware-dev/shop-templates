@@ -1,4 +1,11 @@
+@use 'breakpoints' as *;
+
 .shop-entry {
+  max-width: var(--shop-container-max);
+  margin: 1.25rem auto 0;
+  padding-left: var(--shop-spacing-md);
+  padding-right: var(--shop-spacing-md);
+
   &__header {
     text-align: left;
     margin-bottom: var(--shop-spacing-xl);
@@ -22,7 +29,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $shop-bp-md) {
   .shop-entry {
     &__title {
       font-size: 28px;
@@ -31,5 +38,54 @@
     &__subtitle {
       font-size: var(--shop-font-size-base);
     }
+  }
+}
+
+/* 统一的空状态（空购物车、无搜索结果等） */
+.shop-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--shop-spacing-md);
+  padding: var(--shop-spacing-xl) var(--shop-spacing-lg);
+  text-align: center;
+  color: var(--shop-gray-500);
+
+  &__icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--shop-gray-100);
+    color: var(--shop-gray-400);
+
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  &__title {
+    font-size: var(--shop-font-size-lg);
+    font-weight: 600;
+    color: var(--shop-gray-900);
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: var(--shop-font-size-sm);
+    color: var(--shop-gray-500);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  &__actions {
+    margin-top: var(--shop-spacing-sm);
+    display: flex;
+    gap: var(--shop-spacing-sm);
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }

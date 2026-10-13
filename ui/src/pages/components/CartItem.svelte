@@ -20,6 +20,7 @@
   let isSubscription = $derived(
     item.product?.productType === ProductResponseProductTypeEnum.Subscription
   );
+  let isInquiry = $derived(item.productVariant?.pricingType === 'INQUIRY');
   let specValueText = $derived(
     item.productVariant?.specValues
       ?.map((specValue) => specValue.name + ': ' + specValue.value)
@@ -31,11 +32,23 @@
     return price.times(quantity).toNumber();
   });
 
+  let deleting = $state(false);
+
   async function handleDelete(item: CartItemResponse) {
-    await ky.delete(`/shop/cart/items/${item.id}`, {
-      headers: { 'X-XSRF-TOKEN': csrfToken },
-    });
-    queryClient.invalidateQueries({ queryKey: ['shop:cart:items'] });
+    if (!window.confirm(get(i18n).t('cartItem.removeConfirm'))) {
+      return;
+    }
+    deleting = true;
+    try {
+      await ky.delete(`/shop/cart/items/${item.id}`, {
+        headers: { 'X-XSRF-TOKEN': csrfToken },
+      });
+      queryClient.invalidateQueries({ queryKey: ['shop:cart:items'] });
+    } catch {
+      toast.error(get(i18n).t('cartItem.removeFailed'));
+    } finally {
+      deleting = false;
+    }
   }
 
   const updateQuantityMutation = createMutation(
@@ -60,8 +73,8 @@
     () => queryClient
   );
 
-  const fetchingCount = useIsFetching({}, queryClient);
-  let isBusy = $derived(fetchingCount.current > 0 || updateQuantityMutation.isPending);
+  const fetchingCount = useIsFetching({ queryKey: ['shop:cart:items'] }, queryClient);
+  let isBusy = $derived(fetchingCount.current > 0 || updateQuantityMutation.isPending || deleting);
 
   let maxQuantity = $derived.by(() => {
     const limits: number[] = [];
@@ -94,13 +107,27 @@
   }
 </script>
 
-<div class="shop-cart-item">
+<div class="shop-cart-item" class:shop-cart-item--inquiry={isInquiry}>
   {#if imageUrl}
     <img
       src={getThumbnailUrl(imageUrl, 'M')}
       alt={item.product?.title}
       class="shop-cart-item__image"
     />
+  {:else}
+    <div class="shop-cart-item__image shop-cart-item__image--placeholder" aria-hidden="true">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+        <circle cx="9" cy="9" r="2"></circle>
+        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+      </svg>
+    </div>
   {/if}
   <div class="shop-cart-item__info">
     <a href={`/shop/product/${item.product?.id}`} class="shop-cart-item__name">
@@ -115,43 +142,54 @@
     {:else if specValueText}
       <p class="shop-cart-item__variant">{specValueText}</p>
     {/if}
-    <div>
-      <span class="shop-cart-item__price">
-        {formatPrice(item.productVariant?.price || 0)}
-      </span>
-      {#if item.productVariant?.originalPrice}
-        <s class="shop-cart-item__price-original">
-          {formatPrice(item.productVariant?.originalPrice || 0)}
-        </s>
-      {/if}
+    {#if isInquiry}
+      <span class="shop-cart-item__inquiry-badge">{$i18n.t('cartItem.inquiryBadge')}</span>
+    {:else}
+      <div>
+        <span class="shop-cart-item__price">
+          {formatPrice(item.productVariant?.price || 0)}
+        </span>
+        {#if item.productVariant?.originalPrice}
+          <s class="shop-cart-item__price-original">
+            {formatPrice(item.productVariant?.originalPrice || 0)}
+          </s>
+        {/if}
+      </div>
+    {/if}
+  </div>
+  {#if !isInquiry}
+    <div class="shop-quantity">
+      <button
+        class="shop-quantity__btn"
+        aria-label={$i18n.t('cartItem.decreaseQuantity')}
+        onclick={() => updateQuantityMutation.mutate((item.quantity ?? 1) - 1)}
+        disabled={isBusy || !canDecreaseQuantity}
+      >
+        {@html MingcuteMinimizeLine}
+      </button>
+      <input
+        type="number"
+        class="shop-quantity__input"
+        aria-label={$i18n.t('cartItem.quantity')}
+        value={item.quantity || 1}
+        min="1"
+        max={Number.isFinite(maxQuantity) ? maxQuantity : undefined}
+        onchange={handleQuantityInput}
+        disabled={isBusy}
+      />
+      <button
+        class="shop-quantity__btn"
+        aria-label={$i18n.t('cartItem.increaseQuantity')}
+        onclick={() => updateQuantityMutation.mutate((item.quantity ?? 1) + 1)}
+        disabled={isBusy || !canIncreaseQuantity}
+      >
+        {@html MingcuteAddLine}
+      </button>
     </div>
-  </div>
-  <div class="shop-quantity">
-    <button
-      class="shop-quantity__btn"
-      onclick={() => updateQuantityMutation.mutate((item.quantity ?? 1) - 1)}
-      disabled={isBusy || !canDecreaseQuantity}
-    >
-      {@html MingcuteMinimizeLine}
-    </button>
-    <input
-      type="number"
-      class="shop-quantity__input"
-      value={item.quantity || 1}
-      min="1"
-      max={Number.isFinite(maxQuantity) ? maxQuantity : undefined}
-      onchange={handleQuantityInput}
-      disabled={isBusy}
-    />
-    <button
-      class="shop-quantity__btn"
-      onclick={() => updateQuantityMutation.mutate((item.quantity ?? 1) + 1)}
-      disabled={isBusy || !canIncreaseQuantity}
-    >
-      {@html MingcuteAddLine}
-    </button>
-  </div>
-  <div class="shop-cart-item__total">{formatPrice(total || 0)}</div>
+    <div class="shop-cart-item__total">{formatPrice(total || 0)}</div>
+  {:else}
+    <div class="shop-cart-item__inquiry-note">{$i18n.t('cartItem.inquiryNote')}</div>
+  {/if}
   <button class="shop-cart-item__remove" onclick={() => handleDelete(item)} disabled={isBusy}>
     {$i18n.t('cartItem.remove')}
   </button>
