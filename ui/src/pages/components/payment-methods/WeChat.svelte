@@ -29,6 +29,15 @@
         </div>
       </div>
     </div>
+  {:else if responseType === 'REDIRECT_URL' && wechatPay.h5?.h5Url}
+    <div class="shop-redirect-container">
+      <a href={wechatPay.h5.h5Url} target="_self" class="shop-redirect-link">
+        {$i18n.t('paymentMethods.redirectToProvider', {
+          provider: $i18n.t('common.providers.wechat'),
+        })}
+      </a>
+      <p class="shop-redirect-tip">{$i18n.t('paymentMethods.wechatH5RedirectTip')}</p>
+    </div>
   {:else}
     <div>{$i18n.t('paymentMethods.wechatUnavailable')}</div>
   {/if}
