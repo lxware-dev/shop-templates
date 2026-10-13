@@ -1,1 +1,6 @@
-<shop-page-payments th:orderCode="${orderCode}" th:csrfToken="${_csrf.token}"> </shop-page-payments>
+<shop-page-payments
+  th:orderCode="${orderCode}"
+  th:csrfToken="${_csrf.token}"
+  th:authenticated="${authenticated}"
+>
+</shop-page-payments>

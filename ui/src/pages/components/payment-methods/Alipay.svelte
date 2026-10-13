@@ -7,6 +7,12 @@
 
   let responseType = $derived(paymentResponse.payload?.responseType);
   let alipay = $derived(paymentResponse.payload?.payload?.alipay);
+
+  // Match the backend mobile-web detection closely enough to keep the cashier in this window.
+  // A new tab drops the shopper off the page that Alipay later returns to.
+  const sameWindow =
+    typeof navigator !== 'undefined' &&
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 </script>
 
 {#if alipay}
@@ -52,7 +58,11 @@
     </div>
   {:else if responseType === 'REDIRECT_URL'}
     <div class="shop-redirect-container">
-      <a href={alipay.redirectUrl} target="_blank" class="shop-redirect-link">
+      <a
+        href={alipay.redirectUrl}
+        target={sameWindow ? '_self' : '_blank'}
+        class="shop-redirect-link"
+      >
         {$i18n.t('paymentMethods.redirectToProvider', {
           provider: $i18n.t('common.providers.alipay'),
         })}

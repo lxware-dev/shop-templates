@@ -180,14 +180,31 @@
     selectedSpecs = { ...selectedSpecs, [specName]: specValue };
   }
 
+  let maxQuantity = $derived.by(() => {
+    if (!selectedVariant) {
+      return 1;
+    }
+    const limits: number[] = [];
+    if (selectedVariant.trackInventory) {
+      limits.push(selectedVariant.stock || 0);
+    }
+    if (selectedVariant.maxPerOrder && selectedVariant.maxPerOrder > 0) {
+      limits.push(selectedVariant.maxPerOrder);
+    }
+    return limits.length > 0 ? Math.min(...limits) : Number.POSITIVE_INFINITY;
+  });
+
+  let maxPerOrderLimit = $derived(
+    selectedVariant?.maxPerOrder && selectedVariant.maxPerOrder > 0
+      ? selectedVariant.maxPerOrder
+      : undefined
+  );
+
   let canIncreaseQuantity = $derived.by(() => {
     if (!selectedVariant) {
       return false;
     }
-    if (!selectedVariant.trackInventory) {
-      return true;
-    }
-    return quantity < (selectedVariant.stock || 0);
+    return quantity < maxQuantity;
   });
 
   let canDecreaseQuantity = $derived.by(() => {
@@ -205,6 +222,22 @@
       quantity--;
     }
   }
+
+  function handleQuantityInput(event: Event) {
+    const next = Number((event.currentTarget as HTMLInputElement).value);
+    if (Number.isNaN(next)) {
+      return;
+    }
+    quantity = Math.min(Math.max(1, next), maxQuantity);
+  }
+
+  $effect(() => {
+    if (quantity > maxQuantity) {
+      quantity = Math.max(1, maxQuantity);
+    } else if (quantity < 1) {
+      quantity = 1;
+    }
+  });
 
   function handleContactSales() {
     if (contactSalesUrl) {
@@ -369,9 +402,10 @@
             <input
               type="number"
               class="shop-quantity__input"
-              bind:value={quantity}
+              value={quantity}
               min="1"
-              max={selectedVariant?.stock || 1}
+              max={Number.isFinite(maxQuantity) ? maxQuantity : undefined}
+              oninput={handleQuantityInput}
             />
             <button
               class="shop-quantity__btn"
@@ -381,6 +415,11 @@
               {@html MingcuteAddLine}
             </button>
           </div>
+          {#if maxPerOrderLimit}
+            <span class="buy-box__limit-hint">
+              {$i18n.t('buyBox.perOrderLimit', { count: maxPerOrderLimit })}
+            </span>
+          {/if}
         </div>
 
         <div class="buy-box__actions">

@@ -1,2 +1,6 @@
-<shop-page-checkout th:contextId="${context.id}" th:csrfToken="${_csrf.token}">
+<shop-page-checkout
+  th:contextId="${context.id}"
+  th:csrfToken="${_csrf.token}"
+  th:authenticated="${authenticated}"
+>
 </shop-page-checkout>
