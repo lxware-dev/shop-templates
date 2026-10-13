@@ -672,7 +672,10 @@
       >
         {submitting ? $i18n.t('subscription.addingToCart') : $i18n.t('buyBox.addToCart')}
       </button>
-      <form action={`/shop/checkout/prepare?redirect_uri=${currentUrl}`} method="post">
+      <form
+        action={`/shop/checkout/prepare?redirect_uri=${encodeURIComponent(currentUrl)}`}
+        method="post"
+      >
         <input type="hidden" name="_csrf" value={csrfToken} />
         <input type="hidden" name="source" value="BUY_NOW" />
         {#each cartLines as line, index}

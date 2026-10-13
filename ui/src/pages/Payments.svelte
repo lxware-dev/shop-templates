@@ -94,10 +94,10 @@
     orderQuery.data?.paymentStatus === OrderResponsePaymentStatusEnum.Pending
   );
 
-  // 游客订单访问令牌失效时后端返回 401/403，此时展示邮箱找回表单；其余错误视为加载失败
+  // 后端对无权访问的订单返回 404，统一提供邮箱找回入口，不区分订单是否存在。
   let orderAccessLocked = $derived.by(() => {
     const status = (orderQuery.error as { response?: Response } | null)?.response?.status;
-    return status === 401 || status === 403;
+    return status === 401 || status === 403 || status === 404;
   });
 
   const orderDiscountAmount = $derived(orderQuery.data?.discountAmount ?? 0);
@@ -238,14 +238,11 @@
   let pollingStartedAt = $state<number | null>(null);
   let pollTimedOut = $state(false);
 
+  const pollingSessionCode = $derived(paymentResponseQuery.data?.sessionCode);
+
   $effect(() => {
-    if (paymentResponseQuery.data?.sessionCode && pollingStartedAt === null) {
-      pollingStartedAt = Date.now();
-    }
-    if (!paymentResponseQuery.data?.sessionCode) {
-      pollingStartedAt = null;
-      pollTimedOut = false;
-    }
+    pollingStartedAt = pollingSessionCode ? Date.now() : null;
+    pollTimedOut = false;
   });
 
   const paymentStatusQuery = createQuery(

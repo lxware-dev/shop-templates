@@ -73,10 +73,6 @@
     display: flex;
     gap: var(--shop-spacing-xs);
     flex-wrap: wrap;
-
-    &:empty {
-      display: none;
-    }
   }
 
   &__badge {

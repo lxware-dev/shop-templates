@@ -319,6 +319,13 @@
           ></span>
           <span th:text="|-¥${#numbers.formatDecimal(order.discountAmount, 1, 2)}|"></span>
         </div>
+        <div
+          class="shop-order-summary__row shop-order-summary__row--discount"
+          th:if="${order.couponDiscountAmount != null && order.couponDiscountAmount > 0}"
+        >
+          <span>优惠券抵扣</span>
+          <span th:text="|-¥${#numbers.formatDecimal(order.couponDiscountAmount, 1, 2)}|"></span>
+        </div>
         <div class="shop-divider"></div>
         <div class="shop-order-summary__row shop-order-summary__row--total">
           <span>应付总额</span>

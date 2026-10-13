@@ -164,10 +164,11 @@
 
 @media (max-width: $shop-bp-md) {
   .shop-cart-item {
-    grid-template-columns: 72px 1fr auto;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
     grid-template-areas:
-      'image info remove'
-      'image quantity total';
+      'image info info'
+      'quantity quantity total'
+      '. . remove';
     align-items: start;
 
     &__image {

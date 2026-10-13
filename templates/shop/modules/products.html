@@ -141,11 +141,11 @@
       </div>
       <div class="shop-product-card__info">
         <h3 class="shop-product-card__name" th:text="${product.title}"></h3>
-        <div class="shop-product-card__badges">
-          <span
-            th:if="${product.productType != null && product.productType.toString() == 'SUBSCRIPTION'}"
-            class="shop-product-card__badge"
-          >
+        <div
+          class="shop-product-card__badges"
+          th:if="${product.productType != null && product.productType.toString() == 'SUBSCRIPTION'}"
+        >
+          <span class="shop-product-card__badge">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -162,9 +162,6 @@
               <path d="M8 16H3v5"></path>
             </svg>
             <span>订阅</span>
-          </span>
-          <span th:if="${product.minPrice == null}" class="shop-product-card__badge">
-            <span>询价</span>
           </span>
         </div>
         <p

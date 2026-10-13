@@ -192,8 +192,9 @@
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
     text-decoration: none;
 
-    &:hover {
+    &[href] {
       text-decoration: underline;
+      text-underline-offset: 2px;
     }
   }
 
@@ -275,17 +276,6 @@
     margin: var(--shop-spacing-xs) 0 0 0;
     font-size: var(--shop-font-size-sm);
     color: var(--shop-gray-600);
-  }
-}
-
-.shop-order-summary-card {
-  .shop-order-summary__row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--shop-spacing-sm);
-    font-size: var(--shop-font-size-base);
-    color: var(--shop-gray-700);
   }
 }
 

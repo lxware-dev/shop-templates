@@ -366,7 +366,7 @@
     <div class="shop-empty">
       <span>{$i18n.t('common.loading')}</span>
     </div>
-  {:else if contextQuery.isError}
+  {:else if contextQuery.isLoadingError}
     <div class="shop-empty">
       <p class="shop-empty__title">{$i18n.t('checkout.contextLoadFailed')}</p>
       <div class="shop-empty__actions">
