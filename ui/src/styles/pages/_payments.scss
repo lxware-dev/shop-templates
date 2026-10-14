@@ -1,3 +1,5 @@
+@use '../breakpoints' as *;
+
 .shop-payments {
   display: grid;
   grid-template-columns: 1fr 420px;
@@ -15,7 +17,7 @@
     flex-direction: column;
     gap: var(--shop-spacing-lg);
     position: sticky;
-    top: 100px;
+    top: var(--shop-sticky-offset);
   }
 
   &__actions {
@@ -52,7 +54,7 @@
 
   &--active {
     border-color: var(--shop-color-primary);
-    background-color: var(--shop-color-primary-light, rgba(59, 130, 246, 0.05));
+    background-color: var(--shop-color-primary-light);
 
     .shop-payment-method__check {
       opacity: 1;
@@ -158,24 +160,24 @@
 
   &__row {
     &--rejected {
-      color: var(--shop-gray-400, #9ca3af);
-      font-size: var(--shop-font-size-sm, 0.875rem);
+      color: var(--shop-gray-400);
+      font-size: var(--shop-font-size-sm);
 
       span:last-child {
-        font-size: var(--shop-font-size-xs, 0.75rem);
+        font-size: var(--shop-font-size-xs);
       }
     }
   }
 
   &__rejected {
-    color: var(--shop-color-error, #7a5050);
+    color: var(--shop-color-error);
     font-weight: 500;
   }
 
   &__rejected-reason {
     margin: calc(-1 * var(--shop-spacing-xs)) 0 var(--shop-spacing-sm);
-    color: var(--shop-color-error, #7a5050);
-    font-size: var(--shop-font-size-xs, 0.75rem);
+    color: var(--shop-color-error);
+    font-size: var(--shop-font-size-xs);
     line-height: 1.4;
   }
 }
@@ -236,7 +238,7 @@
   gap: var(--shop-spacing-sm);
   margin-top: var(--shop-spacing-md);
   padding: var(--shop-spacing-sm) var(--shop-spacing-md);
-  background-color: var(--shop-color-primary-light, rgba(59, 130, 246, 0.1));
+  background-color: var(--shop-color-primary-light);
   border-radius: var(--shop-border-radius);
   font-size: var(--shop-font-size-sm);
   color: var(--shop-color-primary);
@@ -245,7 +247,7 @@
 .shop-loading-spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid var(--shop-color-primary-light, rgba(59, 130, 246, 0.3));
+  border: 2px solid var(--shop-gray-200);
   border-top-color: var(--shop-color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -292,7 +294,7 @@
   color: var(--shop-color-error);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: $shop-bp-lg) {
   .shop-payments {
     grid-template-columns: 1fr;
 
@@ -302,7 +304,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $shop-bp-md) {
   .shop-payment-methods {
     grid-template-columns: 1fr;
   }

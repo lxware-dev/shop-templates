@@ -32,6 +32,8 @@
 3. `shop/cart.html`：购物车页面
 4. `shop/checkout.html`：结算页面
 5. `shop/payments.html`：支付页面
+6. `shop/order.html`：订单详情页面（游客可通过邮箱重新获取访问链接）
+7. `shop/payments/alipay-redirect.html`：支付宝跳转中间页，由支付插件渲染
 
 示例仓库：[lxware-dev/theme-shop-starter](https://github.com/lxware-dev/theme-shop-starter)
 

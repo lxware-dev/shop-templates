@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@tsdown/css": "^0.22.2",
+    "@types/node": "^26.6.5",
     "prettier": "^3.8.1",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-svelte": "^3.5.1",

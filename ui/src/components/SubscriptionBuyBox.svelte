@@ -43,6 +43,9 @@
     singleSubscription?: boolean;
   } = $props();
 
+  // 自定义元素仅在浏览器端渲染，window 必然存在
+  const currentUrl = window.location.href;
+
   // The backend orders subscriptions live-first, so the head is the one the user center would manage.
   const currentSubscription = $derived(subscriptions[0] ?? null);
   const liveSubscriptions = $derived(
@@ -669,7 +672,10 @@
       >
         {submitting ? $i18n.t('subscription.addingToCart') : $i18n.t('buyBox.addToCart')}
       </button>
-      <form action={`/shop/checkout/prepare?redirect_uri=${window.location.href}`} method="post">
+      <form
+        action={`/shop/checkout/prepare?redirect_uri=${encodeURIComponent(currentUrl)}`}
+        method="post"
+      >
         <input type="hidden" name="_csrf" value={csrfToken} />
         <input type="hidden" name="source" value="BUY_NOW" />
         {#each cartLines as line, index}

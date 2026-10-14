@@ -30,6 +30,9 @@
 
   let { id, csrfToken }: { id: number; csrfToken: string } = $props();
 
+  // 自定义元素仅在浏览器端渲染，window 必然存在
+  const currentUrl = window.location.href;
+
   const queryClient = new QueryClient();
 
   const productQuery = createQuery(
@@ -457,7 +460,7 @@
         </div>
 
         <div class="buy-box__actions">
-          <form action={`/shop/cart?redirect_uri=${window.location.href}`} method="post">
+          <form action={`/shop/cart?redirect_uri=${encodeURIComponent(currentUrl)}`} method="post">
             <input type="hidden" name="_csrf" value={csrfToken} />
             <input type="hidden" name="productVariantId" value={selectedVariant?.id} />
             <input type="hidden" name="quantity" value={quantity} />
@@ -470,7 +473,7 @@
             </button>
           </form>
           <form
-            action={`/shop/checkout/prepare?redirect_uri=${window.location.href}`}
+            action={`/shop/checkout/prepare?redirect_uri=${encodeURIComponent(currentUrl)}`}
             method="post"
           >
             <input type="hidden" name="_csrf" value={csrfToken} />

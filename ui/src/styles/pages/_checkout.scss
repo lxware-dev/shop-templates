@@ -1,3 +1,5 @@
+@use '../breakpoints' as *;
+
 .shop-checkout {
   display: grid;
   grid-template-columns: 1fr 400px;
@@ -15,7 +17,7 @@
     flex-direction: column;
     gap: var(--shop-spacing-lg);
     position: sticky;
-    top: 100px;
+    top: var(--shop-sticky-offset);
   }
 
   &__form-row {
@@ -105,10 +107,10 @@
     }
 
     &--discount {
-      color: var(--shop-color-success, #0f766e);
+      color: var(--shop-color-success);
 
       span:last-child {
-        color: var(--shop-color-success, #0f766e);
+        color: var(--shop-color-success);
       }
     }
   }
@@ -121,21 +123,21 @@
     gap: 0.5rem;
     align-items: center;
 
-    @media (max-width: 640px) {
+    @media (max-width: $shop-bp-sm) {
       grid-template-columns: 1fr;
     }
   }
 
   &__tip {
     margin-top: 0.5rem;
-    color: var(--shop-gray-500, #6b7280);
-    font-size: var(--shop-font-size-sm, 0.875rem);
+    color: var(--shop-gray-500);
+    font-size: var(--shop-font-size-sm);
   }
 
   &__state {
     margin: 0;
-    color: var(--shop-gray-500, #6b7280);
-    font-size: var(--shop-font-size-sm, 0.875rem);
+    color: var(--shop-gray-500);
+    font-size: var(--shop-font-size-sm);
   }
 
   &__actions {
@@ -146,8 +148,8 @@
 
   &__error {
     margin: var(--shop-spacing-sm) 0 0;
-    color: var(--shop-color-error, #7a5050);
-    font-size: var(--shop-font-size-sm, 0.875rem);
+    color: var(--shop-color-error);
+    font-size: var(--shop-font-size-sm);
     line-height: 1.4;
   }
 }
@@ -157,6 +159,15 @@
   flex-direction: column;
   gap: var(--shop-spacing-sm);
   margin-bottom: var(--shop-spacing-sm);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.shop-tip {
+  margin: var(--shop-spacing-sm) 0 0;
+  color: var(--shop-gray-500);
+  font-size: var(--shop-font-size-sm);
+  line-height: 1.5;
 }
 
 .shop-coupon-item {
@@ -170,13 +181,13 @@
   transition: border-color 0.2s;
 
   &--selected {
-    border-color: var(--shop-color-primary, #2563eb);
-    background-color: var(--shop-color-primary-light, rgba(37, 99, 235, 0.05));
+    border-color: var(--shop-color-primary);
+    background-color: var(--shop-color-primary-light);
   }
 
   &__checkbox {
     margin-top: 2px;
-    accent-color: var(--shop-color-primary, #2563eb);
+    accent-color: var(--shop-color-primary);
     cursor: pointer;
   }
 
@@ -199,22 +210,22 @@
   }
 
   &__expires {
-    font-size: var(--shop-font-size-xs, 0.75rem);
+    font-size: var(--shop-font-size-xs);
     color: var(--shop-gray-400);
     margin-top: 2px;
   }
 
   &__notice {
     display: block;
-    font-size: var(--shop-font-size-xs, 0.75rem);
-    color: var(--shop-color-warning, #b45309);
+    font-size: var(--shop-font-size-xs);
+    color: var(--shop-color-warning);
     margin-top: var(--shop-spacing-xs);
     line-height: 1.4;
   }
 
   &__tag {
     display: inline-block;
-    font-size: var(--shop-font-size-xs, 0.75rem);
+    font-size: var(--shop-font-size-xs);
     font-weight: 500;
     padding: 1px 6px;
     border-radius: 3px;
@@ -222,8 +233,8 @@
     vertical-align: middle;
 
     &--warn {
-      background-color: var(--shop-color-warning-light, rgba(234, 179, 8, 0.15));
-      color: var(--shop-color-warning, #b45309);
+      background-color: var(--shop-color-warning-light);
+      color: var(--shop-color-warning);
     }
   }
 
@@ -231,12 +242,12 @@
     opacity: 0.85;
 
     .shop-coupon-item__name {
-      color: var(--shop-gray-600, #4b5563);
+      color: var(--shop-gray-600);
     }
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: $shop-bp-lg) {
   .shop-checkout {
     grid-template-columns: 1fr;
 
@@ -248,20 +259,20 @@
 
 .shop-coupon-item {
   &--rejected {
-    border-color: var(--shop-color-danger, #dc2626);
-    background-color: var(--shop-color-danger-light, rgba(220, 38, 38, 0.04));
+    border-color: var(--shop-color-danger);
+    background-color: var(--shop-color-danger-light);
   }
 
   &__error {
     display: block;
-    font-size: var(--shop-font-size-xs, 0.75rem);
-    color: var(--shop-color-danger, #dc2626);
+    font-size: var(--shop-font-size-xs);
+    color: var(--shop-color-danger);
     margin-top: var(--shop-spacing-xs);
     line-height: 1.4;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $shop-bp-md) {
   .shop-checkout {
     &__form-row {
       grid-template-columns: 1fr;

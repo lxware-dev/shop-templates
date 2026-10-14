@@ -12,7 +12,8 @@
       "alipay": "Alipay",
       "wechat": "WeChat",
       "stripe": "Stripe"
-    }
+    },
+    "retry": "Retry"
   },
   "buyBox": {
     "loadFailed": "Failed to load: {{message}}",
@@ -82,19 +83,29 @@
   "cart": {
     "title": "Cart",
     "subtitle": "{{count}} items",
-    "loadError": "Load failed: {{message}}",
-    "empty": "Your cart is empty",
     "summaryTitle": "Order summary",
     "itemsTotal": "Items total",
     "shipping": "Shipping",
     "pendingCalculation": "To be calculated",
     "total": "Total",
     "proceedToCheckout": "Proceed to checkout",
-    "continueShopping": "Continue shopping"
+    "continueShopping": "Continue shopping",
+    "loadFailed": "Failed to load the cart. Please try again.",
+    "emptyTitle": "Your cart is empty",
+    "emptyDesc": "Browse and find something you like.",
+    "emptyAction": "Browse products",
+    "inquiryExcluded": "{{count}} inquiry item(s) must be ordered via sales and have been excluded from checkout"
   },
   "cartItem": {
     "updateQuantityFailed": "Failed to update quantity. Please try again.",
-    "remove": "Remove"
+    "remove": "Remove",
+    "removeConfirm": "Remove this item from your cart?",
+    "removeFailed": "Failed to remove the item. Please try again.",
+    "inquiryBadge": "Inquiry",
+    "inquiryNote": "Contact sales to order",
+    "quantity": "Quantity",
+    "increaseQuantity": "Increase quantity",
+    "decreaseQuantity": "Decrease quantity"
   },
   "checkout": {
     "title": "Checkout",
@@ -142,7 +153,9 @@
     "email": "Email",
     "emailHelp": "Order confirmation and the access link are sent to this email.",
     "guestLoginPrompt": "If this email already belongs to an account, log in before checking out.",
-    "subscriptionRequiresLogin": "Subscription products require you to log in."
+    "subscriptionRequiresLogin": "Subscription products require you to log in.",
+    "contextLoadFailed": "Failed to load checkout. Please try again.",
+    "submitting": "Submitting…"
   },
   "addressForm": {
     "lastName": "Last name *",
@@ -183,7 +196,9 @@
     "accessEmailHelp": "Enter the email used at checkout. We will send an order access link to it.",
     "sendAccessLink": "Send access link",
     "accessLinkSent": "If the email matches, an access link has been sent.",
-    "accessLinkFailed": "Could not send the link. Please try again."
+    "accessLinkFailed": "Could not send the link. Please try again.",
+    "pollTimeout": "No payment detected for a while; auto-refresh has stopped.",
+    "pollResume": "Check again"
   },
   "paymentMethods": {
     "scanToPay": "Please use {{provider}} to scan the QR code and complete the payment",

@@ -25,20 +25,9 @@
     type PaymentInitiateResponse,
     type PaymentMethodPublicResponse,
     type PaymentSessionUcResponseStatusEnum,
+    type CouponDetail,
+    type CouponRejection,
   } from '@halo-dev/api-client';
-
-  interface AppliedCoupon {
-    customerCouponId?: number;
-    couponName?: string;
-    discountAmount?: number;
-  }
-
-  interface RejectedCoupon {
-    customerCouponId?: number;
-    couponName?: string;
-    reasonCode?: string;
-    reasonMessage?: string;
-  }
 
   import PaymentOrderItem from './components/PaymentOrderItem.svelte';
   import { toast, Toaster } from 'svelte-sonner';
@@ -105,7 +94,13 @@
     orderQuery.data?.paymentStatus === OrderResponsePaymentStatusEnum.Pending
   );
 
-  const orderDiscountAmount = $derived((orderQuery.data as any)?.discountAmount ?? 0);
+  // 后端对无权访问的订单返回 404，统一提供邮箱找回入口，不区分订单是否存在。
+  let orderAccessLocked = $derived.by(() => {
+    const status = (orderQuery.error as { response?: Response } | null)?.response?.status;
+    return status === 401 || status === 403 || status === 404;
+  });
+
+  const orderDiscountAmount = $derived(orderQuery.data?.discountAmount ?? 0);
 
   const hasOrderDiscount = $derived(orderDiscountAmount > 0);
 
@@ -120,24 +115,24 @@
   );
 
   const orderDiscountLabel = $derived.by(() => {
-    const order = orderQuery.data as any;
+    const order = orderQuery.data;
     if (!order?.discountName) return get(i18n).t('payments.discount');
     return order.discountCode
       ? `${order.discountName} (${order.discountCode})`
       : order.discountName;
   });
 
-  const appliedCoupons = $derived(
-    ((orderQuery.data as any)?.appliedCoupons ?? []) as AppliedCoupon[]
-  );
+  const appliedCoupons = $derived(orderQuery.data?.appliedCoupons ?? []);
 
+  // rejectedCoupons 不在 OrderResponse 契约中，后端可能随计算结果返回
   const rejectedCoupons = $derived(
-    ((orderQuery.data as any)?.rejectedCoupons ?? []) as RejectedCoupon[]
+    ((orderQuery.data as OrderResponse & { rejectedCoupons?: CouponRejection[] })
+      ?.rejectedCoupons ?? []) as CouponRejection[]
   );
 
   const hasRejectedCoupons = $derived(rejectedCoupons.length > 0);
 
-  function couponLabel(c: AppliedCoupon) {
+  function couponLabel(c: CouponDetail) {
     return c.couponName ?? get(i18n).t('checkout.coupons');
   }
 
@@ -160,7 +155,7 @@
     return new Error(get(i18n).t('payments.loadPaymentResponseFailed'));
   }
 
-  function rejectedCouponReason(coupon: RejectedCoupon) {
+  function rejectedCouponReason(coupon: CouponRejection) {
     return (
       coupon.reasonMessage || coupon.reasonCode || get(i18n).t('checkout.couponRejectedFallback')
     );
@@ -233,9 +228,22 @@
         }
       },
       enabled: !!selectedPaymentMethodId,
+      staleTime: 60_000,
     }),
     () => queryClient
   );
+
+  // 轮询超时兜底：5 分钟后停止轮询并提示用户手动刷新
+  const POLL_TIMEOUT_MS = 5 * 60 * 1000;
+  let pollingStartedAt = $state<number | null>(null);
+  let pollTimedOut = $state(false);
+
+  const pollingSessionCode = $derived(paymentResponseQuery.data?.sessionCode);
+
+  $effect(() => {
+    pollingStartedAt = pollingSessionCode ? Date.now() : null;
+    pollTimedOut = false;
+  });
 
   const paymentStatusQuery = createQuery(
     () => ({
@@ -252,8 +260,14 @@
           )
           .json();
       },
-      enabled: !!paymentResponseQuery.data?.sessionCode,
-      refetchInterval: 2000,
+      enabled: !!paymentResponseQuery.data?.sessionCode && !pollTimedOut,
+      refetchInterval: () => {
+        if (pollingStartedAt !== null && Date.now() - pollingStartedAt > POLL_TIMEOUT_MS) {
+          pollTimedOut = true;
+          return false;
+        }
+        return 2000;
+      },
     }),
     () => queryClient
   );
@@ -295,39 +309,50 @@
   {#if orderQuery.isLoading}
     <div>{$i18n.t('common.loading')}</div>
   {:else if orderQuery.isError}
-    <div class="shop-card">
-      <h2 class="shop-card__title">{$i18n.t('payments.accessEmail')}</h2>
-      <p class="shop-checkout-discount-card__tip">{$i18n.t('payments.accessEmailHelp')}</p>
-      <form
-        class="shop-address-form"
-        onsubmit={(event) => {
-          event.preventDefault();
-          sendAccessLink();
-        }}
-      >
-        <div class="shop-form-group">
-          <label class="shop-label" for="access-email">{$i18n.t('payments.accessEmail')}</label>
-          <input
-            class="shop-input"
-            id="access-email"
-            type="email"
-            required
-            autocomplete="email"
-            bind:value={accessEmail}
-          />
-        </div>
-        <button
-          type="submit"
-          class="shop-btn shop-btn-primary"
-          disabled={accessLinkPending || !accessEmail}
+    {#if orderAccessLocked}
+      <div class="shop-card shop-order-locked">
+        <h2 class="shop-card__title">{$i18n.t('payments.accessEmail')}</h2>
+        <p class="shop-tip">{$i18n.t('payments.accessEmailHelp')}</p>
+        <form
+          class="shop-address-form"
+          onsubmit={(event) => {
+            event.preventDefault();
+            sendAccessLink();
+          }}
         >
-          {$i18n.t('payments.sendAccessLink')}
-        </button>
-      </form>
-      {#if accessLinkSent}
-        <p class="shop-checkout-discount-card__tip">{$i18n.t('payments.accessLinkSent')}</p>
-      {/if}
-    </div>
+          <div class="shop-form-group">
+            <label class="shop-label" for="access-email">{$i18n.t('payments.accessEmail')}</label>
+            <input
+              class="shop-input"
+              id="access-email"
+              type="email"
+              required
+              autocomplete="email"
+              bind:value={accessEmail}
+            />
+          </div>
+          <button
+            type="submit"
+            class="shop-btn shop-btn-primary"
+            disabled={accessLinkPending || !accessEmail}
+          >
+            {$i18n.t('payments.sendAccessLink')}
+          </button>
+        </form>
+        {#if accessLinkSent}
+          <p class="shop-tip">{$i18n.t('payments.accessLinkSent')}</p>
+        {/if}
+      </div>
+    {:else}
+      <div class="shop-empty">
+        <p class="shop-empty__title">{$i18n.t('payments.loadOrderFailed')}</p>
+        <div class="shop-empty__actions">
+          <button class="shop-btn shop-btn-secondary" onclick={() => orderQuery.refetch()}>
+            {$i18n.t('common.retry')}
+          </button>
+        </div>
+      </div>
+    {/if}
   {:else if !isPendingPayment}
     <div>
       {$i18n.t('payments.orderNotPayablePrefix')}
@@ -347,7 +372,7 @@
             {:else if paymentMethodsQuery.data?.length === 0}
               <div>{$i18n.t('payments.noPaymentMethods')}</div>
             {:else}
-              {#each paymentMethodsQuery.data ?? [] as paymentMethod}
+              {#each paymentMethodsQuery.data ?? [] as paymentMethod (paymentMethod.id)}
                 <label
                   class="shop-payment-method"
                   class:shop-payment-method--active={selectedPaymentMethodId === paymentMethod.id}
@@ -450,6 +475,21 @@
               <PaymentMethodComponent paymentResponse={paymentResponseQuery.data} />
             {:else}
               <div>{$i18n.t('payments.unsupportedPaymentMethod')}</div>
+            {/if}
+            {#if pollTimedOut}
+              <p class="shop-tip">
+                {$i18n.t('payments.pollTimeout')}
+                <button
+                  type="button"
+                  class="shop-btn shop-btn-secondary shop-btn-sm"
+                  onclick={() => {
+                    pollingStartedAt = Date.now();
+                    pollTimedOut = false;
+                  }}
+                >
+                  {$i18n.t('payments.pollResume')}
+                </button>
+              </p>
             {/if}
           {/if}
         </div>

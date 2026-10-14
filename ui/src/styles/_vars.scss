@@ -8,6 +8,7 @@
   /* 主要色 - 黑色 */
   --shop-color-primary: hsl(0, 0%, 9%); /* 黑色 */
   --shop-color-primary-content: hsl(0, 0%, 100%); /* 白色文字 */
+  --shop-color-primary-light: hsl(0, 0%, 96%); /* 主色浅底（选中态背景） */
 
   /* 次要色 - 中性灰 */
   --shop-color-secondary: hsl(0, 0%, 96%); /* 浅灰 */
@@ -28,14 +29,20 @@
   /* 成功色 - 深绿灰 */
   --shop-color-success: hsl(142, 10%, 30%); /* 深绿灰 */
   --shop-color-success-content: hsl(0, 0%, 100%); /* 白色文字 */
+  --shop-color-success-light: hsla(142, 30%, 35%, 0.1); /* 成功浅底 */
 
   /* 警告色 - 暗橙灰 */
   --shop-color-warning: hsl(38, 15%, 35%); /* 暗橙灰 */
   --shop-color-warning-content: hsl(0, 0%, 100%); /* 白色文字 */
+  --shop-color-warning-light: hsla(38, 45%, 45%, 0.12); /* 警告浅底 */
 
   /* 错误色 - 深红灰 */
   --shop-color-error: hsl(0, 10%, 35%); /* 深红灰 */
   --shop-color-error-content: hsl(0, 0%, 100%); /* 白色文字 */
+
+  /* 危险色 - 用于破坏性操作与校验错误（比 error 更可辨识） */
+  --shop-color-danger: hsl(0, 55%, 45%);
+  --shop-color-danger-light: hsla(0, 55%, 45%, 0.06);
 
   /* 中性色阶 - 基于黑白灰 */
   --shop-gray-50: hsl(0, 0%, 98%);
@@ -78,4 +85,8 @@
 
   /* 过渡 */
   --shop-transition: all 0.2s ease;
+
+  /* 布局 */
+  --shop-container-max: 80rem; /* 内容容器最大宽度 */
+  --shop-sticky-offset: 100px; /* 侧边栏 sticky 顶端偏移（配合主题固定头部） */
 }

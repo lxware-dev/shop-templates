@@ -1,3 +1,5 @@
+@use '../breakpoints' as *;
+
 // 订阅产品页（服务端渲染部分）与订阅买盒组件 shop-subscription-buy-box
 .shop-subscription {
   gap: var(--shop-spacing-md, 16px);
@@ -381,7 +383,7 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: $shop-bp-xs) {
     .shop-subscription__axes {
       grid-template-columns: minmax(0, 1fr);
       gap: var(--shop-spacing-xs, 4px);

@@ -1,3 +1,5 @@
+@use '../breakpoints' as *;
+
 .shop-cart {
   display: grid;
   grid-template-columns: 1fr 400px;
@@ -27,6 +29,18 @@
     border-radius: var(--shop-border-radius);
     background-color: var(--shop-gray-100);
     object-fit: cover;
+
+    &--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--shop-gray-300);
+
+      svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
   }
 
   &__info {
@@ -76,11 +90,40 @@
       border-color: var(--shop-color-error);
     }
   }
+
+  &__inquiry-badge {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 2px 8px;
+    font-size: var(--shop-font-size-xs);
+    font-weight: 500;
+    border-radius: 999px;
+    background: var(--shop-color-warning-light);
+    color: var(--shop-color-warning);
+  }
+
+  &__inquiry-note {
+    font-size: var(--shop-font-size-sm);
+    color: var(--shop-gray-500);
+  }
+}
+
+.shop-cart-summary {
+  &__hint {
+    margin: 0 0 var(--shop-spacing-md) 0;
+    padding: var(--shop-spacing-sm) var(--shop-spacing-md);
+    font-size: var(--shop-font-size-sm);
+    color: var(--shop-color-warning);
+    background: var(--shop-color-warning-light);
+    border-radius: var(--shop-border-radius);
+    line-height: 1.5;
+  }
 }
 
 .shop-cart-summary {
   position: sticky;
-  top: 100px;
+  top: var(--shop-sticky-offset);
 
   &__row {
     display: flex;
@@ -109,7 +152,7 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: $shop-bp-lg) {
   .shop-cart {
     grid-template-columns: 1fr;
   }
@@ -119,13 +162,43 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $shop-bp-md) {
   .shop-cart-item {
-    display: flex;
-    flex-wrap: wrap;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    grid-template-areas:
+      'image info info'
+      'quantity quantity total'
+      '. . remove';
+    align-items: start;
+
+    &__image {
+      grid-area: image;
+      width: 72px;
+      height: 72px;
+    }
+
+    &__info {
+      grid-area: info;
+    }
+
+    .shop-quantity {
+      grid-area: quantity;
+      justify-self: start;
+    }
+
+    &__total {
+      grid-area: total;
+      align-self: center;
+    }
+
+    &__inquiry-note {
+      grid-area: quantity;
+      align-self: center;
+    }
 
     &__remove {
-      width: 100%;
+      grid-area: remove;
+      justify-self: end;
     }
   }
 }

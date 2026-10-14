@@ -1,3 +1,5 @@
+@use '../breakpoints' as *;
+
 .shop-product-card {
   display: flex;
   flex-direction: column;
@@ -33,6 +35,20 @@
     }
   }
 
+  &__image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--shop-gray-300);
+
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
   &__info {
     display: flex;
     flex-direction: column;
@@ -53,19 +69,25 @@
     overflow: hidden;
   }
 
+  &__badges {
+    display: flex;
+    gap: var(--shop-spacing-xs);
+    flex-wrap: wrap;
+  }
+
   &__badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     align-self: flex-start;
     padding: 4px 10px;
-    font-size: var(--shop-font-size-xs, 12px);
+    font-size: var(--shop-font-size-xs);
     font-weight: 500;
     line-height: 1.2;
     border-radius: 999px;
-    background: var(--shop-color-base-200, #fafafa);
-    color: var(--shop-gray-600, #525252);
-    border: 1px solid var(--shop-gray-200, #e6e6e6);
+    background: var(--shop-color-base-200);
+    color: var(--shop-gray-600);
+    border: 1px solid var(--shop-gray-200);
 
     svg {
       width: 12px;
@@ -117,7 +139,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $shop-bp-md) {
   .shop-product-card {
     &__image {
       height: 180px;

@@ -1,0 +1,6 @@
+// 响应式断点（编译期变量，媒体查询无法使用 CSS 自定义属性）
+// 仅包含 SCSS 变量，不产生 CSS 输出，可安全 @use
+$shop-bp-lg: 1024px;
+$shop-bp-md: 768px;
+$shop-bp-sm: 640px;
+$shop-bp-xs: 480px;

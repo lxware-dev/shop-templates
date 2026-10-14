@@ -12,7 +12,8 @@
       "alipay": "Alipay",
       "wechat": "WeChat",
       "stripe": "Stripe"
-    }
+    },
+    "retry": "Reintentar"
   },
   "buyBox": {
     "loadFailed": "Error al cargar: {{message}}",
@@ -82,19 +83,29 @@
   "cart": {
     "title": "Carrito",
     "subtitle": "{{count}} artículos",
-    "loadError": "Error al cargar: {{message}}",
-    "empty": "Tu carrito está vacío",
     "summaryTitle": "Resumen del pedido",
     "itemsTotal": "Total de artículos",
     "shipping": "Envío",
     "pendingCalculation": "Por calcular",
     "total": "Total",
     "proceedToCheckout": "Proceder al pago",
-    "continueShopping": "Continuar comprando"
+    "continueShopping": "Continuar comprando",
+    "loadFailed": "No se pudo cargar el carrito. Inténtalo de nuevo.",
+    "emptyTitle": "Tu carrito está vacío",
+    "emptyDesc": "Explora y encuentra algo que te guste.",
+    "emptyAction": "Ver productos",
+    "inquiryExcluded": "{{count}} artículo(s) de consulta deben pedirse por ventas y se excluyeron del pago"
   },
   "cartItem": {
     "updateQuantityFailed": "Error al actualizar la cantidad. Inténtelo de nuevo.",
-    "remove": "Eliminar"
+    "remove": "Eliminar",
+    "removeConfirm": "¿Eliminar este artículo del carrito?",
+    "removeFailed": "No se pudo eliminar el artículo. Inténtalo de nuevo.",
+    "inquiryBadge": "Consulta",
+    "inquiryNote": "Contacta a ventas para ordenar",
+    "quantity": "Cantidad",
+    "increaseQuantity": "Aumentar cantidad",
+    "decreaseQuantity": "Disminuir cantidad"
   },
   "checkout": {
     "title": "Finalizar compra",
@@ -142,7 +153,9 @@
     "email": "Correo",
     "emailHelp": "La confirmación del pedido y el enlace de acceso se envían a este correo.",
     "guestLoginPrompt": "Si este correo ya pertenece a una cuenta, inicie sesión antes de pagar.",
-    "subscriptionRequiresLogin": "Los productos de suscripción requieren iniciar sesión."
+    "subscriptionRequiresLogin": "Los productos de suscripción requieren iniciar sesión.",
+    "contextLoadFailed": "No se pudo cargar el pago. Inténtalo de nuevo.",
+    "submitting": "Enviando…"
   },
   "addressForm": {
     "lastName": "Apellido *",
@@ -183,7 +196,9 @@
     "accessEmailHelp": "Introduzca el correo usado al pagar. Le enviaremos un enlace de acceso al pedido.",
     "sendAccessLink": "Enviar enlace de acceso",
     "accessLinkSent": "Si el correo coincide, se ha enviado un enlace de acceso.",
-    "accessLinkFailed": "No se pudo enviar el enlace. Inténtelo de nuevo."
+    "accessLinkFailed": "No se pudo enviar el enlace. Inténtelo de nuevo.",
+    "pollTimeout": "No se detectó el pago; se detuvo la actualización automática.",
+    "pollResume": "Verificar de nuevo"
   },
   "paymentMethods": {
     "scanToPay": "Utilice {{provider}} para escanear el código QR y completar el pago",
