@@ -40,7 +40,7 @@
             <p
               class="shop-order-header__date"
               th:if="${order.createdAt != null}"
-              th:text="|下单时间：${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm', timeZone)}|"
+              th:text="|下单时间：${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}|"
             ></p>
           </div>
           <div class="shop-order-header__badges">
