@@ -109,7 +109,7 @@
   <div class="shop-product-list" th:if="${!productPage.items.isEmpty()}">
     <a
       th:each="product : ${productPage.items}"
-      th:href="@{/shop/product/{id}(id=${product.id})}"
+      th:href="@{${product.permalink}}"
       class="shop-product-card"
     >
       <div class="shop-product-card__image">
