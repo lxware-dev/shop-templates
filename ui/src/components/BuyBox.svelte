@@ -94,10 +94,17 @@
     () => queryClient
   );
 
+  // `defaultValue` was added to the UC product response later than this
+  // component. Keep it optional so a bundle built from this source still
+  // works against an older Halo backend (where it is simply absent).
+  type SpecDefinitionWithDefault = SpecDefinitionPayload & {
+    defaultValue?: string;
+  };
+
   let variants = $derived(productQuery.data?.productVariants || []);
   let specDefinitions = $derived(
-    (productQuery.data?.specDefinition || []).filter(
-      (spec: SpecDefinitionPayload) => spec.usedForSku
+    ((productQuery.data?.specDefinition || []) as SpecDefinitionWithDefault[]).filter(
+      (spec) => spec.usedForSku
     )
   );
 
@@ -108,24 +115,73 @@
   let hasExternalLink = $derived(!!externalLinkUrl && externalLinkUrl.length > 0);
   let externalLinkButtonText = $derived(productQuery.data?.externalLinkButtonText);
 
-  const getInitialSelectedSpecs = (): Record<string, string> => {
+  const fillFromVariant = (variant: ProductVariantResponse | undefined): Record<string, string> => {
     const initial: Record<string, string> = {};
-    if (specDefinitions.length > 0 && variants?.length) {
-      const firstAvailableVariant =
-        variants.find((variant: ProductVariantResponse) => variant.stock && variant.stock > 0) ||
-        variants[0];
-      if (firstAvailableVariant) {
-        specDefinitions.forEach((spec: SpecDefinitionPayload) => {
-          const specValue = firstAvailableVariant.specValues?.find(
-            (sv: SpecValuePayload) => sv.name === spec.name
-          );
-          if (specValue && spec.name && specValue.value) {
-            initial[spec.name] = specValue.value;
-          }
-        });
+    if (!variant) {
+      return initial;
+    }
+    specDefinitions.forEach((spec) => {
+      const specValue = variant.specValues?.find((sv: SpecValuePayload) => sv.name === spec.name);
+      if (specValue && spec.name && specValue.value) {
+        initial[spec.name] = specValue.value;
+      }
+    });
+    return initial;
+  };
+
+  // Defaults configured in the console, resolved against the current values
+  // so stale or unknown values are ignored instead of breaking the buy box.
+  const getConfiguredDefaults = (): Record<string, string> => {
+    const defaults: Record<string, string> = {};
+    specDefinitions.forEach((spec) => {
+      const defaultValue = spec.defaultValue?.trim();
+      if (!spec.name || !defaultValue) {
+        return;
+      }
+      const matched = spec.values?.find((item) => item.value?.trim() === defaultValue);
+      if (matched?.value) {
+        defaults[spec.name] = matched.value;
+      }
+    });
+    return defaults;
+  };
+
+  const findVariantMatching = (
+    selection: Record<string, string>
+  ): ProductVariantResponse | undefined => {
+    const entries = Object.entries(selection);
+    if (entries.length === 0) {
+      return undefined;
+    }
+    return variants.find((variant: ProductVariantResponse) =>
+      entries.every(([name, value]) => {
+        const sv = variant.specValues?.find((item: SpecValuePayload) => item.name === name);
+        return sv?.value === value;
+      })
+    );
+  };
+
+  const getInitialSelectedSpecs = (): Record<string, string> => {
+    if (specDefinitions.length === 0 || !variants?.length) {
+      return {};
+    }
+
+    // With configured defaults, preselect them and complete the remaining
+    // selectors from the matching variant so the buy box opens fully resolved.
+    const configuredDefaults = getConfiguredDefaults();
+    if (Object.keys(configuredDefaults).length > 0) {
+      const defaultVariant = findVariantMatching(configuredDefaults);
+      if (defaultVariant) {
+        return fillFromVariant(defaultVariant);
       }
     }
-    return initial;
+
+    // No usable defaults (including against older backends that do not send
+    // `defaultValue`): keep the legacy first-available-variant behavior.
+    const firstAvailableVariant =
+      variants.find((variant: ProductVariantResponse) => variant.stock && variant.stock > 0) ||
+      variants[0];
+    return fillFromVariant(firstAvailableVariant);
   };
 
   let selectedSpecs = $state<Record<string, string>>({});
